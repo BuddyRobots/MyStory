@@ -1,0 +1,22 @@
+# Unity3D related
+Library
+Assets/OpenCVForUnity
+ProjectSettings
+Temp
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
+AnimationDemo.userprefs
+
+
+# Xcode related
+AnimationDemoXcode/*
+!AnimationDemoXcode/Classes
+AnimationDemoXcode/Classes/*
+!AnimationDemoXcode/Classes/test_tensorflow.h 
+!AnimationDemoXcode/Classes/test_tensorflow.mm 
+!AnimationDemoXcode/Models
+
+
+# MAC-OSX related
+.DS_Store
+*.zip
