@@ -12,7 +12,7 @@ public class MicroPhoneInput : MonoBehaviour
 
 	private static MicroPhoneInput m_instance;
 
-	public float sensitivity=100;
+	public float sensitivity=1000;
 	public float loudness=0;
 
     private static string[] micArray=null;
@@ -56,14 +56,14 @@ public class MicroPhoneInput : MonoBehaviour
             return;
         }
 		GetComponent<AudioSource>().loop = false;
-		GetComponent<AudioSource>().mute = true;
+		GetComponent<AudioSource>().mute = false;
         GetComponent<AudioSource>().clip = Microphone.Start(null, false, RECORD_TIME, 44100); //22050 
 		while (!(Microphone.GetPosition(null)>0)) {
 		}
 		GetComponent<AudioSource>().Play ();
         Debug.Log("StartRecord");
         //倒计时
-        StartCoroutine(TimeDown());
+//        StartCoroutine(TimeDown());
        
 	}
 
@@ -195,10 +195,11 @@ public class MicroPhoneInput : MonoBehaviour
 	void Update ()
     {
 		loudness = GetAveragedVolume () ;//* sensitivity;//音量大小的显示可以根据loudness的值来取
-		if (loudness > 1) 
-		{
-			Debug.Log("loudness = "+loudness);
-		}
+//		Debug.Log("loudness = "+loudness);
+//		if (loudness > 1) 
+//		{
+//			Debug.Log("loudness = "+loudness);
+//		}
 	}
 
     private IEnumerator TimeDown()

@@ -18,16 +18,22 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 
 	private static MicroPhoneInputSaveWav m_instance;  
 	  
-	public float sensitivity=100;  
+	public float sensitivity=10000;  
 	public float loudness=0;  
 
 	private static string[] micArray=null;  
 
 	const int HEADER_SIZE = 44;  
-	const int RECORD_TIME = 5;  
+//	const int RECORD_TIME = 5;  
+	private int RECORD_TIME;  
 
 	private AudioClip clip;  
 	private string path_1; 
+
+
+
+
+//	public bool isRecording=false;
 
 	public static MicroPhoneInputSaveWav getInstance()  
 	{  
@@ -55,6 +61,13 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 
 	public void StartRecord()  
 	{  
+		
+
+//		RECORD_TIME=Manager.recordTime;
+		RECORD_TIME=LevelManager.currentLevelData.RecordTime;
+
+//		Debug.Log("RECORD_TIME---"+LevelManager.currentLevelData.RecordTime);
+		
 		GetComponent<AudioSource>().Stop();  
 		if (micArray.Length == 0)  
 		{  
@@ -62,33 +75,42 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 			return;  
 		}  
 		GetComponent<AudioSource>().loop = false;  
-		GetComponent<AudioSource>().mute = true;  
+		GetComponent<AudioSource>().mute = false;  //   ？？？？？？？？-----这里为false的时候能检测到音量大小，但是录音不正常，能同时听到录的声音，如果为true，就不能检测音量大小，但是录音的时候正常
 		GetComponent<AudioSource>().clip = Microphone.Start(null, false, RECORD_TIME, 44100);  
 		clip = GetComponent<AudioSource>().clip;  
 		while (!(Microphone.GetPosition(null)>0)) {  
 		}  
 		GetComponent<AudioSource>().Play ();  
-		Debug.Log("StartRecord");  
+//		isRecording=true;
+
+		Debug.Log("---------StartRecord");  
 		//倒计时  
 		StartCoroutine(TimeDown());  
-
 	}  
 
 	public  void StopRecord()  
 	{  
+		
 		if (micArray.Length == 0)  
 		{  
 			Debug.Log("No Record Device!");  
 			return;  
 		}  
-		if (!Microphone.IsRecording(null))  
-		{  
-			return;  
-		}  
-		Microphone.End (null);  
-		GetComponent<AudioSource>().Stop();  
 
-		Debug.Log("StopRecord");  
+		//这里不注释掉的话，会进去return掉，后面的语句就不执行了
+//		if (!Microphone.IsRecording(null))  
+//		{  
+//			return;  
+//		}  
+
+		Microphone.End (null);  
+
+
+		GetComponent<AudioSource>().Stop(); 
+
+
+		Manager.recordingDone=true;
+		Debug.Log("-------StopRecord");  
 
 	}  
 
@@ -167,6 +189,8 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 		audioSource.mute = false;  
 		audioSource.Play();  
 	}  
+
+
 	public void PlayRecord()  
 	{  
 		if (GetComponent<AudioSource>().clip == null)  
@@ -181,6 +205,11 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 
 	}  
 
+	//获取音量大小
+	public float GetSoundVolume()
+	{
+		return  GetAveragedVolume () * sensitivity; 
+	}
 
 
 	public  float GetAveragedVolume()  
@@ -198,16 +227,21 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 	// Update is called once per frame  
 	void Update ()  
 	{  
-		loudness = GetAveragedVolume () * sensitivity;  
-		if (loudness > 1)   
-		{  
-			Debug.Log("loudness = "+loudness);  
-		}  
+		
+//		loudness = GetAveragedVolume ()* sensitivity;  
+//		if (loudness>0) {
+//			Debug.Log("volume loudness-------"+loudness);
+//
+//		}
+//		if (loudness > 1)   
+//		{  
+//			Debug.Log("loudness = "+loudness);  
+//		}  
 	}  
 
 	private IEnumerator TimeDown()  
 	{  
-		Debug.Log(" IEnumerator TimeDown()");  
+		Debug.Log(" ------------IEnumerator TimeDown()");  
 
 		int time = 0;  
 		while (time < RECORD_TIME)  

@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ModelAnimationShow : MonoBehaviour {
+public class ModelAnimationShow : MonoBehaviour 
+{
 
 	private Button confirmBtn;
 	private Button backBtn;
@@ -22,17 +23,11 @@ public class ModelAnimationShow : MonoBehaviour {
 		EventTriggerListener.Get(reDrawBtn.gameObject).onClick=OnReDrawBtnClick;
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 
 
 	private void OnConfirmBtnClick(GameObject btn)
 	{
-		SceneManager.LoadSceneAsync("5_SelectLevel");
+		SceneManager.LoadSceneAsync("1_ModelSelect");
 
 	}
 
