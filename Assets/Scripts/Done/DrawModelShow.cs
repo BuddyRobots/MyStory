@@ -66,9 +66,7 @@ public class DrawModelShow : MonoBehaviour {
 
 	void ShowMouseImages()
 	{
-		Debug.Log("------ShowMouseImages()");
 		ClearList();
-
 		//确定可以选择的图片共有多少张，并把指数存储在数组中（因为要随机出来3个指数）
 		int count=destMouseSprites.Length;
 		for (int i = 0; i < count; i++) 
@@ -84,7 +82,7 @@ public class DrawModelShow : MonoBehaviour {
 			indexList.Remove(index);
 		}	
 
-		Debug.Log("需要展示的老鼠图片数量（正常为3）--"+showSprites.Count);
+//		Debug.Log("需要展示的老鼠图片数量（正常为3）--"+showSprites.Count);
 
 
 		//把随机出来的3张图赋值给界面UI
@@ -103,10 +101,6 @@ public class DrawModelShow : MonoBehaviour {
 
 	void ShowBallImages()
 	{
-
-
-		Debug.Log("------ShowBallImages()");
-
 
 		ClearList();
 		int count=destBallSprites.Length;
@@ -142,10 +136,6 @@ public class DrawModelShow : MonoBehaviour {
 	void ShowGarlandImages()
 	{
 
-
-		Debug.Log("------ShowGarlandImages()");
-
-
 		ClearList();
 		int count=destGarlandSprites.Length;
 		for (int i = 0; i < count; i++) 
@@ -160,7 +150,6 @@ public class DrawModelShow : MonoBehaviour {
 			showSprites.Add(destGarlandSprites[indexList[index]]);
 			indexList.Remove(index);
 		}	
-
 
 
 		Debug.Log("需要展示的--花环--图片数量（正常为3）--"+showSprites.Count);

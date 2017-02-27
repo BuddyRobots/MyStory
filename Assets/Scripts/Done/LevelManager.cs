@@ -11,6 +11,8 @@ using LitJson;
 public class LevelManager : AllSceneSinglton<LevelManager>
 {	
 
+
+
 	/// <summary>
 	/// 存储关卡数据的集合
 	/// </summary>
@@ -18,6 +20,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	public static LevelItemData currentLevelData;//这个数据可以被failurePanel，photoTakingPanel,photoRecognizingPanel 拿去获取当前关卡名字
 
+	private List<List<string>> allLevelSubTitleList=new List<List<string>>();
 
 	//json字符串，保存关卡的信息（这里的信息字段名和levelItemData里的属性保持一致）
 	string leveljsonstr = @"
@@ -112,17 +115,96 @@ public class LevelManager : AllSceneSinglton<LevelManager>
             }";
 
 
+
 	void Awake()
 	{
 //		code for test...
 		PlayerPrefs.SetInt ("LevelID",3);
 		PlayerPrefs.SetInt ("LevelProgress",0);
 
+		ReadSubtitleText();
 		ParseLevelItemInfo();
+		SetSubtitleForLevel();
 		LoadLocalLevelProgressData ();
 	}
-		
 
+
+
+	public void ReadSubtitleText()
+	{
+		Debug.Log("--ReadSubtitleText()");
+		string 	allSubtitle=Resources.Load("Txt/Subtitle").ToString();//读取字幕文本文件
+		string[] singleLevelSubtitle=allSubtitle.Split('|');//每一关的字幕
+//		Debug.Log("一共有 "+singleLevelSubtitle.Length+" 段话");
+		for (int i = 0; i < singleLevelSubtitle.Length; i++) 
+		{
+			string[] sentences=singleLevelSubtitle[i].Split('*');//每一句的字幕
+			List<string> temp=new List<string>();
+//			Debug.Log("第 "+i+" 段话有 "+sentences.Length+" 句话，分别是：");
+			for (int j = 0; j < sentences.Length; j++)
+			{
+//				Debug.Log("第 "+j+" 句是："+sentences[j]);
+				temp.Add(sentences[j]);
+			}
+			allLevelSubTitleList.Add(temp);
+
+			Debug.Log("----------------------------------");
+
+		}
+	}
+
+	void SetSubtitleForLevel()
+	{
+		Debug.Log("--SetSubtitleForLevel()");
+		for (int i = 0; i < levelItemDataList.Count; i++) 
+		{
+			levelItemDataList[i].SubtitleList=allLevelSubTitleList[i];
+			Debug.Log("************levelItemDataList[i].SubtitleList.count---"+levelItemDataList[i].SubtitleList.Count);
+		}
+
+	}
+		
+	/// <summary>
+	/// 解析json字符串，并把信息存到levelitemdata里面
+	/// </summary>
+	public void ParseLevelItemInfo()
+	{
+		Debug.Log("----ParseLevelItemInfo()");
+		JsonData jd = JsonMapper.ToObject(leveljsonstr);   
+		JsonData jdLevelItems = jd["levelData"]; 
+
+		if (jdLevelItems.IsArray) 
+		{
+
+			for (int i = 0; i < jdLevelItems.Count; i++) 
+			{
+				LevelItemData levelItemData = new LevelItemData ();
+				levelItemData.LevelID = (int)jdLevelItems [i] ["levelID"];
+				levelItemData.LevelName = (string)jdLevelItems [i] ["levelName"];
+				levelItemData.LevelSubtitle = (string)jdLevelItems [i] ["levelsubtitle"];
+
+
+
+
+				levelItemData.Progress = (LevelProgress)((int)jdLevelItems [i] ["progress"]);
+				levelItemData.PrelevelID = (int)jdLevelItems [i] ["preLevelID"];
+				levelItemData.NextLevelID = (int)jdLevelItems [i] ["nextLevelID"];
+				//				Debug.Log("*******000"+levelItemData.NextLevelID);
+				levelItemData.RecordTime=(int)jdLevelItems[i]["recordTime"];
+				//				Debug.Log("*********"+levelItemData.RecordTime);
+				levelItemDataList.Add (levelItemData);
+
+			}
+
+		}
+
+//		Manager._instance.ReadSubtitleText();
+//		for (int i = 0; i < levelItemDataList.Count; i++) 
+//		{
+//			Debug.Log("levelItemDataList[i].SubtitleList.Count---"+levelItemDataList[i].SubtitleList.Count);
+//		}
+
+	}
 	/// <summary>
 	/// 加载本地已经完成的关卡
 	/// </summary>
@@ -205,37 +287,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		}
 	}
 
-	/// <summary>
-	/// 解析json字符串，并把信息存到levelitemdata里面
-	/// </summary>
-	public void ParseLevelItemInfo()
-	{
-		Debug.Log("----ParseLevelItemInfo()");
-		JsonData jd = JsonMapper.ToObject(leveljsonstr);   
-		JsonData jdLevelItems = jd["levelData"]; 
 
-		if (jdLevelItems.IsArray) 
-		{
-
-			for (int i = 0; i < jdLevelItems.Count; i++) 
-			{
-				LevelItemData levelItemData = new LevelItemData ();
-				levelItemData.LevelID = (int)jdLevelItems [i] ["levelID"];
-				levelItemData.LevelName = (string)jdLevelItems [i] ["levelName"];
-				levelItemData.LevelSubtitle = (string)jdLevelItems [i] ["levelsubtitle"];
-				levelItemData.Progress = (LevelProgress)((int)jdLevelItems [i] ["progress"]);
-				levelItemData.PrelevelID = (int)jdLevelItems [i] ["preLevelID"];
-				levelItemData.NextLevelID = (int)jdLevelItems [i] ["nextLevelID"];
-//				Debug.Log("*******000"+levelItemData.NextLevelID);
-				levelItemData.RecordTime=(int)jdLevelItems[i]["recordTime"];
-//				Debug.Log("*********"+levelItemData.RecordTime);
-				levelItemDataList.Add (levelItemData);
-
-			}
-
-		}
-
-	}
 
 	/// <summary>
 	/// 根据关卡数字获取关卡数据,LevelManager提供这样一个获得关卡数据的方法，方便在关卡界面点击按钮时调用该方法来获取关卡数据

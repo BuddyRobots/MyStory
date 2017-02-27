@@ -35,12 +35,14 @@ public class VideoRecManager : MonoBehaviour
 		
 	public  void PauseRec()
 	{
+//		ShareREC.setSyncAudioComment(false);
 		_PauseShareREC();
 
 	}
 
 	public void ResumeREC()
 	{
+//		ShareREC.setSyncAudioComment(true);
 		_ResumeShareREC();
 
 	}
@@ -49,6 +51,7 @@ public class VideoRecManager : MonoBehaviour
 	{
 		FinishedRecordEvent finishedEvent=new FinishedRecordEvent(recordFinishedHandler);
 		ShareREC.stopRecording (finishedEvent);
+
 	}
 		
 	void recordFinishedHandler(Exception ex)
@@ -57,9 +60,9 @@ public class VideoRecManager : MonoBehaviour
 		{
 //			ShareREC.playLastRecording();
 
-			Hashtable userData = new Hashtable();
-			userData["score"] = "10000";
-			ShareREC.editLastingRecording("这是我用shareREC录制的视频", userData, null);
+//			Hashtable userData = new Hashtable();
+//			userData["score"] = "10000";
+//			ShareREC.editLastingRecording("这是我用shareREC录制的视频", userData, null);
 
 			string path  =	ShareREC.lastRecordingPath();
 			Debug.Log("----------path-is-------"+path);//----------path-is-------/private/var/mobile/Containers/Data/Application/A62B2128-C1B5-4A46-BEF8-1CF46651BB9F/tmp/9853DA2A3B219BFEC395B90667052DE4.mp4
@@ -84,7 +87,7 @@ public class VideoRecManager : MonoBehaviour
 
 	public void SaveVideoToPhotoAlbum()
 	{
-		string videoName="video_test";
+		string videoName                                                                                                                                                                                ="video_test";
 		_IOSSaveVideoToPhotosAlbum(ShareREC.lastRecordingPath());
 
 	}

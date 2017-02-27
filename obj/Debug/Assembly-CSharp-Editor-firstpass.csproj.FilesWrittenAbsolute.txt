@@ -40,3 +40,4 @@
 /Users/WangQian/Documents/GitWorkspace/MyStory/Temp/bin/Debug/UnityEditor.iOS.Extensions.Xcode.xml
 /Users/WangQian/Documents/GitWorkspace/MyStory/Temp/bin/Debug/UnityEditor.iOS.Extensions.Common.dll
 /Users/WangQian/Documents/GitWorkspace/MyStory/Temp/bin/Debug/UnityEditor.iOS.Extensions.Common.dll.mdb
+/Users/WangQian/Documents/GitWorkspace/MyStory/Temp/bin/Debug/LitJson.dll

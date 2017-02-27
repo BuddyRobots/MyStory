@@ -1,16 +1,21 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/FingerCtrl.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/SubtitleFadeInAndOutTest.cs">
     <Files>
-      <File FileName="Assets/FingerCtrl.cs" Line="58" Column="39" />
-      <File FileName="Assets/Scripts/Done/DrawModelShow.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Done/FormalScene.cs" Line="211" Column="30" />
-      <File FileName="Assets/Scripts/Done/Manager.cs" Line="25" Column="34" />
-      <File FileName="Assets/Scripts/Done/ModelAnimationShow.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Done/SelectLevel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Done/TakingPhoto.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Done/WebCam.cs" Line="25" Column="4" />
+      <File FileName="Assets/SubtitleFadeInAndOutTest.cs" Line="38" Column="29" NotebookId="1" />
+      <File FileName="Assets/Scripts/Done/Manager.cs" Line="39" Column="3" NotebookId="1" />
+      <File FileName="Assets/Scripts/Done/SceneSinglton.cs" Line="8" Column="1" NotebookId="1" />
+      <File FileName="Assets/Scripts/Done/SelectLevel.cs" Line="1" Column="1" NotebookId="1" />
+      <File FileName="Assets/Resources/Txt/Subtitle.txt" Line="1" Column="36" NotebookId="1" />
     </Files>
+    <FloatingWindows>
+      <FloatingWindow WindowId="1" X="119" Y="34" Width="1161" Height="936">
+        <Files>
+          <File FileName="Assets/Scripts/Done/LevelManager.cs" Line="130" Column="2" />
+          <File FileName="Assets/Scripts/Done/LevelItemData.cs" Line="39" Column="2" />
+        </Files>
+      </FloatingWindow>
+    </FloatingWindows>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

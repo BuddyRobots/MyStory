@@ -9,6 +9,7 @@ using System.Collections;
 //	Doing,
 //	Done
 //}
+using System.Collections.Generic;
 
 
 public class LevelItemData 
@@ -22,7 +23,19 @@ public class LevelItemData
 	private int preLevelID;
 	private int nextLevelID;
 	private int recordTime;//录音时长
+	private List<string> subtitleList;
 
+	public List<string> SubtitleList
+	{
+		get
+		{ 
+			return subtitleList;
+		}
+		set
+		{ 
+			subtitleList = value;
+		}
+	}
 
 
 	public int LevelID

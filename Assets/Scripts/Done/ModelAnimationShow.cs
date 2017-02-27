@@ -11,6 +11,8 @@ public class ModelAnimationShow : MonoBehaviour
 	private Button backBtn;
 	private Button reDrawBtn;
 
+	//for test...
+//	public Sprite textureSprite;
 
 	void Start () 
 	{
@@ -21,9 +23,18 @@ public class ModelAnimationShow : MonoBehaviour
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(reDrawBtn.gameObject).onClick=OnReDrawBtnClick;
+		//for test....
+//		textureSprite=GameObject.Find("TextureSprite").GetComponent<Sprite>();
+//		SetTex();
 
 	}
 
+	//for test....
+//	void SetTex()
+//	{
+//		textureSprite =Sprite.Create(Manager._instance.texture,new Rect(0,0,300,400),new Vector2(0.5f,0.5f),100);
+//
+//	}
 
 	private void OnConfirmBtnClick(GameObject btn)
 	{

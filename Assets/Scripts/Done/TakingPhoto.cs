@@ -9,7 +9,8 @@ public class TakingPhoto : MonoBehaviour
 	private Button confirmBtn;
 	private Button backBtn;
 
-	void Start () {
+	void Start () 
+	{
 		confirmBtn=transform.Find("Confirm").GetComponent<Button>();
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
@@ -18,12 +19,16 @@ public class TakingPhoto : MonoBehaviour
 	}
 	
 
-	void Update () {
-		
-	}
+
 
 	private void OnConfirmBtnClick(GameObject btn)
 	{
+		
+//		GetImage._instance.isTakingPhoto=true;//开启取图片
+
+		//存储拍摄得到的texture2D
+		Manager._instance.texture=GetImage._instance.texture;
+
 		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
 
 	}
