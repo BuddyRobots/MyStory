@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 476cdee22a4d24bdb9b923aa2b0c0bb5
+timeCreated: 1486715310
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: HYLuoBoJ
+  fontNames:
+  - HYLuoBoJ
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
