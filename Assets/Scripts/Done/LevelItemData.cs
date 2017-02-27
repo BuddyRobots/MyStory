@@ -23,7 +23,9 @@ public class LevelItemData
 	private int preLevelID;
 	private int nextLevelID;
 	private int recordTime;//录音时长
-	private List<string> subtitleList;
+	private string sentenceTimeString;
+	private List<string> subtitleList;//字幕（以句为单位）
+	private List<float> sentenceTimeList;//存储每一句字幕的时间
 
 	public List<string> SubtitleList
 	{
