@@ -18,6 +18,9 @@ namespace MyStory
 		public BodyPart rightLeg;
 		public BodyPart tail;
 
+		// TODO for test
+		public Mat image;
+
 		GameObject spriteMeshRootGO;
 
 		// TODO Complete this. It's for test now.
@@ -25,7 +28,7 @@ namespace MyStory
 		{
 			List<Texture2D> partList = new List<Texture2D>();
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
-			Segmentation.Segment(inputTexture, out partList, out bbList);
+			image = Segmentation.Segment(inputTexture, out partList, out bbList);
 
 			head     = new BodyPart(partList[0], bbList[0]);
 			leftEar  = new BodyPart(partList[1], bbList[1]);

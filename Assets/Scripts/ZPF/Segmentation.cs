@@ -15,7 +15,8 @@ namespace MyStory
 			[In, Out] IntPtr segmentatonResultArray
 		);
 
-		public static void Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
+		// TODO test: return Mat. Change to void while publish.
+		public static Mat Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
 		{
 			Mat sourceImage = new Mat(sourceTex.height, sourceTex.width, CvType.CV_8UC3);
 			Utils.texture2DToMat(sourceTex, sourceImage);
@@ -35,6 +36,8 @@ namespace MyStory
 			bbList = new List<OpenCVForUnity.Rect>();
 
 			GetLists(sourceImage, originMaskImage, out partList, out bbList);
+
+			return modelSizeImage;
 		}
 
 		private static Mat CropMatToModelSize(Mat sourceImage)

@@ -2,6 +2,7 @@
 using System.Collections;
 using Anima2D;
 using MyStory;
+using OpenCVForUnity;
 
 
 public class test_DisplaySprite : MonoBehaviour
@@ -11,13 +12,30 @@ public class test_DisplaySprite : MonoBehaviour
 	{
 		GameObject head = new GameObject("Mosue Head");
 		head.AddComponent<SpriteRenderer>();
+		head.transform.position = GameObject.Find("tou2").transform.position;
+
+		GameObject body = new GameObject("Mosue Body");
+		head.AddComponent<SpriteRenderer>();
 		head.transform.position = GameObject.Find("shenti").transform.position;
 
-		if (Manager._instance.texture)
-		{
-			Mouse mouse = new Mouse(Manager._instance.texture);
+		GameObject arm = new GameObject("Mosue Arm");
+		head.AddComponent<SpriteRenderer>();
+		head.transform.position = GameObject.Find("shenti").transform.position;
 
-			head.GetComponent<SpriteRenderer>().sprite = mouse.head.sprite;
+
+
+		Texture2D tex = Manager._instance.texture;
+		if (tex)
+		{
+			Mouse mouse = new Mouse(tex);
+
+			//head.GetComponent<SpriteRenderer>().sprite = mouse.head.sprite;
+
+			Mat displayImage = mouse.image;
+			Texture2D displayTex = new Texture2D(displayImage.width(), displayImage.height());
+			Utils.matToTexture2D(mouse.image, displayTex);
+
+			head.GetComponent<SpriteRenderer>().sprite = Sprite.Create(displayTex, new UnityEngine.Rect(0.0f,0.0f,displayTex.width,displayTex.height), new Vector2(0.5f,0.5f), 100.0f);
 
 
 
