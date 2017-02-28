@@ -34,7 +34,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""preLevelID"": 0,
            			""nextLevelID"": 2,
 					""recordTime"":8,
-					""sentenceTimeString"":""""
+					""sentenceTimeString"":""  ""
 
 				},
 				{
