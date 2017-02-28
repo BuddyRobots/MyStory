@@ -25,19 +25,8 @@ public class LevelItemData
 	private int recordTime;//录音时长
 	private string sentenceTimeString;
 	private List<string> subtitleList;//字幕（以句为单位）
-	private List<float> sentenceTimeList;//存储每一句字幕的时间
+	private List<float> sentenceTimeList=new List<float>();//存储每一句字幕的时间
 
-	public List<string> SubtitleList
-	{
-		get
-		{ 
-			return subtitleList;
-		}
-		set
-		{ 
-			subtitleList = value;
-		}
-	}
 
 
 	public int LevelID
@@ -137,6 +126,40 @@ public class LevelItemData
 		{ 
 
 			recordTime = value;
+		}
+	}
+	public string SentenceTimeString
+	{
+		get
+		{
+			return sentenceTimeString;
+		}
+		set
+		{
+			sentenceTimeString=value;
+		}
+	}
+
+	public List<string> SubtitleList
+	{
+		get
+		{ 
+			return subtitleList;
+		}
+		set
+		{ 
+			subtitleList = value;
+		}
+	}
+	public List<float> SentenceTimeList
+	{
+		get
+		{ 
+			return sentenceTimeList;
+		}
+		set
+		{ 
+			sentenceTimeList = value;
 		}
 	}
 

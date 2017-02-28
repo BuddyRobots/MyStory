@@ -25,8 +25,6 @@ public class Manager : MonoBehaviour
 	public Texture2D texture;//用来存储从拍摄界面取得的Texture2D
 
 	private float fadingTimer;//淡入淡出计时器
-	private const float FADINGTIME=4f;
-
 
 	void Awake()
 	{
@@ -45,7 +43,7 @@ public class Manager : MonoBehaviour
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
 		GameObject.DontDestroyOnLoad(gameObject);
-//		ReadSubtitleText();
+
 	}
 		
 
@@ -77,8 +75,8 @@ public class Manager : MonoBehaviour
 		if (bgMusicFadeOut) //如果背景音乐需要淡出，音量在固定时间内从1渐变成0，然后暂停
 		{
 			fadingTimer+=Time.deltaTime;
-			bgAudio.volume=Mathf.Lerp(1f,0,fadingTimer/FADINGTIME);
-			if (fadingTimer>=FADINGTIME) 
+			bgAudio.volume=Mathf.Lerp(1f,0,fadingTimer/Constant.MUSIC_FADINGTIME);
+			if (fadingTimer>=Constant.MUSIC_FADINGTIME) 
 			{
 				fadingTimer=0;
 				bgAudio.Pause ();
@@ -95,8 +93,8 @@ public class Manager : MonoBehaviour
 			}
 			fadingTimer+=Time.deltaTime;
 		
-			bgAudio.volume=Mathf.Lerp(0,1f,fadingTimer/FADINGTIME);
-			if (fadingTimer>=FADINGTIME) 
+			bgAudio.volume=Mathf.Lerp(0,1f,fadingTimer/Constant.MUSIC_FADINGTIME);
+			if (fadingTimer>=Constant.MUSIC_FADINGTIME) 
 			{
 				fadingTimer=1f;
 				bgMusicFadeIn=false;
@@ -110,6 +108,27 @@ public class Manager : MonoBehaviour
 
 
 
+//	public void ShowFinger(Vector3 pos)
+//	{
+//		prePos=Vector3.zero; 
+//		Debug.Log("----出现小手");
+//		GameObject sceneParent=GameObject.Find("SceneParent");
+////		if (prePos == pos) 
+////		{
+////			return;
+////		}
+////		prePos = pos;
+//		if (finger) 
+//		{
+//			Destroy (finger);
+//			finger = null;
+//		}
+//		finger = Instantiate (fingerPrefab) as GameObject;
+//		finger.name="finger";
+//		finger.transform.parent = sceneParent.transform;
+//		finger.transform.localScale = Vector3.one;
+//		finger.GetComponent<FingerCtrl> ().FingerShow (pos + offSet);
+//	}
 
 
 

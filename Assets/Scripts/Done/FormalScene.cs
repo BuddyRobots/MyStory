@@ -28,7 +28,7 @@ public class FormalScene : MonoBehaviour
 	private GameObject recordDoneFrame;
 	private GameObject winFrame;
 	private GameObject subtitle;
-
+	private GameObject sceneParent;
 
 	private Slider recordTimeSlider;
 
@@ -38,20 +38,22 @@ public class FormalScene : MonoBehaviour
 
 	private int currentLevelID;
 
-	public LevelItemData data;
-
-
 
 	private AudioSource audioSource;
 
+
+	public LevelItemData data;
+
 	public GameObject sceneLevel_1;
 	public GameObject sceneLevel_2;
+	public bool subtitleShow=false;//字幕是否显示的标记
 
 
 
 
 	void Start () 
 	{
+		Debug.Log("fomalScene --初始化");
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		nextBtn=transform.Find("Next").GetComponent<Button>();
 		recordBtn=transform.Find("Record").GetComponent<Button>();
@@ -86,9 +88,10 @@ public class FormalScene : MonoBehaviour
 		//for test ..
 //		audioSource.clip=Resources.Load<AudioClip>("Audio/Seagulls");
 
+		sceneParent=GameObject.Find("SceneParent");
 
-
-
+		sliderMoving=false;
+		subtitleShow=false;
 
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
@@ -119,14 +122,18 @@ public class FormalScene : MonoBehaviour
 		ShowSceneAccordingToLevelID(currentLevelID);
 
 
-
-
+//		Manager._instance.ShowFinger(new Vector3(1.3f,0.3f,0));
+		BussinessManager._instance.ShowFinger(new Vector3(1.3f,0.3f,0));
 
 
 	}
 
+
+
+
 	void ShowSceneAccordingToLevelID(int levelID)
 	{
+
 
 		Debug.Log("----当前是第 "+levelID+" 关-----");
 
@@ -152,7 +159,11 @@ public class FormalScene : MonoBehaviour
 		default:
 			break;
 		}
-
+		if (tempScene!=null) 
+		{
+			tempScene.transform.parent=sceneParent.transform;
+		}
+	
 
 
 

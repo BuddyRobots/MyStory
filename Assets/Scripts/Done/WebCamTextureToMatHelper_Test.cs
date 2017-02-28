@@ -80,7 +80,7 @@ public class WebCamTextureToMatHelper_Test  : MonoBehaviour
 		    // Checks all the cameras available on the device
 			for(int cameraIndex = 0; cameraIndex < WebCamTexture.devices.Length; cameraIndex++)
 			{
-				#if UNITY_EDITOR
+//				#if UNITY_EDITOR
 				if (!WebCamTexture.devices[cameraIndex].isFrontFacing) //如果是后置摄像头（非屏幕摄像头）
 				{
 					webCamDevice = WebCamTexture.devices[cameraIndex];
@@ -88,15 +88,15 @@ public class WebCamTextureToMatHelper_Test  : MonoBehaviour
 
 					break;
 				}
-				#elif UNITY_IOS
-				if (WebCamTexture.devices[cameraIndex].isFrontFacing) //如果是前置摄像头（屏幕摄像头）
-				{
-					webCamDevice = WebCamTexture.devices[cameraIndex];
-					webCamTexture = new WebCamTexture(webCamDevice.name, requestWidth, requestHeight);
-
-					break;
-				}
-				#endif
+//				#elif UNITY_IOS
+//				if (WebCamTexture.devices[cameraIndex].isFrontFacing) //如果是前置摄像头（屏幕摄像头）
+//				{
+//					webCamDevice = WebCamTexture.devices[cameraIndex];
+//					webCamTexture = new WebCamTexture(webCamDevice.name, requestWidth, requestHeight);
+//
+//					break;
+//				}
+//				#endif
 			}
 		}
 
@@ -104,12 +104,12 @@ public class WebCamTextureToMatHelper_Test  : MonoBehaviour
 		{
 			if (WebCamTexture.devices.Length > 0)
 			{
-				#if UNITY_EDITOR
+//				#if UNITY_EDITOR
 				webCamDevice = WebCamTexture.devices[0];
-				#elif UNITY_IOS
-				webCamDevice = WebCamTexture.devices[1];
-				#endif
-
+//				#elif UNITY_IOS
+//				webCamDevice = WebCamTexture.devices[1];
+//				#endif
+//
 				webCamTexture = new WebCamTexture(webCamDevice.name, requestWidth, requestHeight);
 			}
 			else
