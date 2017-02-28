@@ -7,13 +7,14 @@ Assets/Editor Default Resources
 Assets/Gizmos
 *.meta
 
+
 # Xcode related
-MyStory/Xcode/*
-!MyStory/Classes
-MyStory/Classes/*
-!MyStory/Classes/test_tensorflow.h 
-!MyStory/Classes/test_tensorflow.mm 
-!MyStory/Models
+MyStoryXcode/*
+!MyStoryXcode/Classes
+MyStoryXcode/Classes/*
+!MyStoryXcode/Classes/test_tensorflow.h 
+!MyStoryXcode/Classes/test_tensorflow.mm 
+!MyStoryXcode/Models
 
 
 # MAC-OSX related
