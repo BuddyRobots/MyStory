@@ -110,7 +110,6 @@ public class WebCamTextureToMatHelper_Test  : MonoBehaviour
 //				#elif UNITY_IOS
 //				webCamDevice = WebCamTexture.devices[1];
 //				#endif
-
 				webCamTexture = new WebCamTexture(webCamDevice.name, requestWidth, requestHeight);
 			}
 			else

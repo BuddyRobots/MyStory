@@ -23,8 +23,6 @@ public class FingerCtrl : MonoBehaviour
 	void Start () 
 	{
 		speed = 4f;
-//		Debug.Log("finger's localposition--"+transform.localPosition);
-		FingerShow(transform.localPosition);
 	}
 
 

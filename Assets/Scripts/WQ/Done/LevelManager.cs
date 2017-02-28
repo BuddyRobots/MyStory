@@ -34,7 +34,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""preLevelID"": 0,
            			""nextLevelID"": 2,
 					""recordTime"":8,
-					""sentenceTimeString"":""  ""
+					""sentenceTimeString"":""3,4,5""
 
 				},
 				{
@@ -44,7 +44,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 1,
            			""nextLevelID"": 3,
-					""recordTime"":9
+					""recordTime"":9,
+					""sentenceTimeString"":""6""
 				},
 				{
            			""levelID"": 3,
@@ -53,7 +54,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 2,
            			""nextLevelID"": 4,
-					""recordTime"":10
+					""recordTime"":10,
+					""sentenceTimeString"":""3,3,5""
 				},
 				{
            			""levelID"": 4,
@@ -62,7 +64,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 3,
            			""nextLevelID"": 5,
-					""recordTime"":11
+					""recordTime"":11,
+					""sentenceTimeString"":""0""
 				},
 				{
            			""levelID"": 5,
@@ -71,7 +74,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 4,
            			""nextLevelID"": 6,
-					""recordTime"":12
+					""recordTime"":12,
+					""sentenceTimeString"":""5,7,3""
 				},
 				{
            			""levelID"": 6,
@@ -80,7 +84,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 5,
            			""nextLevelID"": 7,
-					""recordTime"":13
+					""recordTime"":13,
+					""sentenceTimeString"":""3""
 				},
 				{
            			""levelID"": 7,
@@ -89,7 +94,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 6,
            			""nextLevelID"": 8,
-					""recordTime"":14
+					""recordTime"":14,
+					""sentenceTimeString"":""6,6""
 				},
 				{
            			""levelID"": 8,
@@ -98,7 +104,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 7,
            			""nextLevelID"": 9,
-					""recordTime"":15
+					""recordTime"":15,
+					""sentenceTimeString"":""0""
 				},
 				{
            			""levelID"": 9,
@@ -107,11 +114,9 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 8,
            			""nextLevelID"": 10,
-					""recordTime"":16
+					""recordTime"":16,
+					""sentenceTimeString"":""5,6,5""
 				}
-				
-				
-
 				]
             }";
 
@@ -170,7 +175,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	public void ParseLevelItemInfo()
 	{
-		Debug.Log("----ParseLevelItemInfo()");
+		Debug.Log("----ParseLevelItemInfo()----正常情况下这里只执行一次");
 		JsonData jd = JsonMapper.ToObject(leveljsonstr);   
 		JsonData jdLevelItems = jd["levelData"]; 
 
@@ -193,6 +198,20 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 				//				Debug.Log("*******000"+levelItemData.NextLevelID);
 				levelItemData.RecordTime=(int)jdLevelItems[i]["recordTime"];
 				//				Debug.Log("*********"+levelItemData.RecordTime);
+				levelItemData.SentenceTimeString=(string)jdLevelItems[i]["sentenceTimeString"];
+
+
+
+
+				string[] temp_sentenceTimeList=levelItemData.SentenceTimeString.Split(',');
+
+				for (int j = 0; j < temp_sentenceTimeList.Length; j++) 
+				{
+					levelItemData.SentenceTimeList.Add(float.Parse(temp_sentenceTimeList[j]));
+				}
+
+
+
 				levelItemDataList.Add (levelItemData);
 
 			}
