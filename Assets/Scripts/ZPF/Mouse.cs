@@ -28,7 +28,7 @@ namespace MyStory
 		{
 			List<Texture2D> partList = new List<Texture2D>();
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
-			image = Segmentation.Segment(inputTexture, out partList, out bbList);
+			Segmentation.Segment(inputTexture, out partList, out bbList);
 
 			head     = new BodyPart(partList[0], bbList[0]);
 			leftEar  = new BodyPart(partList[1], bbList[1]);

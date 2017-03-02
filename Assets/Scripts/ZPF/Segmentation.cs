@@ -16,12 +16,19 @@ namespace MyStory
 		);
 
 		// TODO test: return Mat. Change to void while publish.
-		public static Mat Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
+		public static void Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
 		{
+			partList = new List<Texture2D>();
+			bbList = new List<OpenCVForUnity.Rect>();
+
 			Mat sourceImage = new Mat(sourceTex.height, sourceTex.width, CvType.CV_8UC3);
 			Utils.texture2DToMat(sourceTex, sourceImage);
 
-			Mat modelSizeImage = CropMatToModelSize(sourceImage);
+			//Mat modelSizeImage = CropMatToModelSize(sourceImage);
+
+			Mat modelSizeImage = sourceImage.clone();
+			Utils.texture2DToMat(sourceTex, modelSizeImage);
+
 
 			float[] inputImageArray = MatToTensorArray(modelSizeImage);
 			float[] segmentationResultArray;
@@ -32,20 +39,23 @@ namespace MyStory
 			Mat originMaskImage = new Mat(sourceImage.size(), CvType.CV_8UC3);
 			Imgproc.resize(modelMaskImage, originMaskImage, originMaskImage.size(), 0, 0, Imgproc.INTER_NEAREST);
 
-			partList = new List<Texture2D>();
-			bbList = new List<OpenCVForUnity.Rect>();
-
 			GetLists(sourceImage, originMaskImage, out partList, out bbList);
-
-			return modelSizeImage;
 		}
 
 		private static Mat CropMatToModelSize(Mat sourceImage)
 		{			
 			Mat grayImage = MatBGR2Gray(sourceImage);
 
+
+
+			///
+			Debug.Log("Segmentation.cs CropMatToModelSize() : grayImage.channels = " + grayImage.channels() + " grayImage.depth = " + grayImage.depth());
+			///
+
+
+
 			// Find Contours
-			List<MatOfPoint> contours = new List<MatOfPoint>();
+			/*List<MatOfPoint> contours = new List<MatOfPoint>();
 			Mat hierarchy = new Mat();
 			Imgproc.findContours(grayImage, contours, hierarchy, Imgproc.RETR_EXTERNAL,
 				Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
@@ -68,9 +78,26 @@ namespace MyStory
 					      Math.Max(roi.tl().y - 50.0, 0)),
 				new Point(Math.Min(roi.br().x + 50.0, sourceImage.cols()),
 					      Math.Min(roi.br().y + 50.0, sourceImage.rows())));
+			Mat croppedImage = new Mat(sourceImage, bb);*/
+
+			OpenCVForUnity.Rect roi = Imgproc.boundingRect(new MatOfPoint(grayImage));
+
+
+			///
+			Debug.Log("Segmentation.cs CropMatToModelSize() : roi.tl = " + roi.tl() + " roi.br = " + roi.br());
+			///
+
+
+
+			OpenCVForUnity.Rect bb = new OpenCVForUnity.Rect(
+				new Point(Math.Max(roi.tl().x - 50.0, 0),
+					      Math.Max(roi.tl().y - 50.0, 0)),
+				new Point(Math.Min(roi.br().x + 50.0, sourceImage.cols()),
+					      Math.Min(roi.br().y + 50.0, sourceImage.rows())));
 			Mat croppedImage = new Mat(sourceImage, bb);
+
 			// Zoom to 224*224
-			ZoomCropped(croppedImage);		
+			//ZoomCropped(croppedImage);		
 
 			return croppedImage;
 		}
@@ -87,7 +114,9 @@ namespace MyStory
 				new Scalar(Constant.THRES_H_MAX, Constant.THRES_S_MAX, Constant.THRES_V_MAX),
 				grayImage);
 			Imgproc.morphologyEx(grayImage, grayImage, Imgproc.MORPH_OPEN,
-				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(5, 5)));
+				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(7, 7)));
+			Imgproc.morphologyEx(grayImage, grayImage, Imgproc.MORPH_CLOSE,
+				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(7, 7)));
 
 			return grayImage;
 		}
