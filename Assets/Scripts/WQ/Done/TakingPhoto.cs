@@ -24,7 +24,7 @@ public class TakingPhoto : MonoBehaviour
 		//GetImage._instance.isTakingPhoto = true; //开启取图片
 
 		//存储拍摄得到的texture2D
-		Manager._instance.texture=GetImage._instance.texture;
+		Manager._instance.texture=GetImage_old._instance.texture;
 
 		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
 	}

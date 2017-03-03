@@ -4,9 +4,9 @@ using UnityEngine;
 using OpenCVForUnity;
 
 [RequireComponent(typeof(WebCamTextureToMatHelper_Test))]
-public class GetImage : MonoBehaviour 
+public class GetImage_old : MonoBehaviour 
 {
-	public static GetImage _instance;
+	public static GetImage_old _instance;
 
 	// Flag for taking several photos
 //	public bool isTakingPhoto = false;
