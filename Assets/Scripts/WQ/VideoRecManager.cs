@@ -24,25 +24,26 @@ public class VideoRecManager : MonoBehaviour
 	void Start () 
 	{
 		ShareREC.registerApp("1ae63a4932688");
+		ShareREC.setSyncAudioComment(true);
 	}
 	
 
 	public void StartRec()
 	{
-		ShareREC.setSyncAudioComment(true);
+		
 		ShareREC.startRecoring();
 	}
 		
 	public  void PauseRec()
 	{
-//		ShareREC.setSyncAudioComment(false);
+		ShareREC.setSyncAudioComment(false);
 		_PauseShareREC();
 
 	}
 
 	public void ResumeREC()
 	{
-//		ShareREC.setSyncAudioComment(true);
+		ShareREC.setSyncAudioComment(true);
 		_ResumeShareREC();
 
 	}
@@ -51,6 +52,7 @@ public class VideoRecManager : MonoBehaviour
 	{
 		FinishedRecordEvent finishedEvent=new FinishedRecordEvent(recordFinishedHandler);
 		ShareREC.stopRecording (finishedEvent);
+		ShareREC.setSyncAudioComment(false);
 
 	}
 		
@@ -58,11 +60,17 @@ public class VideoRecManager : MonoBehaviour
 	{
 		if (ex==null) 
 		{
+			
 //			ShareREC.playLastRecording();
-
+//
 //			Hashtable userData = new Hashtable();
 //			userData["score"] = "10000";
 //			ShareREC.editLastingRecording("这是我用shareREC录制的视频", userData, null);
+
+
+
+
+
 
 			string path  =	ShareREC.lastRecordingPath();
 			Debug.Log("----------path-is-------"+path);//----------path-is-------/private/var/mobile/Containers/Data/Application/A62B2128-C1B5-4A46-BEF8-1CF46651BB9F/tmp/9853DA2A3B219BFEC395B90667052DE4.mp4
@@ -87,7 +95,7 @@ public class VideoRecManager : MonoBehaviour
 
 	public void SaveVideoToPhotoAlbum()
 	{
-		string videoName                                                                                                                                                                                ="video_test";
+		string videoName="video_test";
 		_IOSSaveVideoToPhotosAlbum(ShareREC.lastRecordingPath());
 
 	}

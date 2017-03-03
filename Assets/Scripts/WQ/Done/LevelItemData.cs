@@ -26,8 +26,21 @@ public class LevelItemData
 	private string sentenceTimeString;
 	private List<string> subtitleList;//字幕（以句为单位）
 	private List<float> sentenceTimeList=new List<float>();//存储每一句字幕的时间
+	private AudioClip audioAside;//旁白音频
 
+	public AudioClip AudioAside
+	{
 
+		get
+		{ 
+			return audioAside;
+		}
+		set
+		{ 
+			audioAside = value;
+		}
+
+	}
 
 	public int LevelID
 	{

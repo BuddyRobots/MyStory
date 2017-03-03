@@ -241,7 +241,7 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 
 	private IEnumerator TimeDown()  
 	{  
-		Debug.Log(" ------------IEnumerator TimeDown()");  
+//		Debug.Log(" ------------IEnumerator TimeDown()");  
 
 		int time = 0;  
 		while (time < RECORD_TIME)  
@@ -251,13 +251,13 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 				Debug.Log ("IsRecording false");  
 				yield break;  
 			}  
-			Debug.Log("yield return new WaitForSeconds "+time);  
+//			Debug.Log("yield return new WaitForSeconds "+time);  
 			yield return new WaitForSeconds(1);  
 			time++;  
 		}  
 		if (time >= RECORD_TIME)  
 		{  
-			Debug.Log("RECORD_TIME is out! stop record!");  
+//			Debug.Log("RECORD_TIME is out! stop record!");  
 			StopRecord();  
 		}  
 		yield return 0;  
