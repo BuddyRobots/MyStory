@@ -46,4 +46,100 @@ public class BussinessManager : MonoBehaviour
 		finger.GetComponent<FingerCtrl> ().FingerShow (pos + offSet);
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	public void PauseStory()
+	{
+
+		switch (LevelManager.currentLevelData.LevelID)
+		{
+		case 1:
+			LevelOne._instance.PauseStory();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		default:
+			break;
+		}
+
+	}
+
+
+	public void StartStory()
+	{
+		switch (LevelManager.currentLevelData.LevelID)
+		{
+		case 1:
+			LevelOne._instance.StartStory();
+
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	public void ResumeStory()
+	{
+		switch (LevelManager.currentLevelData.LevelID)
+		{
+		case 1:
+			
+			LevelOne._instance.ResumeStory();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		default:
+			break;
+		}
+
+	}
+
+
+
 }

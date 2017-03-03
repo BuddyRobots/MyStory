@@ -12,6 +12,8 @@ public class ModelChoose : MonoBehaviour {
 	private Button backBtn;
 	private Button nextBtn;
 
+	private GameObject manager;
+
 
 	void Start () 
 	{
@@ -20,6 +22,8 @@ public class ModelChoose : MonoBehaviour {
 		garlandBtn =transform.Find("Garland").GetComponent<Button>();
 		backBtn =transform.Find("Back").GetComponent<Button>();
 		nextBtn =transform.Find("Next").GetComponent<Button>();
+
+		manager=GameObject.Find("Manager");
 
 		EventTriggerListener.Get(mouseBtn.gameObject).onClick=OnModelChooseBtnClick;
 		EventTriggerListener.Get(ballBtn.gameObject).onClick=OnModelChooseBtnClick;
@@ -56,18 +60,21 @@ public class ModelChoose : MonoBehaviour {
 
 
 		SceneManager.LoadSceneAsync("2_DrawModelShow");
+		GameObject.DontDestroyOnLoad(manager);
 	}
 
 	private void OnBackBtnClick(GameObject btn)
 	{
 
 		SceneManager.LoadSceneAsync("0_StartGame");
+		GameObject.DontDestroyOnLoad(manager);
 
 	}
 	private void OnNextBtnClick(GameObject btn)
 	{
 
 		SceneManager.LoadSceneAsync("5_SelectLevel");
+		GameObject.DontDestroyOnLoad(manager);
 
 	}
 }

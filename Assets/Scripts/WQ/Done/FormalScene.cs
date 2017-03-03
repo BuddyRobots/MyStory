@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class FormalScene : MonoBehaviour 
 {
+	public static FormalScene _instance;
+
 	private Button backBtn;
 	private Button nextBtn;
 	private Button recordBtn;
@@ -47,10 +49,13 @@ public class FormalScene : MonoBehaviour
 	public GameObject sceneLevel_1;
 	public GameObject sceneLevel_2;
 	[HideInInspector]
-	public bool subtitleShow=false;//字幕是否显示的标记
 
 
 
+	void Awake()
+	{
+		_instance=this;
+	}
 
 	void Start () 
 	{
@@ -78,7 +83,7 @@ public class FormalScene : MonoBehaviour
 		recordDoneFrame=transform.Find("RecordDoneFrame").gameObject;
 		winFrame=transform.Find("WinFrame").gameObject;
 		subtitle=transform.Find("Subtitle").gameObject;
-
+		subtitle.SetActive(false);
 		recordTimeSlider=transform.Find("RecordingFrame/RecordTimeSlider").GetComponent<Slider>();
 
 
@@ -92,7 +97,7 @@ public class FormalScene : MonoBehaviour
 		sceneParent=GameObject.Find("SceneParent");
 
 		sliderMoving=false;
-		subtitleShow=false;
+
 
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
@@ -258,10 +263,18 @@ public class FormalScene : MonoBehaviour
 
 	private void OnRecordBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了录音按钮");
 		//录音按钮隐藏，录音提示框显示，蒙板显示
 		recordBtn.transform.gameObject.SetActive(false);
 		mask.SetActive(true);
 		noticeToRecordFrame.SetActive(true);
+
+
+		//HideSubtitle();
+//		BussinessManager._instance.PauseStory();
+		SubtitleCtrl._instance.pauseChangeSubtitle=true;
+
+
 
 	}
 
@@ -285,6 +298,8 @@ public class FormalScene : MonoBehaviour
 		noticeToRecordFrame.SetActive(false);
 		recordBtn.transform.gameObject.SetActive(true);
 
+		BussinessManager._instance.ResumeStory();
+
 	}
 
 
@@ -294,13 +309,18 @@ public class FormalScene : MonoBehaviour
 		mask.SetActive(false);
 		noticeToRecordFrame.SetActive(false);
 		recordingFrame.SetActive(true);
-		subtitle.SetActive(true);
+//		subtitle.SetActive(true);
 		//录音，slider倒计时，音量大小显示，
 		//同步字幕，录屏  to do ...
+
+		HideSubtitle();
+		ShowSubtitle();
 
 		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 
 		sliderMoving=true;
+
+//		BussinessManager._instance.StartStory();
 	
 	}
 		
@@ -342,12 +362,16 @@ public class FormalScene : MonoBehaviour
 		music.SetActive(false);
 		shareBtn.transform.gameObject.SetActive(true);
 		saveVideoToAlbumBtn.transform.gameObject.SetActive(true);
-		subtitle.SetActive(true);
 
 
 		//保存音频，并播放
 		MicroPhoneInputSaveWav.getInstance().SaveMusic();
 		MicroPhoneInputSaveWav.getInstance().PlayRecord();
+
+//		
+//		LevelOne._instance.StartStory();
+		HideSubtitle();
+		ShowSubtitle();
 
 
 	}
@@ -362,6 +386,22 @@ public class FormalScene : MonoBehaviour
 	void OnConfirmBtnClick(GameObject btn)
 	{
 		SceneManager.LoadSceneAsync("5_SelectLevel");
+
+	}
+
+	public void ShowSubtitle()
+	{
+		Debug.Log("Formalscene------ShowSubtitle()");
+		subtitle.SetActive(true);
+		Debug.Log("-ShowSubtitle()-----done");
+	}
+
+	public void HideSubtitle()
+	{
+		Debug.Log("Formalscene------HideSubtitle()");
+
+		subtitle.SetActive(false);
+		Debug.Log("-HideSubtitle()-----done");
 
 	}
 

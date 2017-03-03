@@ -22,6 +22,8 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	private List<List<string>> allLevelSubTitleList=new List<List<string>>();
 
+
+
 	//json字符串，保存关卡的信息（这里的信息字段名和levelItemData里的属性保持一致）
 	string leveljsonstr = @"
             {
@@ -124,6 +126,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	void Awake()
 	{
+		Debug.Log("levelManager-----awake()");
 //		code for test...
 		PlayerPrefs.SetInt ("LevelID",3);
 		PlayerPrefs.SetInt ("LevelProgress",0);
@@ -131,6 +134,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		ReadSubtitleText();
 		ParseLevelItemInfo();
 		SetSubtitleForLevel();
+		SetAudioclipForLevel();
 		LoadLocalLevelProgressData ();
 	}
 
@@ -167,8 +171,22 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 			levelItemDataList[i].SubtitleList=allLevelSubTitleList[i];
 			Debug.Log("************levelItemDataList[i].SubtitleList.count---"+levelItemDataList[i].SubtitleList.Count);
 		}
+	}
+
+	/// <summary>
+	/// 给关卡设置旁白音频
+	/// </summary>
+	void SetAudioclipForLevel()
+	{
+		Debug.Log("--SetAudioclipForLevel()");
+		for (int i = 0; i < levelItemDataList.Count; i++) 
+		{
+			levelItemDataList[i].AudioAside=Manager._instance.audioAside[i];
+		}
+
 
 	}
+
 		
 	/// <summary>
 	/// 解析json字符串，并把信息存到levelitemdata里面

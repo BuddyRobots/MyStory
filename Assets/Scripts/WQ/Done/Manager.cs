@@ -6,12 +6,13 @@ using UnityEngine;
 
 ///该类用来--控制背景音乐的播放，淡入淡出，存储玩家在角色选择界面选择的角色类型
 
-public class Manager : MonoBehaviour 
+public class Manager :MonoBehaviour
 {
 	public static Manager _instance;
 
+
 	public static bool musicOn=true;
-	public static bool recordingDone=false;
+	public static bool recordingDone=false;//录音是否结束的标志
 
 	public static ModelType modelType;//玩家选择画的角色类型，作为绘画展示界面显示什么图片的依据
 
@@ -24,25 +25,36 @@ public class Manager : MonoBehaviour
 	[HideInInspector]
 	public Texture2D texture;//用来存储从拍摄界面取得的Texture2D
 
-	private float fadingTimer;//淡入淡出计时器
+
+	private float musicFadingTimer;//淡入淡出计时器
+	private GameObject manager;
+
+
+	public List<AudioClip> audioAside;
+
 
 	void Awake()
 	{
-		_instance=this;
+		if (_instance!=null) 
+		{
+			Destroy (gameObject);
 
+		}
+		else
+		{
+		    _instance=this;
+			GameObject.DontDestroyOnLoad(gameObject);
+		}
 	}
 
 	void Start () 
 	{
-
 		Manager.musicOn=true;
-
 		bgMusicFadeOut=false;
 		bgMusicFadeIn=false;
+		recordingDone=false;
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
-
-		GameObject.DontDestroyOnLoad(gameObject);
 
 	}
 		
@@ -74,11 +86,11 @@ public class Manager : MonoBehaviour
 		#region 控制背景音乐的淡入淡出(故事场景播放配音时淡出，配音结束时淡入)
 		if (bgMusicFadeOut) //如果背景音乐需要淡出，音量在固定时间内从1渐变成0，然后暂停
 		{
-			fadingTimer+=Time.deltaTime;
-			bgAudio.volume=Mathf.Lerp(1f,0,fadingTimer/Constant.MUSIC_FADINGTIME);
-			if (fadingTimer>=Constant.MUSIC_FADINGTIME) 
+			musicFadingTimer+=Time.deltaTime;
+			bgAudio.volume=Mathf.Lerp(1f,0,musicFadingTimer/Constant.MUSIC_FADINGTIME);
+			if (musicFadingTimer>=Constant.MUSIC_FADINGTIME) 
 			{
-				fadingTimer=0;
+				musicFadingTimer=0;
 				bgAudio.Pause ();
 				bgMusicFadeOut=false;
 			}
@@ -91,12 +103,12 @@ public class Manager : MonoBehaviour
 			{
 				bgAudio.Play();
 			}
-			fadingTimer+=Time.deltaTime;
+			musicFadingTimer+=Time.deltaTime;
 		
-			bgAudio.volume=Mathf.Lerp(0,1f,fadingTimer/Constant.MUSIC_FADINGTIME);
-			if (fadingTimer>=Constant.MUSIC_FADINGTIME) 
+			bgAudio.volume=Mathf.Lerp(0,1f,musicFadingTimer/Constant.MUSIC_FADINGTIME);
+			if (musicFadingTimer>=Constant.MUSIC_FADINGTIME) 
 			{
-				fadingTimer=1f;
+				musicFadingTimer=1f;
 				bgMusicFadeIn=false;
 			}
 			
@@ -106,29 +118,6 @@ public class Manager : MonoBehaviour
 	}
 
 
-
-
-//	public void ShowFinger(Vector3 pos)
-//	{
-//		prePos=Vector3.zero; 
-//		Debug.Log("----出现小手");
-//		GameObject sceneParent=GameObject.Find("SceneParent");
-////		if (prePos == pos) 
-////		{
-////			return;
-////		}
-////		prePos = pos;
-//		if (finger) 
-//		{
-//			Destroy (finger);
-//			finger = null;
-//		}
-//		finger = Instantiate (fingerPrefab) as GameObject;
-//		finger.name="finger";
-//		finger.transform.parent = sceneParent.transform;
-//		finger.transform.localScale = Vector3.one;
-//		finger.GetComponent<FingerCtrl> ().FingerShow (pos + offSet);
-//	}
 
 
 
