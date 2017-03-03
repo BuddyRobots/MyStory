@@ -16,12 +16,19 @@ namespace MyStory
 		);
 
 		// TODO test: return Mat. Change to void while publish.
-		public static Mat Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
+		public static void Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
 		{
+			partList = new List<Texture2D>();
+			bbList = new List<OpenCVForUnity.Rect>();
+
 			Mat sourceImage = new Mat(sourceTex.height, sourceTex.width, CvType.CV_8UC3);
 			Utils.texture2DToMat(sourceTex, sourceImage);
 
-			Mat modelSizeImage = CropMatToModelSize(sourceImage);
+			//Mat modelSizeImage = CropMatToModelSize(sourceImage);
+
+			Mat modelSizeImage = sourceImage.clone();
+			Utils.texture2DToMat(sourceTex, modelSizeImage);
+
 
 			float[] inputImageArray = MatToTensorArray(modelSizeImage);
 			float[] segmentationResultArray;
@@ -32,47 +39,27 @@ namespace MyStory
 			Mat originMaskImage = new Mat(sourceImage.size(), CvType.CV_8UC3);
 			Imgproc.resize(modelMaskImage, originMaskImage, originMaskImage.size(), 0, 0, Imgproc.INTER_NEAREST);
 
-			partList = new List<Texture2D>();
-			bbList = new List<OpenCVForUnity.Rect>();
-
 			GetLists(sourceImage, originMaskImage, out partList, out bbList);
-
-			return modelSizeImage;
 		}
 
 		private static Mat CropMatToModelSize(Mat sourceImage)
 		{			
 			Mat grayImage = MatBGR2Gray(sourceImage);
 
-			// Find Contours
-			List<MatOfPoint> contours = new List<MatOfPoint>();
-			Mat hierarchy = new Mat();
-			Imgproc.findContours(grayImage, contours, hierarchy, Imgproc.RETR_EXTERNAL,
-				Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
-
-			int maxAreaIdex = 0;
-			double maxArea = 0;
-			for (var i = 0; i < contours.Count; i++)
-			{
-				double area = Imgproc.contourArea(contours[i]);
-				if (area > maxArea)
-				{
-					maxArea = area;
-					maxAreaIdex = i;
-				}
-			}	
-			// Find Bounding Box
-			OpenCVForUnity.Rect roi = Imgproc.boundingRect(contours[maxAreaIdex]);
+			Mat points = Mat.zeros(grayImage.size(), grayImage.type());
+			Core.findNonZero(grayImage, points);
+			OpenCVForUnity.Rect roi = Imgproc.boundingRect(new MatOfPoint(points));
 			OpenCVForUnity.Rect bb = new OpenCVForUnity.Rect(
 				new Point(Math.Max(roi.tl().x - 50.0, 0),
 					      Math.Max(roi.tl().y - 50.0, 0)),
 				new Point(Math.Min(roi.br().x + 50.0, sourceImage.cols()),
 					      Math.Min(roi.br().y + 50.0, sourceImage.rows())));
 			Mat croppedImage = new Mat(sourceImage, bb);
-			// Zoom to 224*224
-			ZoomCropped(croppedImage);		
 
-			return croppedImage;
+			// Zoom to 224*224
+			Mat zoomedImage = ZoomCropped(croppedImage);		
+
+			return zoomedImage;
 		}
 
 		private static Mat MatBGR2Gray(Mat sourceImage)
@@ -87,12 +74,14 @@ namespace MyStory
 				new Scalar(Constant.THRES_H_MAX, Constant.THRES_S_MAX, Constant.THRES_V_MAX),
 				grayImage);
 			Imgproc.morphologyEx(grayImage, grayImage, Imgproc.MORPH_OPEN,
-				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(5, 5)));
+				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(7, 7)));
+			Imgproc.morphologyEx(grayImage, grayImage, Imgproc.MORPH_CLOSE,
+				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(7, 7)));
 
 			return grayImage;
 		}
 
-		private static void ZoomCropped(Mat croppedImage)
+		private static Mat ZoomCropped(Mat croppedImage)
 		{
 			int croppedWidth = croppedImage.cols();
 			int croppedHeight = croppedImage.rows();
@@ -124,7 +113,7 @@ namespace MyStory
 			Imgproc.resize(croppedImage, scaleImage, new Size(Constant.MODEL_HEIGHT, Constant.MODEL_WIDTH));
 
 			// Return croppedImage[224*224*3]
-			croppedImage = scaleImage;
+			return scaleImage;
 		}
 	
 		// TODO need to simplify this

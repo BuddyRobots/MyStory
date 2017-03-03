@@ -12,15 +12,19 @@ public class test_DisplaySprite : MonoBehaviour
 	{
 		GameObject head = new GameObject("Mosue Head");
 		head.AddComponent<SpriteRenderer>();
-		head.transform.position = GameObject.Find("tou2").transform.position;
+		head.transform.position = GameObject.Find("Head").transform.position;
 
 		GameObject body = new GameObject("Mosue Body");
-		head.AddComponent<SpriteRenderer>();
-		head.transform.position = GameObject.Find("shenti").transform.position;
+		body.AddComponent<SpriteRenderer>();
+		body.transform.position = GameObject.Find("Torso").transform.position;
 
 		GameObject arm = new GameObject("Mosue Arm");
-		head.AddComponent<SpriteRenderer>();
-		head.transform.position = GameObject.Find("shenti").transform.position;
+		arm.AddComponent<SpriteRenderer>();
+		arm.transform.position = GameObject.Find("R hand").transform.position;
+
+		GameObject imageTex = new GameObject("Image Texture");
+		imageTex.AddComponent<SpriteRenderer>();
+		imageTex.transform.position = GameObject.Find("Torso").transform.position - new Vector3(7, 0, 0);
 
 
 
@@ -29,13 +33,15 @@ public class test_DisplaySprite : MonoBehaviour
 		{
 			Mouse mouse = new Mouse(tex);
 
-			//head.GetComponent<SpriteRenderer>().sprite = mouse.head.sprite;
+			head.GetComponent<SpriteRenderer>().sprite = mouse.head.sprite;
+			body.GetComponent<SpriteRenderer>().sprite = mouse.body.sprite;
+			arm.GetComponent<SpriteRenderer>().sprite = mouse.leftArm.sprite;
+
 
 			Mat displayImage = mouse.image;
 			Texture2D displayTex = new Texture2D(displayImage.width(), displayImage.height());
 			Utils.matToTexture2D(mouse.image, displayTex);
-
-			head.GetComponent<SpriteRenderer>().sprite = Sprite.Create(displayTex, new UnityEngine.Rect(0.0f,0.0f,displayTex.width,displayTex.height), new Vector2(0.5f,0.5f), 100.0f);
+			imageTex.GetComponent<SpriteRenderer>().sprite = Sprite.Create(displayTex, new UnityEngine.Rect(0.0f,0.0f,displayTex.width,displayTex.height), new Vector2(0.5f,0.5f), 100.0f);
 
 
 
@@ -49,7 +55,7 @@ public class test_DisplaySprite : MonoBehaviour
 		else
 		{
 			Mouse mouse = new Mouse();
-			mouse.head.sprite = GameObject.Find("tou").GetComponent<SpriteMeshInstance>().spriteMesh.sprite;	
+			mouse.head.sprite = GameObject.Find("mouse-head").GetComponent<SpriteMeshInstance>().spriteMesh.sprite;	
 
 
 
@@ -63,5 +69,8 @@ public class test_DisplaySprite : MonoBehaviour
 		}
 
 		head.GetComponent<SpriteRenderer>().sortingOrder = 10;
+		body.GetComponent<SpriteRenderer>().sortingOrder = 10;
+		arm.GetComponent<SpriteRenderer>().sortingOrder = 10;
+		imageTex.GetComponent<SpriteRenderer>().sortingOrder = 10;
 	}
 }
