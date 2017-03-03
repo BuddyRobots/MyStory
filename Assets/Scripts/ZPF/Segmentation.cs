@@ -46,49 +46,9 @@ namespace MyStory
 		{			
 			Mat grayImage = MatBGR2Gray(sourceImage);
 
-
-
-			///
-			Debug.Log("Segmentation.cs CropMatToModelSize() : grayImage.channels = " + grayImage.channels() + " grayImage.depth = " + grayImage.depth());
-			///
-
-
-
-			// Find Contours
-			/*List<MatOfPoint> contours = new List<MatOfPoint>();
-			Mat hierarchy = new Mat();
-			Imgproc.findContours(grayImage, contours, hierarchy, Imgproc.RETR_EXTERNAL,
-				Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
-
-			int maxAreaIdex = 0;
-			double maxArea = 0;
-			for (var i = 0; i < contours.Count; i++)
-			{
-				double area = Imgproc.contourArea(contours[i]);
-				if (area > maxArea)
-				{
-					maxArea = area;
-					maxAreaIdex = i;
-				}
-			}	
-			// Find Bounding Box
-			OpenCVForUnity.Rect roi = Imgproc.boundingRect(contours[maxAreaIdex]);
-			OpenCVForUnity.Rect bb = new OpenCVForUnity.Rect(
-				new Point(Math.Max(roi.tl().x - 50.0, 0),
-					      Math.Max(roi.tl().y - 50.0, 0)),
-				new Point(Math.Min(roi.br().x + 50.0, sourceImage.cols()),
-					      Math.Min(roi.br().y + 50.0, sourceImage.rows())));
-			Mat croppedImage = new Mat(sourceImage, bb);*/
-
-			OpenCVForUnity.Rect roi = Imgproc.boundingRect(new MatOfPoint(grayImage));
-
-
-			///
-			Debug.Log("Segmentation.cs CropMatToModelSize() : roi.tl = " + roi.tl() + " roi.br = " + roi.br());
-			///
-
-
-
+			Mat points = Mat.zeros(grayImage.size(), grayImage.type());
+			Core.findNonZero(grayImage, points);
+			OpenCVForUnity.Rect roi = Imgproc.boundingRect(new MatOfPoint(points));
 			OpenCVForUnity.Rect bb = new OpenCVForUnity.Rect(
 				new Point(Math.Max(roi.tl().x - 50.0, 0),
 					      Math.Max(roi.tl().y - 50.0, 0)),
@@ -97,9 +57,9 @@ namespace MyStory
 			Mat croppedImage = new Mat(sourceImage, bb);
 
 			// Zoom to 224*224
-			//ZoomCropped(croppedImage);		
+			Mat zoomedImage = ZoomCropped(croppedImage);		
 
-			return croppedImage;
+			return zoomedImage;
 		}
 
 		private static Mat MatBGR2Gray(Mat sourceImage)
@@ -121,7 +81,7 @@ namespace MyStory
 			return grayImage;
 		}
 
-		private static void ZoomCropped(Mat croppedImage)
+		private static Mat ZoomCropped(Mat croppedImage)
 		{
 			int croppedWidth = croppedImage.cols();
 			int croppedHeight = croppedImage.rows();
@@ -153,7 +113,7 @@ namespace MyStory
 			Imgproc.resize(croppedImage, scaleImage, new Size(Constant.MODEL_HEIGHT, Constant.MODEL_WIDTH));
 
 			// Return croppedImage[224*224*3]
-			croppedImage = scaleImage;
+			return scaleImage;
 		}
 	
 		// TODO need to simplify this
