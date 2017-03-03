@@ -5,11 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using MyStory;
 
-
+[RequireComponent(typeof(GetImage))]
 public class TakingPhoto : MonoBehaviour 
 {
 	private Button confirmBtn;
 	private Button backBtn;
+
+	GetImage getImage;
+
+	public GameObject camQuad;
 
 	void Start () 
 	{
@@ -17,15 +21,26 @@ public class TakingPhoto : MonoBehaviour
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
+
+		getImage=gameObject.GetComponent<GetImage>();
+		getImage.Init();
+
+
+
+	}
+
+
+	void Update()
+	{
+//		camQuad.GetComponent<Renderer>().material.mainTexture=getImage.webCamTexture;
+		camQuad.GetComponent<MeshRenderer>().material.mainTexture=getImage.webCamTexture;
+
+
 	}
 
 	private void OnConfirmBtnClick(GameObject btn)
 	{		
-		//GetImage._instance.isTakingPhoto = true; //开启取图片
-
-		//存储拍摄得到的texture2D
-		Manager._instance.texture=GetImage_old._instance.texture;
-
+		Manager._instance.getImage=getImage;
 		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
 	}
 

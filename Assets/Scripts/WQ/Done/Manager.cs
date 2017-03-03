@@ -10,6 +10,7 @@ public class Manager :MonoBehaviour
 {
 	public static Manager _instance;
 
+	public GetImage getImage;
 
 	public static bool musicOn=true;
 	public static bool recordingDone=false;//录音是否结束的标志
