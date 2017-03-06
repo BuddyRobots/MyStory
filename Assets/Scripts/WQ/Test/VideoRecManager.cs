@@ -9,14 +9,14 @@ public class VideoRecManager : MonoBehaviour
 {
 
 
-	[DllImport("__Internal")]
-	private static extern void _PauseShareREC();
+//	[DllImport("__Internal")]
+//	private static extern void _PauseShareREC();
 
-	[DllImport("__Internal")]
-	private static extern void _ResumeShareREC();
+//	[DllImport("__Internal")]
+//	private static extern void _ResumeShareREC();
 
-	[DllImport("__Internal")]
-	private static extern void _IOSSaveImageToPhotosAlbum(string readAddr);
+//	[DllImport("__Internal")]
+//	private static extern void _IOSSaveImageToPhotosAlbum(string readAddr);
 
 	[DllImport("__Internal")]
 	private static extern void _IOSSaveVideoToPhotosAlbum(string readAddr);
@@ -34,25 +34,12 @@ public class VideoRecManager : MonoBehaviour
 		ShareREC.startRecoring();
 	}
 		
-	public  void PauseRec()
-	{
-		ShareREC.setSyncAudioComment(false);
-		_PauseShareREC();
-
-	}
-
-	public void ResumeREC()
-	{
-		ShareREC.setSyncAudioComment(true);
-		_ResumeShareREC();
-
-	}
 
 	public void EndRec()
 	{
 		FinishedRecordEvent finishedEvent=new FinishedRecordEvent(recordFinishedHandler);
 		ShareREC.stopRecording (finishedEvent);
-		ShareREC.setSyncAudioComment(false);
+
 
 	}
 		
@@ -61,14 +48,11 @@ public class VideoRecManager : MonoBehaviour
 		if (ex==null) 
 		{
 			
-//			ShareREC.playLastRecording();
-//
-//			Hashtable userData = new Hashtable();
-//			userData["score"] = "10000";
-//			ShareREC.editLastingRecording("这是我用shareREC录制的视频", userData, null);
+			ShareREC.playLastRecording();
 
-
-
+			Hashtable userData = new Hashtable();
+			userData["score"] = "10000";
+			ShareREC.editLastingRecording("这是我用shareREC录制的视频", userData, null);
 
 
 
@@ -81,15 +65,15 @@ public class VideoRecManager : MonoBehaviour
 
 
 
-	public void TakeScreenShotAndSaveToAlbum()
-	{
-		string imageName="testPic";
-		Application.CaptureScreenshot(imageName);
-
-		string readAddr=Application.persistentDataPath+"/"+imageName;
-		Debug.Log("------readAddr-----"+readAddr);//------readAddr-----/var/mobile/Containers/Data/Application/A62B2128-C1B5-4A46-BEF8-1CF46651BB9F/Documents/testPic
-		SaveImageToPhotoAlbum(readAddr);
-	}
+//	public void TakeScreenShotAndSaveToAlbum()
+//	{
+//		string imageName="testPic";
+//		Application.CaptureScreenshot(imageName);
+//
+//		string readAddr=Application.persistentDataPath+"/"+imageName;
+//		Debug.Log("------readAddr-----"+readAddr);//------readAddr-----/var/mobile/Containers/Data/Application/A62B2128-C1B5-4A46-BEF8-1CF46651BB9F/Documents/testPic
+//		SaveImageToPhotoAlbum(readAddr);
+//	}
 
 
 
@@ -100,12 +84,12 @@ public class VideoRecManager : MonoBehaviour
 
 	}
 		
-	private void SaveImageToPhotoAlbum(string readAddr)
-	{
-		
-		_IOSSaveImageToPhotosAlbum(readAddr);
-
-	}
+//	private void SaveImageToPhotoAlbum(string readAddr)
+//	{
+//		
+//		_IOSSaveImageToPhotosAlbum(readAddr);
+//
+//	}
 
 
 
