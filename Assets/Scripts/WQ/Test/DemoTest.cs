@@ -15,10 +15,7 @@ public class DemoTest : MonoBehaviour {
 		ShareREC.setSyncAudioComment(true);
 	}
 
-	// Update is called once per frame
-	void Update () {
 
-	}
 
 	void OnGUI ()
 	{

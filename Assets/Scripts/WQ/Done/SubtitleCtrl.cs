@@ -57,32 +57,16 @@ public class SubtitleCtrl : MonoBehaviour
 	}
 
 
-
-//	void Update () 
-//	{
-//		if (!pauseChangeSubtitle) 
-//		{
-//			// 字幕的切换
-//			ChangeSubtitleLineByLine();
-//			// 字幕的淡入淡出
-//			FadeInAndOut();
-//		}
-//			
-//	}
-//
-
-
-
 	void Update () 
 	{
 		if (!pauseChangeSubtitle) 
 		{
 
-			if (subtitleCountIndex<subTitleList.Count) 
+			if (subtitleCountIndex < subTitleList.Count) 
 			{
 				subtitleText.text=subTitleList[subtitleCountIndex];
-				subtitleChangeTimer+=Time.deltaTime;
-				if (subtitleChangeTimer>=recordingTimeList[subtitleCountIndex]-Constant.SUBTITLE_FADINGTIME) //如果到了淡出的时间
+				subtitleChangeTimer += Time.deltaTime;
+				if (subtitleChangeTimer >= recordingTimeList[subtitleCountIndex]-Constant.SUBTITLE_FADINGTIME) //如果到了淡出的时间
 				{
 					
 					fadeOut=true;
@@ -153,7 +137,7 @@ public class SubtitleCtrl : MonoBehaviour
 			{
 				Debug.Log("time to fade out ----");
 				fadeOut=true;
-//				fadeIn=false;
+				fadeIn=false;
 				if (subtitleCountIndex==subTitleList.Count-1) //最后一句的时候字幕背景要和字幕一起淡出
 				{
 					
@@ -169,7 +153,7 @@ public class SubtitleCtrl : MonoBehaviour
 					if (subtitleCountIndex<=subTitleList.Count-1)
 					{
 						fadeIn=true;
-//						fadeOut=false;
+						fadeOut=false;
 					}
 				}
 			}
@@ -177,43 +161,12 @@ public class SubtitleCtrl : MonoBehaviour
 	}
 
 
-
-
-
-//	void FadeInAndOut()
-//	{
-//		if (fadeOut)
-//		{
-//			FadeOut();
-//		}
-//		if (fadeIn) 
-//		{
-//			FadeIn();	
-//		}
-//		if (canvasGroupFadingOut) 
-//		{
-//			canvasGroupFadingOut=false;
-//			
-//			fadingTimer+=Time.deltaTime;
-//			canvasGroup.alpha=Mathf.Lerp(1f,0,fadingTimer/Constant.SUBTITLE_FADINGTIME);
-//			if (fadingTimer>=Constant.SUBTITLE_FADINGTIME) 
-//			{
-//				Debug.Log("背景淡出---");
-//				fadingTimer=Constant.SUBTITLE_FADINGTIME;
-//			}
-//
-//		}
-//
-//	}
-//
-
-
 	//淡出
 	void FadeOut()
 	{
 		temp_fadeOutTimer+=Time.deltaTime;
 		Color temp=subtitleText.color;
-		temp.a=Mathf.Lerp(1f,0,temp_fadeOutTimer/Constant.SUBTITLE_FADINGTIME);
+		temp.a=Mathf.Lerp(255f,0,temp_fadeOutTimer/Constant.SUBTITLE_FADINGTIME);
 		subtitleText.color=temp;
 
 		if (temp_fadeOutTimer>=Constant.SUBTITLE_FADINGTIME) 
@@ -227,7 +180,7 @@ public class SubtitleCtrl : MonoBehaviour
 	{
 		temp_fadeInTimer+=Time.deltaTime;
 		Color temp=subtitleText.color;
-		temp.a=Mathf.Lerp(1f,0,temp_fadeInTimer/Constant.SUBTITLE_FADINGTIME);
+		temp.a=Mathf.Lerp(255f,0,temp_fadeInTimer/Constant.SUBTITLE_FADINGTIME);
 		subtitleText.color=temp;
 
 		if (temp_fadeInTimer>=Constant.SUBTITLE_FADINGTIME) 
