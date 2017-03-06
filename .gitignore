@@ -1,19 +1,19 @@
-# Unity3D related
 /*
+
+# Unity3D related
 !/Assets
-Assets/OpenCVForUnity
-Assets/Anima2D
-Assets/Editor Default Resources
-Assets/Gizmos
+Assets/AssetStoreTools
+*.unitypackage
 
 
 # Xcode related
-MyStoryXcode/*
-!MyStoryXcode/Classes
-MyStoryXcode/Classes/*
-!MyStoryXcode/Classes/test_tensorflow.h 
-!MyStoryXcode/Classes/test_tensorflow.mm 
-!MyStoryXcode/Models
+!Builds/Xcode/Classes/test_tensorflow.h 
+!Builds/Xcode/Classes/test_tensorflow.mm 
+!Builds/Xcode/Classes/MyControl.h
+!Builds/Xcode/Classes/MyControl.mm 
+!Builds/Xcode/Classes/PhotoManager.h 
+!Builds/Xcode/Classes/PhotoManager.mm 
+!Builds/Xcode/Models
 
 
 # MAC-OSX related
