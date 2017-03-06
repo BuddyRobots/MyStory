@@ -7,14 +7,15 @@ Assets/AssetStoreTools
 
 
 # Xcode related
-!Builds/Xcode/Classes/test_tensorflow.h 
-!Builds/Xcode/Classes/test_tensorflow.mm 
-!Builds/Xcode/Classes/MyControl.h
-!Builds/Xcode/Classes/MyControl.mm 
-!Builds/Xcode/Classes/PhotoManager.h 
-!Builds/Xcode/Classes/PhotoManager.mm 
-!Builds/Xcode/Models
+!/Builds/Xcode/Classes/test_tensorflow.h 
+!/Builds/Xcode/Classes/test_tensorflow.mm 
+!/Builds/Xcode/Classes/MyControl.h
+!/Builds/Xcode/Classes/MyControl.mm 
+!/Builds/Xcode/Classes/PhotoManager.h 
+!/Builds/Xcode/Classes/PhotoManager.mm 
+!/Builds/Xcode/Models
 
+!/MyStoryXcode
 
 # MAC-OSX related
 .DS_Store
