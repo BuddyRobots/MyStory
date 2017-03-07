@@ -21,7 +21,7 @@ public class GetImage : MonoBehaviour
 		get {
 			if (m_RGBMat == null || m_RGBMat.rows() != webCamTexture.height || m_RGBMat.cols() != webCamTexture.width)
 			{
-				m_RGBMat = new Mat(webCamTexture.height, webCamTexture.width, CvType.CV_8UC3);			
+				m_RGBMat = new Mat(webCamTexture.height, webCamTexture.width, CvType.CV_8UC3);	
 				colors = new Color32[webCamTexture.width * webCamTexture.height];
 			}
 			Utils.webCamTextureToMat(webCamTexture, m_RGBMat, colors);
@@ -35,7 +35,7 @@ public class GetImage : MonoBehaviour
 	Mat m_RGBAMat;
 	public Mat RGBAMat {
 		get {
-			if (m_RGBAMat == null || m_RGBAMat.rows() != webCamTexture.height ||	m_RGBAMat.cols() != webCamTexture.width)
+			if (m_RGBAMat == null || m_RGBAMat.rows() != webCamTexture.height || m_RGBAMat.cols() != webCamTexture.width)
 			{
 				m_RGBAMat = new Mat(webCamTexture.height, webCamTexture.width, CvType.CV_8UC4);			
 				colors = new Color32[webCamTexture.width * webCamTexture.height];
@@ -220,16 +220,16 @@ public class GetImage : MonoBehaviour
 		initDone = false;
 
 		if (webCamTexture != null) {
-			webCamTexture.Stop ();
+			webCamTexture.Stop();
 			webCamTexture = null;
 		}
-		if (RGBMat != null) {
-			RGBMat.Dispose ();
-			RGBMat = null;
+		if (m_RGBMat != null) {
+			m_RGBMat.Dispose();
+			m_RGBMat = null;
 		}
-		if (RGBAMat != null) {
-			RGBAMat.Dispose ();
-			RGBAMat = null;
+		if (m_RGBAMat != null) {
+			m_RGBAMat.Dispose();
+			m_RGBAMat = null;
 		}
 		colors = null;
 	}

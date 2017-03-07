@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using OpenCVForUnity;
+using MyStory;
 
 
 
@@ -9,8 +11,6 @@ using UnityEngine;
 public class Manager :MonoBehaviour
 {
 	public static Manager _instance;
-
-	public GetImage getImage;
 
 	public static bool musicOn=true;
 	public static bool recordingDone=false;//录音是否结束的标志
@@ -24,8 +24,8 @@ public class Manager :MonoBehaviour
 	public AudioSource bgAudio;
 
 	[HideInInspector]
-	public Texture2D texture;//用来存储从拍摄界面取得的Texture2D
-
+	public Mat sourceMat;//用来存储从拍摄界面取得的Mat
+	public Mouse mouse;
 
 	private float musicFadingTimer;//淡入淡出计时器
 	private GameObject manager;

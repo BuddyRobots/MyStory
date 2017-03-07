@@ -24,28 +24,25 @@ public class TakingPhoto : MonoBehaviour
 
 		getImage=gameObject.GetComponent<GetImage>();
 		getImage.Init();
-
-
-
 	}
-
 
 	void Update()
 	{
-//		camQuad.GetComponent<Renderer>().material.mainTexture=getImage.webCamTexture;
 		camQuad.GetComponent<MeshRenderer>().material.mainTexture=getImage.webCamTexture;
-
-
 	}
 
 	private void OnConfirmBtnClick(GameObject btn)
-	{		
-		Manager._instance.getImage=getImage;
+	{				
+		Manager._instance.sourceMat=getImage.RGBMat;
 		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
 	}
 
 	private void OnBackBtnClick(GameObject btn)
 	{
 		SceneManager.LoadSceneAsync("2_DrawModelShow");
+	}
+
+	void OnDisable() {
+		getImage.Dispose();
 	}
 }

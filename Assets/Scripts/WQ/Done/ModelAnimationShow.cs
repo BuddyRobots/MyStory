@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using MyStory;
+
 
 public class ModelAnimationShow : MonoBehaviour 
 {
@@ -11,8 +13,7 @@ public class ModelAnimationShow : MonoBehaviour
 	private Button backBtn;
 	private Button reDrawBtn;
 
-	//for test...
-//	public Sprite textureSprite;
+	private Mouse mouse;
 
 	void Start () 
 	{
@@ -23,35 +24,21 @@ public class ModelAnimationShow : MonoBehaviour
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(reDrawBtn.gameObject).onClick=OnReDrawBtnClick;
-		//for test....
-//		textureSprite=GameObject.Find("TextureSprite").GetComponent<Sprite>();
-//		SetTex();
 
+		mouse = Manager._instance.mouse;
 	}
-
-	//for test....
-//	void SetTex()
-//	{
-//		textureSprite =Sprite.Create(Manager._instance.texture,new Rect(0,0,300,400),new Vector2(0.5f,0.5f),100);
-//
-//	}
 
 	private void OnConfirmBtnClick(GameObject btn)
 	{
 		SceneManager.LoadSceneAsync("1_ModelSelect");
-
 	}
 
 	private void OnBackBtnClick(GameObject btn)
 	{
-
 		SceneManager.LoadSceneAsync("3_TakingPhoto");
-
 	}
 	private void OnReDrawBtnClick(GameObject btn)
 	{
-
 		SceneManager.LoadSceneAsync("2_DrawModelShow");
-
 	}
 }

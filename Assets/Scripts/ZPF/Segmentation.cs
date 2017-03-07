@@ -16,19 +16,12 @@ namespace MyStory
 		);
 
 		// TODO test: return Mat. Change to void while publish.
-		public static void Segment(Texture2D sourceTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
+		public static void Segment(Mat sourceImage, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
 		{
 			partList = new List<Texture2D>();
-			bbList = new List<OpenCVForUnity.Rect>();
+			bbList = new List<OpenCVForUnity.Rect>();		
 
-			Mat sourceImage = new Mat(sourceTex.height, sourceTex.width, CvType.CV_8UC3);
-			Utils.texture2DToMat(sourceTex, sourceImage);
-
-			//Mat modelSizeImage = CropMatToModelSize(sourceImage);
-
-			Mat modelSizeImage = sourceImage.clone();
-			Utils.texture2DToMat(sourceTex, modelSizeImage);
-
+			Mat modelSizeImage = CropMatToModelSize(sourceImage);
 
 			float[] inputImageArray = MatToTensorArray(modelSizeImage);
 			float[] segmentationResultArray;

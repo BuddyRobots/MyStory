@@ -11,8 +11,10 @@ public class test_Tensorflow : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Texture2D inputTexture = MyUtils.ReadPicture.ReadAsTexture2D("Pictures/Mouses/1487573118");
+		Mat inputMat = new Mat(inputTexture.height, inputTexture.width, CvType.CV_8UC3);
+		Utils.texture2DToMat(inputTexture, inputMat);
 
-		Mouse mouse = new Mouse(inputTexture);
+		Mouse mouse = new Mouse(inputMat);
 
 		Texture2D displayTex = mouse.head.texture;
 		GameObject.Find("Head").GetComponent<Renderer>().material.mainTexture = displayTex;

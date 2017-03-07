@@ -131,7 +131,7 @@ public class HSVThreshold : MonoBehaviour {
 
 		return grayImage;
 	}
-
+		
 	private static Mat ZoomCropped(Mat croppedImage)
 	{
 		int croppedWidth = croppedImage.cols();
@@ -175,5 +175,10 @@ public class HSVThreshold : MonoBehaviour {
 		PlayerPrefs.SetInt("THRES_S_MAX", THRES_S_MAX);
 		PlayerPrefs.SetInt("THRES_V_MIN", THRES_V_MIN);
 		PlayerPrefs.SetInt("THRES_V_MAX", THRES_V_MAX);
+	}
+
+	public Mat GetRGBMat()
+	{
+		return getImage.RGBMat;
 	}
 }

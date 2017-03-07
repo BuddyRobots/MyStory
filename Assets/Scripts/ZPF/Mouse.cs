@@ -18,17 +18,14 @@ namespace MyStory
 		public BodyPart rightLeg;
 		public BodyPart tail;
 
-		// TODO for test
-		public Mat image;
-
 		GameObject spriteMeshRootGO;
 
-		// TODO Complete this. It's for test now.
-		public Mouse(Texture2D inputTexture/*, GameObject oriSpriteRootGO*/)
+		// TODO Need to complete this. It's for test now.
+		public Mouse(Mat inputMat/*, GameObject oriSpriteRootGO*/)
 		{
 			List<Texture2D> partList = new List<Texture2D>();
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
-			Segmentation.Segment(inputTexture, out partList, out bbList);
+			Segmentation.Segment(inputMat, out partList, out bbList);
 
 			head     = new BodyPart(partList[0], bbList[0]);
 			leftEar  = new BodyPart(partList[1], bbList[1]);
@@ -39,16 +36,6 @@ namespace MyStory
 			leftLeg  = new BodyPart(partList[6], bbList[6]);
 			rightLeg = new BodyPart(partList[7], bbList[7]);
 			tail     = new BodyPart(partList[8], bbList[8]);
-
-
-
-
-		}
-
-		// TODO for test
-		public Mouse()
-		{
-			head = new BodyPart();
 		}
 
 		public class BodyPart
@@ -80,15 +67,8 @@ namespace MyStory
 						m_sprite = Sprite.Create(texture, new UnityEngine.Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 					return m_sprite;
 				}
-
-
-				// TODO test: delete set{} when publish
-				set {
-					m_sprite = value;
-				}
 			}
-
-
+				
 			public BodyPart(Texture2D tex, OpenCVForUnity.Rect bb)
 			{
 				this.texture = tex;
@@ -96,9 +76,6 @@ namespace MyStory
 
 				this.m_sprite = Sprite.Create(tex, new UnityEngine.Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
 			}
-
-			// TODO for test
-			public BodyPart() {}
 		}
 	}
 }
