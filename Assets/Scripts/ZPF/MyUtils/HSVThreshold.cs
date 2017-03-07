@@ -62,7 +62,6 @@ public class HSVThreshold : MonoBehaviour {
 		s_Max_Slider.value = THRES_S_MAX;
 		v_Min_Slider.value = THRES_V_MIN;
 		v_Max_Slider.value = THRES_V_MAX;
-
 	}
 	
 	// Update is called once per frame
@@ -167,7 +166,7 @@ public class HSVThreshold : MonoBehaviour {
 		return scaleImage;
 	}
 
-	void OnApplicationQuit()
+	void OnDisable()
 	{
 		PlayerPrefs.SetInt("THRES_H_MIN", THRES_H_MIN);
 		PlayerPrefs.SetInt("THRES_H_MAX", THRES_H_MAX);

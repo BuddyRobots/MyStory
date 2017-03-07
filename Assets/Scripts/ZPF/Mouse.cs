@@ -18,6 +18,8 @@ namespace MyStory
 		public BodyPart rightLeg;
 		public BodyPart tail;
 
+		public Mat modelSizeMat;
+
 		GameObject spriteMeshRootGO;
 
 		// TODO Need to complete this. It's for test now.
@@ -25,7 +27,7 @@ namespace MyStory
 		{
 			List<Texture2D> partList = new List<Texture2D>();
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
-			Segmentation.Segment(inputMat, out partList, out bbList);
+			modelSizeMat = Segmentation.Segment(inputMat, out partList, out bbList);
 
 			head     = new BodyPart(partList[0], bbList[0]);
 			leftEar  = new BodyPart(partList[1], bbList[1]);

@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using MyStory;
+using MyUtils;
+using OpenCVForUnity;
+
 
 [RequireComponent(typeof(GetImage))]
 public class TakingPhoto : MonoBehaviour 
@@ -22,6 +23,12 @@ public class TakingPhoto : MonoBehaviour
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 
+		// Flip Quad vertically if on iPad
+		#if UNITY_IOS && !UNITY_EDITOR
+		GameObject quad = GameObject.Find("Quad");
+		quad.transform.localScale = new Vector3(quad.transform.localScale.x, quad.transform.localScale.y * -1.0f, quad.transform.localScale.z);
+		#endif
+
 		getImage=gameObject.GetComponent<GetImage>();
 		getImage.Init();
 	}
@@ -34,6 +41,14 @@ public class TakingPhoto : MonoBehaviour
 	private void OnConfirmBtnClick(GameObject btn)
 	{				
 		Manager._instance.sourceMat=getImage.RGBMat;
+
+		// Segmentation	
+		//TODO For test.
+		Mat readMat = ReadPicture.ReadAsMat("Pictures/Mouses/1487573118");
+		Mouse mouse = new Mouse(readMat);
+
+		//Mouse mouse = new Mouse(Manager._instance.sourceMat);
+		Manager._instance.mouse = mouse;
 		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
 	}
 

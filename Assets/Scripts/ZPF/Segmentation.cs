@@ -14,9 +14,8 @@ namespace MyStory
 			[In]  IntPtr inputImageArray, int channel, int width, int height, int klass,
 			[In, Out] IntPtr segmentatonResultArray
 		);
-
-		// TODO test: return Mat. Change to void while publish.
-		public static void Segment(Mat sourceImage, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
+			
+		public static Mat Segment(Mat sourceImage, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
 		{
 			partList = new List<Texture2D>();
 			bbList = new List<OpenCVForUnity.Rect>();		
@@ -33,6 +32,8 @@ namespace MyStory
 			Imgproc.resize(modelMaskImage, originMaskImage, originMaskImage.size(), 0, 0, Imgproc.INTER_NEAREST);
 
 			GetLists(sourceImage, originMaskImage, out partList, out bbList);
+
+			return modelSizeImage;
 		}
 
 		private static Mat CropMatToModelSize(Mat sourceImage)
@@ -57,14 +58,21 @@ namespace MyStory
 
 		private static Mat MatBGR2Gray(Mat sourceImage)
 		{
+			int THRES_H_MIN = PlayerPrefs.GetInt("THRES_H_MIN");
+			int THRES_H_MAX = PlayerPrefs.GetInt("THRES_H_MAX");
+			int THRES_S_MIN = PlayerPrefs.GetInt("THRES_S_MIN");
+			int THRES_S_MAX = PlayerPrefs.GetInt("THRES_S_MAX");
+			int THRES_V_MIN = PlayerPrefs.GetInt("THRES_V_MIN");
+			int THRES_V_MAX = PlayerPrefs.GetInt("THRES_V_MAX");
+
 			// BGR to HSV
 			Mat hsvImage = new Mat(sourceImage.rows(), sourceImage.cols(), CvType.CV_8UC3);
 			Imgproc.cvtColor(sourceImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 			// InRange
 			Mat grayImage = new Mat(sourceImage.rows(), sourceImage.cols(), CvType.CV_8UC1);
 			Core.inRange(hsvImage,
-				new Scalar(Constant.THRES_H_MIN, Constant.THRES_S_MIN, Constant.THRES_V_MIN),
-				new Scalar(Constant.THRES_H_MAX, Constant.THRES_S_MAX, Constant.THRES_V_MAX),
+				new Scalar(THRES_H_MIN, THRES_S_MIN, THRES_V_MIN),
+				new Scalar(THRES_H_MAX, THRES_S_MAX, THRES_V_MAX),
 				grayImage);
 			Imgproc.morphologyEx(grayImage, grayImage, Imgproc.MORPH_OPEN,
 				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(7, 7)));

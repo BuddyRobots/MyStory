@@ -23,8 +23,10 @@ public class Manager :MonoBehaviour
 	[HideInInspector]
 	public AudioSource bgAudio;
 
+	// Deprecated sourceMat.
 	[HideInInspector]
 	public Mat sourceMat;//用来存储从拍摄界面取得的Mat
+
 	public Mouse mouse;
 
 	private float musicFadingTimer;//淡入淡出计时器

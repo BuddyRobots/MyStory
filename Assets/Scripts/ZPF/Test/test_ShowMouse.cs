@@ -1,12 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using OpenCVForUnity;
 using MyStory;
+
 
 public class test_ShowMouse : MonoBehaviour {
 
 	[HideInInspector]
 	Mouse mouse;
+
+	public GameObject modelMouse;
 
 	public GameObject headQuad;
 	public GameObject leftEarQuad;
@@ -22,6 +24,13 @@ public class test_ShowMouse : MonoBehaviour {
 	void Start () {
 		mouse = Manager._instance.mouse;
 
+		// Model Size Mat
+		Mat modelSizeMat = mouse.modelSizeMat;
+		Texture2D modelSizeTex = new Texture2D(modelSizeMat.cols(), modelSizeMat.rows());
+		Utils.matToTexture2D(modelSizeMat, modelSizeTex);
+		modelMouse.GetComponent<Renderer>().material.mainTexture = modelSizeTex;
+
+		// Mouse Body Parts
 		headQuad.GetComponent<Renderer>().material.mainTexture = mouse.head.texture;
 		leftEarQuad.GetComponent<Renderer>().material.mainTexture = mouse.leftEar.texture;
 		rightEarQuad.GetComponent<Renderer>().material.mainTexture = mouse.rightEar.texture;
@@ -31,10 +40,5 @@ public class test_ShowMouse : MonoBehaviour {
 		leftLegQuad.GetComponent<Renderer>().material.mainTexture = mouse.leftLeg.texture;
 		rightLegQuad.GetComponent<Renderer>().material.mainTexture = mouse.rightLeg.texture;
 		tailQuad.GetComponent<Renderer>().material.mainTexture = mouse.tail.texture;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }
