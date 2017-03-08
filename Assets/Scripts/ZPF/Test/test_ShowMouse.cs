@@ -22,6 +22,7 @@ public class test_ShowMouse : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		#if !UNITY_EDITOR
 		mouse = Manager._instance.mouse;
 
 		// Model Size Mat
@@ -40,5 +41,6 @@ public class test_ShowMouse : MonoBehaviour {
 		leftLegQuad.GetComponent<Renderer>().material.mainTexture = mouse.leftLeg.texture;
 		rightLegQuad.GetComponent<Renderer>().material.mainTexture = mouse.rightLeg.texture;
 		tailQuad.GetComponent<Renderer>().material.mainTexture = mouse.tail.texture;
+		#endif
 	}
 }

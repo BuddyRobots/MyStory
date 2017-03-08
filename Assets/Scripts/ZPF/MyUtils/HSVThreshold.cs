@@ -168,6 +168,8 @@ public class HSVThreshold : MonoBehaviour {
 
 	void OnDisable()
 	{
+		getImage.Dispose();
+
 		PlayerPrefs.SetInt("THRES_H_MIN", THRES_H_MIN);
 		PlayerPrefs.SetInt("THRES_H_MAX", THRES_H_MAX);
 		PlayerPrefs.SetInt("THRES_S_MIN", THRES_S_MIN);
