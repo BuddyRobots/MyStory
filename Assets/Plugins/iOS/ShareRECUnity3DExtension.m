@@ -136,40 +136,19 @@ extern "C" {
             UnitySendMessage([observerStr UTF8String], "shareRECCallback", [resultStr UTF8String]);
             
             
-            
-            ////////////添加方法，获取整个录制视频的列表
-            /*
-            NSArray *recordings = [ShareREC currentLocalRecordings];
-            SRERecording *recording = [recordings lastObject];
-            NSString *path = [recording mergeAudioVideoPath];
-            */
-            ////////////////////////////
-            
-            
             //必须添加的方法
-//            SRERecording *recording=[[ShareREC currentLocalRecordings]lastObject];
-//            [sharerec confirmEditRecording: recording result:^(BOOL successed,NSError *error)
-//             
-//             NSString *Path=recording.mergeAudioVideoPath;
-//             ALAssetsLibrary *library=[[ALAssetsLibrary alloc] init];
-//             [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath: Path]
-//                                         completionBlock:^(NSURL *assetURL, NSError *error)
-//              {
-//                  if (error)
-//                  {
-//                      NSLog(@"保存失败：%@",error);
-//            
-//                  }else
-//                  {
-//                      NSLog(@"保存成功");
-//                  }
-//              
-//              
-//              }
-//              ];
-            
-//             ]
-            
+            SRERecording *recording=[[ShareREC currentLocalRecordings]lastObject];
+            NSString* Path=recording.mergeAudioVideoPath;
+            NSLog(@"path=======",Path);
+            ALAssetsLibrary* library=[[ALAssetsLibrary alloc] init];
+            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:Path]
+                                        completionBlock:^(NSURL *assetURL, NSError *error) {
+                                            if (error) {
+                                                NSLog(@"保存失败：%@",error);
+                                            }else{
+                                                NSLog(@"保存成功");
+                                            }
+                                        }];
             
             
             
