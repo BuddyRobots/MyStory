@@ -37,15 +37,15 @@ namespace MyStory
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
 			modelSizeMat = Segmentation.Segment(inputMat, out partList, out bbList);
 
-			head     = new BodyPart(partList[0], bbList[0], "head");
-			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar");
-			rightEar = new BodyPart(partList[2], bbList[2], "rightEar");
-			body     = new BodyPart(partList[3], bbList[3], "body");
-			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm");
-			rightArm = new BodyPart(partList[5], bbList[5], "rightArm");
-			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg");
-			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg");
-			tail     = new BodyPart(partList[8], bbList[8], "tail");
+			head     = new BodyPart(partList[0], bbList[0], "head", 2);
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 0);
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 1);
+			body     = new BodyPart(partList[3], bbList[3], "body", 1);
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 0);
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 1);
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 0);
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 2);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 0);
 
 			AddPartsToList();
 		}
@@ -53,15 +53,15 @@ namespace MyStory
 		// Test : Constructor For Test.
 		public Mouse(List<Texture2D> partList, List<OpenCVForUnity.Rect> bbList)
 		{
-			head     = new BodyPart(partList[0], bbList[0], "head");
-			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar");
-			rightEar = new BodyPart(partList[2], bbList[2], "rightEar");
-			body     = new BodyPart(partList[3], bbList[3], "body");
-			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm");
-			rightArm = new BodyPart(partList[5], bbList[5], "rightArm");
-			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg");
-			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg");
-			tail     = new BodyPart(partList[8], bbList[8], "tail");
+			head     = new BodyPart(partList[0], bbList[0], "head", 2);
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 0);
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 1);
+			body     = new BodyPart(partList[3], bbList[3], "body", 1);
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 0);
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 1);
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 0);
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 2);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 0);
 
 			AddPartsToList();
 		}
@@ -71,12 +71,14 @@ namespace MyStory
 			public Texture2D texture;
 			public OpenCVForUnity.Rect bb;
 			public string name;
+			public int sortingOrder;
 				
-			public BodyPart(Texture2D tex, OpenCVForUnity.Rect bb, string name)
+			public BodyPart(Texture2D tex, OpenCVForUnity.Rect bb, string name, int sortingOrder = 0)
 			{
 				this.texture = tex;
 				this.bb = bb;
 				this.name = name;
+				this.sortingOrder = sortingOrder;
 			}
 		}
 	
@@ -112,6 +114,7 @@ namespace MyStory
 				oriSpriteGOList.Add(new GameObject(bodyPartList[i].name));
 				oriSpriteGOList[i].AddComponent<SpriteRenderer>();
 				oriSpriteGOList[i].transform.SetParent(root.transform);
+				oriSpriteGOList[i].GetComponent<SpriteRenderer>().sortingOrder = bodyPartList[i].sortingOrder;
 			}				
 		}
 
