@@ -79,13 +79,15 @@ public class BussinessManager : MonoBehaviour
 
 	}
 
-
-	public void StartStory()
+	/// <summary>
+	/// 点击确定录音按钮，开始场景故事（没有旁白，有字幕，或者还有动画，同时开启录音和录屏）
+	/// </summary>
+	public void StartStoryToRecordAudioAndVideo()
 	{
 		switch (LevelManager.currentLevelData.LevelID)
 		{
 		case 1:
-			LevelOne._instance.StartStory();
+			LevelOne._instance.StartStoryToRecordAudioAndVideo();
 
 			break;
 		case 2:
@@ -140,6 +142,13 @@ public class BussinessManager : MonoBehaviour
 
 	}
 
+	/// <summary>
+	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
+	/// </summary>
+	public void PlayStoryWithAudioRecording()
+	{
 
+
+	}
 
 }

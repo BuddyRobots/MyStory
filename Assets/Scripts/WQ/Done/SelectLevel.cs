@@ -112,7 +112,7 @@ public class SelectLevel : MonoBehaviour
 
 	public void RefreshLevelUI()
 	{
-		Debug.Log("refreshLevelUI");
+		
 		LevelItemData data=null;
 		for (int i = 0; i < LevelManager.Instance.levelItemDataList.Count; i++) 
 		{

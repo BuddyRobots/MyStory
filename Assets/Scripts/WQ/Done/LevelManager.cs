@@ -126,7 +126,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	void Awake()
 	{
-		Debug.Log("levelManager-----awake()");
+//		Debug.Log("levelManager-----awake()");
 //		code for test...
 		PlayerPrefs.SetInt ("LevelID",3);
 		PlayerPrefs.SetInt ("LevelProgress",0);
@@ -142,7 +142,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	public void ReadSubtitleText()
 	{
-		Debug.Log("--ReadSubtitleText()");
+//		Debug.Log("--ReadSubtitleText()");
 		string 	allSubtitle=Resources.Load("Txt/Subtitle").ToString();//读取字幕文本文件
 		string[] singleLevelSubtitle=allSubtitle.Split('|');//每一关的字幕
 //		Debug.Log("一共有 "+singleLevelSubtitle.Length+" 段话");
@@ -158,7 +158,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 			}
 			allLevelSubTitleList.Add(temp);
 
-			Debug.Log("----------------------------------");
+//			Debug.Log("----------------------------------");
 
 		}
 	}
@@ -169,7 +169,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		for (int i = 0; i < levelItemDataList.Count; i++) 
 		{
 			levelItemDataList[i].SubtitleList=allLevelSubTitleList[i];
-			Debug.Log("************levelItemDataList[i].SubtitleList.count---"+levelItemDataList[i].SubtitleList.Count);
+//			Debug.Log("************levelItemDataList[i].SubtitleList.count---"+levelItemDataList[i].SubtitleList.Count);
 		}
 	}
 
@@ -193,7 +193,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	public void ParseLevelItemInfo()
 	{
-		Debug.Log("----ParseLevelItemInfo()----正常情况下这里只执行一次");
+//		Debug.Log("----ParseLevelItemInfo()----正常情况下这里只执行一次");
 		JsonData jd = JsonMapper.ToObject(leveljsonstr);   
 		JsonData jdLevelItems = jd["levelData"]; 
 
@@ -248,7 +248,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	public void LoadLocalLevelProgressData()
 	{
-		Debug.Log("----LoadLocalLevelProgressData");
+//		Debug.Log("----LoadLocalLevelProgressData");
 		int levelID = 0;
 		int levelPro = 0;
 		if (PlayerPrefs.HasKey ("LevelID"))
@@ -353,9 +353,9 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// <param name="data">Data.</param>
 	public void SetCurrentLevel(LevelItemData data)
 	{
-		Debug.Log("----SetCurrentLevel");
+//		Debug.Log("----SetCurrentLevel");
 		currentLevelData = data;
-		Debug.Log("currentLevelData.RecordTime---"+currentLevelData.RecordTime);
+//		Debug.Log("currentLevelData.RecordTime---"+currentLevelData.RecordTime);
 
 	}
 

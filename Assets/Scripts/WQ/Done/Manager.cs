@@ -27,13 +27,20 @@ public class Manager :MonoBehaviour
 	[HideInInspector]
 	public Mat sourceMat;//用来存储从拍摄界面取得的Mat
 
-	public Mouse mouse;
+	public Mouse mouseGo;
 
 	private float musicFadingTimer;//淡入淡出计时器
 	private GameObject manager;
 
 
 	public List<AudioClip> audioAside;
+
+	[HideInInspector]
+	public GameObject mouse;//存储的老鼠，每个场景里的老鼠都来自于这里，如果玩家没画老鼠，就用预先做好的老鼠形象，如果玩家画了小老鼠，就替换
+	[HideInInspector]
+	public GameObject ball;//存储的球
+	[HideInInspector]
+	public GameObject garland;//存储的花环
 
 
 	void Awake()
@@ -47,7 +54,11 @@ public class Manager :MonoBehaviour
 		{
 		    _instance=this;
 			GameObject.DontDestroyOnLoad(gameObject);
+
+
+
 		}
+
 	}
 
 	void Start () 
@@ -59,6 +70,10 @@ public class Manager :MonoBehaviour
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
+
+
+//		mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+//		GameObject.DontDestroyOnLoad(mouse);
 	}
 		
 
