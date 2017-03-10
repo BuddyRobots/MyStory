@@ -82,20 +82,15 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 	private Vector3[] SpriteLocalToWorld(GameObject go) 
 	{
-		SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+		MeshRenderer mr = go.GetComponent<MeshRenderer>();
 		Vector3 pos = go.transform.position;
 		Vector3 [] array = new Vector3[3];
 		// Center
 		array[0] = pos;
-
-
-		Debug.Log("test_LoadSpriteParts.cs SpriteLocalToWorld() : bounds.extend = " + sr.bounds.extents + " min = " + sr.bounds.min + " max = " + sr.bounds.max); 
-
-
 		// Bottom Left
-		array[1] = sr.bounds.min;
+		array[1] = mr.bounds.min;
 		// Top Right
-		array[2] = sr.bounds.max;
+		array[2] = mr.bounds.max;
 		return array;
 	}
 }
