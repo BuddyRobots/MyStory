@@ -37,13 +37,13 @@ public class test_LoadSpriteParts : MonoBehaviour
 		GameObject newMouseBoneRootGO = BoneUtils.CreateFromAnima2DBone2D(oriMouseBoneRootGO);
 
 		// Find Key Points
-		Vector3[] new_leftArmCord = SpriteLocalToWorld(/*GameObject.Find("new_leftArm").GetComponent<SpriteMeshInstance>().spriteMesh.sprite*/GameObject.Find("body"));
+		Vector3[] new_leftArmCord = SpriteLocalToWorld(GameObject.Find("new_leftArm"));
 		GameObject center = new GameObject("center");
 		center.transform.position = new_leftArmCord[0];
-		GameObject topLeft = new GameObject("topLeft");
-		topLeft.transform.position = new_leftArmCord[1];
-		GameObject bottomRight = new GameObject("bottomRight");
-		bottomRight.transform.position = new_leftArmCord[2];
+		GameObject bottomLeft = new GameObject("bottomLeft");
+		bottomLeft.transform.position = new_leftArmCord[1];
+		GameObject topRight = new GameObject("topRight");
+		topRight.transform.position = new_leftArmCord[2];
 
 
 
