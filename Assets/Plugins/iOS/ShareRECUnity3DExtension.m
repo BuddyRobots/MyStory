@@ -10,6 +10,11 @@
 #import <ShareREC/ShareREC.h>
 #import <ShareREC/Extension/ShareREC+Ext.h>
 #import "JSONKit.h"
+#import <AssetsLibrary/ALAssetsLibrary.h>
+#import<ShareREC/Extension/ShareREC+RecordingManager.h>
+#import <ShareREC/Extension/SRERecording.h>
+#import <ShareREC/Extension/ShareREC+RecordingEdit.h>
+
 
 #if defined (__cplusplus)
 extern "C" {
@@ -138,17 +143,19 @@ extern "C" {
             
             //必须添加的方法
             SRERecording *recording=[[ShareREC currentLocalRecordings]lastObject];
-            NSString* Path=recording.mergeAudioVideoPath;
-            NSLog(@"path=======",Path);
-            ALAssetsLibrary* library=[[ALAssetsLibrary alloc] init];
-            [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:Path]
-                                        completionBlock:^(NSURL *assetURL, NSError *error) {
-                                            if (error) {
-                                                NSLog(@"保存失败：%@",error);
-                                            }else{
-                                                NSLog(@"保存成功");
-                                            }
-                                        }];
+            [ShareREC confirmEditRecording:recording result:^(BOOL successes,NSError* error){
+                NSString* Path=recording.mergeAudioVideoPath;
+                ALAssetsLibrary* library=[[ALAssetsLibrary alloc] init];
+                [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:Path]
+                                            completionBlock:^(NSURL *assetURL, NSError *error) {
+                                                if (error) {
+                                                    NSLog(@"保存失败：%@",error);
+                                                }else{
+                                                    NSLog(@"保存成功");
+                                                }
+                                            }];
+                
+            }];
             
             
             

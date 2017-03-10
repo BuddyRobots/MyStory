@@ -4,6 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
+
+/// <summary>
+/// 该类负责控制故事场景的显示，界面UI的显示，界面切换，以及按钮的点击
+/// </summary>
 public class FormalScene : MonoBehaviour 
 {
 	public static FormalScene _instance;
@@ -59,7 +64,7 @@ public class FormalScene : MonoBehaviour
 
 	void Start () 
 	{
-		Debug.Log("fomalScene --初始化");
+//		Debug.Log("fomalScene --初始化");
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		nextBtn=transform.Find("Next").GetComponent<Button>();
 		recordBtn=transform.Find("Record").GetComponent<Button>();
@@ -126,11 +131,7 @@ public class FormalScene : MonoBehaviour
 		//需要根据当前关卡信息来显示对应的关卡的故事情景
 		currentLevelID=LevelManager.currentLevelData.LevelID;
 		ShowSceneAccordingToLevelID(currentLevelID);
-
-
-//		Manager._instance.ShowFinger(new Vector3(1.3f,0.3f,0));
-		BussinessManager._instance.ShowFinger(new Vector3(1.3f,0.3f,0));
-
+	
 
 	}
 
@@ -141,7 +142,7 @@ public class FormalScene : MonoBehaviour
 	{
 
 
-		Debug.Log("----当前是第 "+levelID+" 关-----");
+//		Debug.Log("----当前是第 "+levelID+" 关-----");
 
 
 		//复制相应的预制体，并调用对应的初始化函数    
@@ -154,12 +155,12 @@ public class FormalScene : MonoBehaviour
 
 		case 1:
 			tempScene=Instantiate(sceneLevel_1) as GameObject;
-			Debug.Log("克隆了第一关场景");
+//			Debug.Log("克隆了第一关场景");
 			break;
 		
 		case 2:
 			tempScene=Instantiate<GameObject>(sceneLevel_2);
-			Debug.Log("克隆了第二关场景");
+//			Debug.Log("克隆了第二关场景");
 			break;
 
 		default:
@@ -247,7 +248,8 @@ public class FormalScene : MonoBehaviour
 			}
 			data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
 			LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
-			SceneManager.LoadSceneAsync("6_FormalScene_0");
+//			SceneManager.LoadSceneAsync("6_FormalScene_0");
+			SceneManager.LoadSceneAsync("TRex_Copy");
 		}
 
 
@@ -263,18 +265,12 @@ public class FormalScene : MonoBehaviour
 
 	private void OnRecordBtnClick(GameObject btn)
 	{
-		Debug.Log("点击了录音按钮");
-		//录音按钮隐藏，录音提示框显示，蒙板显示
+		//录音按钮隐藏，录音提示框显示，蒙板显示,且故事场景暂停
 		recordBtn.transform.gameObject.SetActive(false);
 		mask.SetActive(true);
 		noticeToRecordFrame.SetActive(true);
 
-
-		//HideSubtitle();
-//		BussinessManager._instance.PauseStory();
-		SubtitleCtrl._instance.pauseChangeSubtitle=true;
-
-
+		BussinessManager._instance.PauseStory();
 
 	}
 
@@ -298,7 +294,7 @@ public class FormalScene : MonoBehaviour
 		noticeToRecordFrame.SetActive(false);
 		recordBtn.transform.gameObject.SetActive(true);
 
-		BussinessManager._instance.ResumeStory();
+		BussinessManager._instance.ResumeStory();//故事场景恢复
 
 	}
 
@@ -320,7 +316,7 @@ public class FormalScene : MonoBehaviour
 
 		sliderMoving=true;
 
-//		BussinessManager._instance.StartStory();
+		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
 	
 	}
 		

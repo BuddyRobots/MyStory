@@ -166,7 +166,7 @@ public class SubtitleCtrl : MonoBehaviour
 	{
 		temp_fadeOutTimer+=Time.deltaTime;
 		Color temp=subtitleText.color;
-		temp.a=Mathf.Lerp(255f,0,temp_fadeOutTimer/Constant.SUBTITLE_FADINGTIME);
+		temp.a=Mathf.Lerp(1f,0,temp_fadeOutTimer/Constant.SUBTITLE_FADINGTIME);
 		subtitleText.color=temp;
 
 		if (temp_fadeOutTimer>=Constant.SUBTITLE_FADINGTIME) 
@@ -180,7 +180,7 @@ public class SubtitleCtrl : MonoBehaviour
 	{
 		temp_fadeInTimer+=Time.deltaTime;
 		Color temp=subtitleText.color;
-		temp.a=Mathf.Lerp(255f,0,temp_fadeInTimer/Constant.SUBTITLE_FADINGTIME);
+		temp.a=Mathf.Lerp(1f,0,temp_fadeInTimer/Constant.SUBTITLE_FADINGTIME);
 		subtitleText.color=temp;
 
 		if (temp_fadeInTimer>=Constant.SUBTITLE_FADINGTIME) 

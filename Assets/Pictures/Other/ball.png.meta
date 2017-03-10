@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: f6ec11bfd33934bdaa79fa1a01bf467f
-timeCreated: 1488951536
+guid: eb845ae2fd6e1424285745a9cd1277b0
+timeCreated: 1489113164
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Grass_0
+  fileIDToRecycleName: {}
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -40,7 +39,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spriteBorder: {x: 0, y: 148, z: 0, w: 313}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 100
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -85,20 +84,7 @@ TextureImporter:
     overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Grass_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 146
-        width: 1024
-        height: 569
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
+    sprites: []
     outline: []
   spritePackingTag: 
   userData: 
