@@ -75,11 +75,6 @@ public class test_LoadSpriteParts : MonoBehaviour
 			bbList.Add(new OpenCVForUnity.Rect(values[i][0], values[i][1], values[i][2], values[i][3]));
 	}
 
-	private void GetWorldCordFromMatCord()
-	{
-		
-	}
-
 	private Vector3[] SpriteLocalToWorld(GameObject go) 
 	{
 		MeshRenderer mr = go.GetComponent<MeshRenderer>();
@@ -94,4 +89,3 @@ public class test_LoadSpriteParts : MonoBehaviour
 		return array;
 	}
 }
-
