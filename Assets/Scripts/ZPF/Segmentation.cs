@@ -220,7 +220,7 @@ namespace MyStory
 				Mat croppedImage = new Mat(resultImage, partBBList[i]);
 				RemoveBorder(croppedImage);
 
-				Texture2D tmpTex = new Texture2D(croppedImage.width(), croppedImage.height());
+				Texture2D tmpTex = new Texture2D(croppedImage.width(), croppedImage.height(), TextureFormat.RGBA32, false);
 				Utils.matToTexture2D(croppedImage, tmpTex);
 				partTextureList.Add(tmpTex);
 			}
@@ -230,14 +230,6 @@ namespace MyStory
 		// Need to add some bug free features.
 		private static List<OpenCVForUnity.Rect> GetROIList(List<Mat> partMaskList)
 		{
-
-
-			///
-			Debug.Log("Segmentation.cs GetROIList() : partMaskList.Count = " + partMaskList.Count);
-			///
-
-
-
 			List<OpenCVForUnity.Rect> roiList = new List<OpenCVForUnity.Rect>();
 			for (var i = 0; i < partMaskList.Count; i++)
 			{
@@ -246,14 +238,6 @@ namespace MyStory
 				Mat hierarchy = new Mat();
 				Mat mask = partMaskList[i].clone();
 				Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new Point(0, 0));
-
-
-
-				///
-				Debug.Log("Segmentation.cs GetROIList() : contours.Count = " + contours.Count);
-				///
-
-
 
 				// Find max contour id
 				double maxArea = 0.0;
@@ -267,15 +251,6 @@ namespace MyStory
 						maxIdx = j;
 					}
 				}
-
-
-
-				///
-				Debug.Log("Segmentation.cs GetROIList() : maxIdx = " + maxIdx);
-				///
-
-
-
 				OpenCVForUnity.Rect roi = Imgproc.boundingRect(contours[maxIdx]);
 				roiList.Add(roi);
 			}

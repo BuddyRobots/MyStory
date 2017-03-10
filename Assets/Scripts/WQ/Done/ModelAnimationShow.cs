@@ -26,7 +26,7 @@ public class ModelAnimationShow : MonoBehaviour
 		EventTriggerListener.Get(reDrawBtn.gameObject).onClick=OnReDrawBtnClick;
 
 		#if !UNITY_EDITOR
-		mouse = Manager._instance.mouse;
+		mouse = Manager._instance.mouseGo;
 		#endif
 	}
 
