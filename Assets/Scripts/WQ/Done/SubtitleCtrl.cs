@@ -86,6 +86,12 @@ public class SubtitleCtrl : MonoBehaviour
 						canvasGroup.alpha=Mathf.Lerp(1f,0,fadingTimer/Constant.SUBTITLE_FADINGTIME);
 						if (fadingTimer>=Constant.SUBTITLE_FADINGTIME) 
 						{
+
+
+
+							//字幕切换完毕，屏幕需要变暗再变亮
+							FormalScene._instance.screenGrowingDarkAndLight=true;
+
 							canvasGroup.alpha=0;
 							fadingTimer=Constant.SUBTITLE_FADINGTIME;
 							canvasGroupFadingOut=false;
