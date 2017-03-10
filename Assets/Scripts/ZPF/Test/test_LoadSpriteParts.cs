@@ -2,10 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using MyUtils;
+using MyStory;
+using Anima2DRuntimeEngine;
 
 
 public class test_LoadSpriteParts : MonoBehaviour
 {
+	public GameObject mouseSpriteRootGO;
+
 
 	// Use this for initialization
 	void Start ()
@@ -19,26 +23,75 @@ public class test_LoadSpriteParts : MonoBehaviour
 			partTexList.Add(ReadPicture.ReadAsTexture2D(path));
 		}
 
-		SetCordinate(out partBBList);
+		SetCordinate(partTexList, out partBBList);
+
+		Mouse mouse = new Mouse(partTexList, partBBList);
+		mouse.CreateSprite(mouseSpriteRootGO);
+
+		// Change Sprite to SpritMesh
+		GameObject mouseSpriteMeshRootGO = SpriteMeshUtils.CreateFromGameObjectRoot(mouseSpriteRootGO);
+		mouseSpriteMeshRootGO.transform.position = new Vector3(0, 0, -1);
+
+		// Create Bone Root
+		GameObject oriMouseBoneRootGO = GameObject.Find("Hip");
+		GameObject newMouseBoneRootGO = BoneUtils.CreateFromAnima2DBone2D(oriMouseBoneRootGO);
+
+		// Find Key Points
+		Vector3[] new_leftArmCord = SpriteLocalToWorld(/*GameObject.Find("new_leftArm").GetComponent<SpriteMeshInstance>().spriteMesh.sprite*/GameObject.Find("body"));
+		GameObject center = new GameObject("center");
+		center.transform.position = new_leftArmCord[0];
+		GameObject topLeft = new GameObject("topLeft");
+		topLeft.transform.position = new_leftArmCord[1];
+		GameObject bottomRight = new GameObject("bottomRight");
+		bottomRight.transform.position = new_leftArmCord[2];
 
 
 
 
 	}
 
-	private void SetCordinate(out List<OpenCVForUnity.Rect> bbList)
+	private void SetCordinate(List<Texture2D> partTexList, out List<OpenCVForUnity.Rect> bbList)
 	{
 		bbList = new List<OpenCVForUnity.Rect>();
 
-		bbList.Add(new OpenCVForUnity.Rect(84, 125, 59, 41));
-		bbList.Add(new OpenCVForUnity.Rect(81, 75, 60, 58));
-		bbList.Add(new OpenCVForUnity.Rect(149, 73, 60, 58));
-		bbList.Add(new OpenCVForUnity.Rect(104, 187, 25, 31));
-		bbList.Add(new OpenCVForUnity.Rect(70, 179, 23, 9));
-		bbList.Add(new OpenCVForUnity.Rect(134, 176, 23, 9));
-		bbList.Add(new OpenCVForUnity.Rect(91, 225, 15, 26));
-		bbList.Add(new OpenCVForUnity.Rect(118, 225, 15, 26));
-		bbList.Add(new OpenCVForUnity.Rect(226, 197, 109, 4));
+		List<List<int>> values = new List<List<int>>();
+		values.Add(new List<int>(new int[] { -18, 122, 117, 81 }));
+		values.Add(new List<int>(new int[] { -22, 172, 119, 116 }));
+		values.Add(new List<int>(new int[] { 47, 174, 119, 116 }));
+		values.Add(new List<int>(new int[] { 2, 60, 50, 61 }));
+		values.Add(new List<int>(new int[] { -32, 68, 46, 17 }));
+		values.Add(new List<int>(new int[] { 32, 71, 46, 17 }));
+		values.Add(new List<int>(new int[] { -12, 22, 29, 51 }));
+		values.Add(new List<int>(new int[] { 16, 22, 29, 51 }));
+		values.Add(new List<int>(new int[] { 124, 50, 217, 8 }));
+
+		for (var i = 0; i < values.Count; i++)
+		{
+			values[i][0] = values[i][0] + 102 - values[i][2]/2;
+			values[i][1] = -(values[i][1] - 247 + values[i][3]/2);
+		}
+
+		for (var i = 0; i < values.Count; i++)
+			bbList.Add(new OpenCVForUnity.Rect(values[i][0], values[i][1], values[i][2], values[i][3]));
+	}
+
+	private void GetWorldCordFromMatCord()
+	{
+		
+	}
+
+	private Vector3[] SpriteLocalToWorld(GameObject go) 
+	{
+		SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+		Vector3 pos = go.transform.position;
+		Vector3 [] array = new Vector3[3];
+		// Center
+		array[0] = pos;
+		// Top left
+		array[1] = pos + sr.bounds.min;
+		// Bottom right
+		array[2] = pos + sr.bounds.max;
+		return array;
 	}
 }
 
