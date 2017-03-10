@@ -30,6 +30,7 @@ public class FormalScene : MonoBehaviour
 
 	private GameObject music;
 	private GameObject mask;
+	private GameObject blackMask;
 	private GameObject noticeToRecordFrame;
 	private GameObject recordingFrame;
 	private GameObject recordDoneFrame;
@@ -42,6 +43,7 @@ public class FormalScene : MonoBehaviour
 	private bool sliderMoving=false;
 
 	private float sliderMovingTimer=0;
+	float blackMaskFadingTimer;
 
 	private int currentLevelID;
 
@@ -54,16 +56,21 @@ public class FormalScene : MonoBehaviour
 	public GameObject sceneLevel_1;
 	public GameObject sceneLevel_2;
 	[HideInInspector]
-
-
+	public  bool screenGrowingDarkAndLight=false;
+	bool blackMaskShow=false;
+	Vector3 blackMask_originPos;
 
 	void Awake()
 	{
 		_instance=this;
 	}
 
+
+
 	void Start () 
 	{
+		
+
 //		Debug.Log("fomalScene --初始化");
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		nextBtn=transform.Find("Next").GetComponent<Button>();
@@ -83,6 +90,12 @@ public class FormalScene : MonoBehaviour
 
 		music=transform.Find("Music").gameObject;
 		mask=transform.Find("Mask").gameObject;
+		blackMask=transform.Find("BlackMask").gameObject;
+		blackMask_originPos=blackMask.transform.localPosition;
+
+//		Debug.Log("blackMask---localPosition---"+blackMask.transform.localPosition);
+
+
 		noticeToRecordFrame=transform.Find("NoticeToRecordFrame").gameObject;
 		recordingFrame=transform.Find("RecordingFrame").gameObject;
 		recordDoneFrame=transform.Find("RecordDoneFrame").gameObject;
@@ -202,7 +215,63 @@ public class FormalScene : MonoBehaviour
 			}
 		}
 
+
+
+
+		#region  第一关两个小节进行切换时屏幕变暗再变亮
+
+		if (screenGrowingDarkAndLight) 
+		{
+			if (!blackMaskShow) 
+			{
+				//这里会进来两次，screenGrowingDarkAndLight的值有两次为TRUE，为了确保这里只执行一次，需要再弄一个开关
+				Debug.Log("显示黑色遮罩");
+				blackMask.transform.localPosition=Vector3.zero;
+
+				blackMaskFadingTimer+=Time.deltaTime;
+				Color temp=blackMask.GetComponent<Image>().color;
+				temp.a=Mathf.Lerp(0,1f,blackMaskFadingTimer/1f);//慢慢变暗
+				blackMask.GetComponent<Image>().color=temp;
+
+				if (blackMaskFadingTimer>=1f) 
+				{
+					temp.a=Mathf.Lerp(1f,0,1-((2-blackMaskFadingTimer)/1f));//慢慢变亮
+					blackMask.GetComponent<Image>().color=temp;
+
+					if (blackMaskFadingTimer>=2f) 
+					{
+						blackMaskFadingTimer=0;
+						blackMaskShow=true;
+						blackMask.transform.localPosition=blackMask_originPos;
+
+					}
+
+
+
+				}
+
+
+			}
+
+
+//			blackMask.GetComponent<Image>().CrossFadeAlpha(0,1f,true);
+//			blackMask.GetComponent<Image>().CrossFadeAlpha(1f,0,true);
+//			blackMask.transform.localPosition=blackMask_originPos;
+//			screenGrowingDarkAndLight=false;
+		}
+
+
+		#endregion
+
+
+
 	}
+
+
+
+
+
+
 
 	private void OnBackBtnClick(GameObject btn)
 	{

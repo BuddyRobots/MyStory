@@ -14,13 +14,13 @@ public class LevelOne : MonoBehaviour
 	bool grassAniPlay;//草是否播放了动画
 	bool startStory;//该变量用来保证故事只进行一次
 
-	string grassAniName="Grass_2";
+	string grassAniName="GrassScale_new";
 
 	//第一关的场景中有老鼠和球
 	GameObject mouse;
 	GameObject ball;
 
-
+	Vector3 originMousePos=new Vector3(-1.9f,0,0);
 
 	void Awake()
 	{
@@ -36,7 +36,7 @@ public class LevelOne : MonoBehaviour
 
 	void ShowFinger()
 	{
-		BussinessManager._instance.ShowFinger(new Vector3(1.3f,0.3f,0));//这个坐标位置可以灵活设置  ***********
+		BussinessManager._instance.ShowFinger(new Vector3(-5f,2f,0));//这个坐标位置可以灵活设置  ***********
 
 	}
 		
@@ -45,6 +45,7 @@ public class LevelOne : MonoBehaviour
 
 		if (!startStoryStraight) 
 		{
+//			Debug.Log("---------点击小草");
 			//如果点击了确认录音按钮，就点击小草无效   to  do.....
 			ClickTheGrass();
 		}
@@ -68,6 +69,7 @@ public class LevelOne : MonoBehaviour
 		{
 			if (EventSystem.current.IsPointerOverGameObject())
 			{
+				Debug.Log("当前点击是在UI 上");
 				return ;
 			}
 			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
@@ -75,6 +77,7 @@ public class LevelOne : MonoBehaviour
 			{
 				if (hit.collider.tag=="ClickObj") 
 				{
+					Debug.Log("点了小草-------");
 					if (BussinessManager._instance.finger!=null) 
 					{
 
@@ -112,7 +115,17 @@ public class LevelOne : MonoBehaviour
 			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
 			//		mouse=Manager._instance.mouse;
 			mouse.transform.parent=transform;
-			mouse.transform.position=new Vector3(5.35f,-3f,0);//Vector3.zero;
+			mouse.transform.position=originMousePos;//Vector3.zero;
+
+
+
+			/////to do....
+			//刚出现的小老鼠应该是不能点击的，碰撞体应设置一下false    
+			//字幕结束的时候屏幕变黑再变亮以后才可以点击小老鼠
+		
+
+
+
 			mouse.name="Mouse";
 		}
 	    
