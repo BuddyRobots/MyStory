@@ -18,9 +18,17 @@ namespace MyStory
 		public BodyPart rightLeg;
 		public BodyPart tail;
 
+		// Test : For test.
 		public Mat modelSizeMat;
 
-		GameObject spriteMeshRootGO;
+		// TODO Change this to private when publish.
+		public List<BodyPart> bodyPartList;
+		private List<GameObject> oriSpriteGOList;
+
+		private const float pixelsPerUnit = 100.0f;
+
+		private GameObject spriteMeshRootGO;
+
 
 		// TODO Need to complete this. It's for test now.
 		public Mouse(Mat inputMat/*, GameObject oriSpriteRootGO*/)
@@ -29,55 +37,123 @@ namespace MyStory
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
 			modelSizeMat = Segmentation.Segment(inputMat, out partList, out bbList);
 
-			head     = new BodyPart(partList[0], bbList[0]);
-			leftEar  = new BodyPart(partList[1], bbList[1]);
-			rightEar = new BodyPart(partList[2], bbList[2]);
-			body     = new BodyPart(partList[3], bbList[3]);
-			leftArm  = new BodyPart(partList[4], bbList[4]);
-			rightArm = new BodyPart(partList[5], bbList[5]);
-			leftLeg  = new BodyPart(partList[6], bbList[6]);
-			rightLeg = new BodyPart(partList[7], bbList[7]);
-			tail     = new BodyPart(partList[8], bbList[8]);
+			head     = new BodyPart(partList[0], bbList[0], "head");
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar");
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar");
+			body     = new BodyPart(partList[3], bbList[3], "body");
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm");
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm");
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg");
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg");
+			tail     = new BodyPart(partList[8], bbList[8], "tail");
+
+			AddPartsToList();
+		}
+
+		// Test : Constructor For Test.
+		public Mouse(List<Texture2D> partList, List<OpenCVForUnity.Rect> bbList)
+		{
+			head     = new BodyPart(partList[0], bbList[0], "head");
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar");
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar");
+			body     = new BodyPart(partList[3], bbList[3], "body");
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm");
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm");
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg");
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg");
+			tail     = new BodyPart(partList[8], bbList[8], "tail");
+
+			AddPartsToList();
 		}
 
 		public class BodyPart
 		{
-			Texture2D m_texture;
-			public Texture2D texture {
-				get {
-					return m_texture;
-				}
-				set {
-					m_texture = value;
-				}
-			}
-
-			OpenCVForUnity.Rect m_bb;
-			public OpenCVForUnity.Rect bb {
-				get {
-					return m_bb;
-				}
-				set {
-					m_bb = value;
-				}
-			}
-
-			Sprite m_sprite;
-			public Sprite sprite {
-				get {
-					if (!m_sprite.texture)
-						m_sprite = Sprite.Create(texture, new UnityEngine.Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-					return m_sprite;
-				}
-			}
+			public Texture2D texture;
+			public OpenCVForUnity.Rect bb;
+			public string name;
 				
-			public BodyPart(Texture2D tex, OpenCVForUnity.Rect bb)
+			public BodyPart(Texture2D tex, OpenCVForUnity.Rect bb, string name)
 			{
 				this.texture = tex;
 				this.bb = bb;
-
-				this.m_sprite = Sprite.Create(tex, new UnityEngine.Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+				this.name = name;
 			}
+		}
+	
+		private void AddPartsToList()
+		{
+			bodyPartList = new List<BodyPart>();
+			bodyPartList.Add(head);
+			bodyPartList.Add(leftEar);
+			bodyPartList.Add(rightEar);
+			bodyPartList.Add(body);
+			bodyPartList.Add(leftArm);
+			bodyPartList.Add(rightArm);
+			bodyPartList.Add(leftLeg);
+			bodyPartList.Add(rightLeg);
+			bodyPartList.Add(tail);
+		}
+	
+		public void CreateSprite(GameObject oriSpriteRootGO)
+		{
+			CreateSpriteStructure(oriSpriteRootGO);
+
+			for (var i = 0; i < oriSpriteGOList.Count; i++)
+				SetSpriteTexture(oriSpriteGOList[i], bodyPartList[i].texture);			
+
+			TransformCordinate();
+		}
+
+		private void CreateSpriteStructure(GameObject root)
+		{
+			oriSpriteGOList = new List<GameObject>();
+			for (var i = 0; i < bodyPartList.Count; i++)
+			{
+				oriSpriteGOList.Add(new GameObject(bodyPartList[i].name));
+				oriSpriteGOList[i].AddComponent<SpriteRenderer>();
+				oriSpriteGOList[i].transform.SetParent(root.transform);
+			}				
+		}
+
+		private void SetSpriteTexture(GameObject spriteGO, Texture2D texture)
+		{
+			spriteGO.GetComponent<SpriteRenderer>().sprite = Sprite.Create(texture, new UnityEngine.Rect(0.0f,0.0f,texture.width,texture.height), new Vector2(0.5f,0.5f), pixelsPerUnit);
+		}
+
+		private void TransformCordinate()
+		{
+			List<Vector3> matCordList = new List<Vector3>();
+			for (var i = 0; i < oriSpriteGOList.Count; i++)
+			{
+				matCordList.Add(new Vector3((bodyPartList[i].bb.x + bodyPartList[i].bb.width/2)/pixelsPerUnit, (bodyPartList[i].bb.y + bodyPartList[i].bb.height/2)/pixelsPerUnit, 0.0f));
+			}
+			Vector3 matOrigin = new Vector3((float)(matCordList[6].x + matCordList[7].x)/2.0f, 
+				Mathf.Max((float)leftLeg.bb.br().y, (float)rightLeg.bb.br().y)/pixelsPerUnit, 0.0f);
+
+			for (var i = 0 ; i < oriSpriteGOList.Count; i++)
+			{
+				matCordList[i] -= matOrigin;
+
+				float y = -matCordList[i].y;
+				float x = matCordList[i].x;
+				matCordList[i] = new Vector3(x, y, 0.0f);
+			}
+
+			for (var i = 0; i < oriSpriteGOList.Count; i++)
+			{
+				oriSpriteGOList[i].transform.localPosition = matCordList[i];
+			}
+		}
+
+		// Test maybe do not need this
+		public void test_CreateSprite(GameObject oriSpriteRootGO)
+		{
+			CreateSpriteStructure(oriSpriteRootGO);
+			for (var i = 0; i < oriSpriteGOList.Count; i++)
+				SetSpriteTexture(oriSpriteGOList[i], bodyPartList[i].texture);
+
+
+
 		}
 	}
 }
