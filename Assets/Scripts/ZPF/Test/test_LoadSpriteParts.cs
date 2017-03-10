@@ -87,10 +87,15 @@ public class test_LoadSpriteParts : MonoBehaviour
 		Vector3 [] array = new Vector3[3];
 		// Center
 		array[0] = pos;
-		// Top left
-		array[1] = pos + sr.bounds.min;
-		// Bottom right
-		array[2] = pos + sr.bounds.max;
+
+
+		Debug.Log("test_LoadSpriteParts.cs SpriteLocalToWorld() : bounds.extend = " + sr.bounds.extents + " min = " + sr.bounds.min + " max = " + sr.bounds.max); 
+
+
+		// Bottom Left
+		array[1] = sr.bounds.min;
+		// Top Right
+		array[2] = sr.bounds.max;
 		return array;
 	}
 }
