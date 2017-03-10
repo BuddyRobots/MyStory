@@ -14,9 +14,9 @@ public class AllSceneSinglton<T>:MonoBehaviour
 		get {
 			if (_instance == null) 
 			{
-				Debug.Log("场景单利---");
+//				Debug.Log("场景单利---");
 				GameObject go = new GameObject ();
-				Debug.Log(go.name);
+//				Debug.Log(go.name);
 				go.hideFlags = HideFlags.HideAndDontSave;
 				DontDestroyOnLoad (go);
 				_instance = (T)go.AddComponent(typeof(T));

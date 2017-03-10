@@ -13,7 +13,7 @@ public class test_ShowMouse : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		#if !UNITY_EDITOR
-		mouse = Manager._instance.mouse;
+		mouse = Manager._instance.mouseGo;
 
 		// Model Size Mat
 		Mat modelSizeMat = mouse.modelSizeMat;

@@ -13,8 +13,7 @@ public class StartGame : MonoBehaviour
 	{
 		startBtn=transform.Find("StartGameBtn").GetComponent<Button>();
 		EventTriggerListener.Get(startBtn.gameObject).onClick=OnStartBtnClick;
-	
-		Debug.Log("******----"+Application.targetFrameRate);
+
 	}
 	
 
