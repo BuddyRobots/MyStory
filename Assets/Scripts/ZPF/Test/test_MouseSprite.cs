@@ -53,6 +53,9 @@ public class test_MouseSprite : MonoBehaviour {
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimated.AddComponent<Animator>();
 		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/MouseStandPoseController") as RuntimeAnimatorController;
+
+		// Save to Manager
+		Manager._instance.mouseGo = newMouseAnimated;
 	}			
 
 	private void SetCordinate(List<Texture2D> partTexList, out List<OpenCVForUnity.Rect> bbList)
