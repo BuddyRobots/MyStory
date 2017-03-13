@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class SpriteCycle_WQ : MonoBehaviour
 {
 	public List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();

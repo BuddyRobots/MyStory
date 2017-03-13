@@ -14,7 +14,7 @@ public class SubtitleCtrl : MonoBehaviour
 	private List<string>  subTitleList=new List<string>();//存储每句话
 	private List<float> recordingTimeList=new List<float>();//存储每句话对应的时间
 
-	private float fadingTimer;//淡入淡出计时器
+	private float subtitleBgFadingTimer;//淡入淡出计时器
 
 	private bool fadeOut=false;
 	private bool fadeIn=false;
@@ -45,7 +45,7 @@ public class SubtitleCtrl : MonoBehaviour
 		fadeOut=false;
 		fadeIn=false;
 		canvasGroupFadingOut=false;
-		fadingTimer=0;
+		subtitleBgFadingTimer=0;
 		canvasGroup.alpha=1;
 		
 		pauseChangeSubtitle=false;
@@ -70,6 +70,7 @@ public class SubtitleCtrl : MonoBehaviour
 				{
 					
 					fadeOut=true;
+					fadeIn=false;
 					if (fadeOut)
 					{
 						FadeOut();
@@ -79,12 +80,12 @@ public class SubtitleCtrl : MonoBehaviour
 					{
 						canvasGroupFadingOut=true;
 					}
-					if (canvasGroupFadingOut) 
+					if (canvasGroupFadingOut) //字幕背景开始淡出
 					{
 
-						fadingTimer+=Time.deltaTime;
-						canvasGroup.alpha=Mathf.Lerp(1f,0,fadingTimer/Constant.SUBTITLE_FADINGTIME);
-						if (fadingTimer>=Constant.SUBTITLE_FADINGTIME) 
+						subtitleBgFadingTimer+=Time.deltaTime;
+						canvasGroup.alpha=Mathf.Lerp(1f,0,subtitleBgFadingTimer/Constant.SUBTITLE_FADINGTIME);
+						if (subtitleBgFadingTimer>=Constant.SUBTITLE_FADINGTIME) 
 						{
 
 
@@ -93,14 +94,14 @@ public class SubtitleCtrl : MonoBehaviour
 							FormalScene._instance.screenGrowingDarkAndLight=true;
 
 							canvasGroup.alpha=0;
-							fadingTimer=Constant.SUBTITLE_FADINGTIME;
+							subtitleBgFadingTimer=Constant.SUBTITLE_FADINGTIME;
 							canvasGroupFadingOut=false;
 						}
 
 					}
 
 
-					if (subtitleChangeTimer>=recordingTimeList[subtitleCountIndex]) 
+					if (subtitleChangeTimer>=recordingTimeList[subtitleCountIndex]) //如果当前这一句字幕的时间走完了，字幕要切换成下一句，重新开始计时
 					{
 						
 						subtitleChangeTimer=0;
@@ -108,21 +109,23 @@ public class SubtitleCtrl : MonoBehaviour
 						if (subtitleCountIndex<subTitleList.Count) 
 						{
 							subtitleText.text=subTitleList[subtitleCountIndex];
-
-						}
-
-						if (subtitleCountIndex<=subTitleList.Count-1)
-						{
 							fadeIn=true;
-
+							fadeOut=false;
 						}
-						if (fadeIn) 
-						{	
-							FadeIn();
 
-						}
+//						if (fadeIn) 
+//						{	
+//							FadeIn();
+//
+//						}
 
 					}
+
+
+				}
+				if (fadeIn) 
+				{	
+					FadeIn();
 
 				}
 			}
@@ -132,39 +135,6 @@ public class SubtitleCtrl : MonoBehaviour
 	}
 
 
-	void ChangeSubtitleLineByLine()
-	{
-
-		if (subtitleCountIndex<subTitleList.Count) 
-		{
-			subtitleText.text=subTitleList[subtitleCountIndex];
-			subtitleChangeTimer+=Time.deltaTime;
-			if (subtitleChangeTimer>=recordingTimeList[subtitleCountIndex]-Constant.SUBTITLE_FADINGTIME) 
-			{
-				Debug.Log("time to fade out ----");
-				fadeOut=true;
-				fadeIn=false;
-				if (subtitleCountIndex==subTitleList.Count-1) //最后一句的时候字幕背景要和字幕一起淡出
-				{
-					
-						canvasGroupFadingOut=true;
-					
-
-				}
-				if (subtitleChangeTimer>=recordingTimeList[subtitleCountIndex]) 
-				{
-					Debug.Log("time to fade in-----");
-					subtitleChangeTimer=0;
-					subtitleCountIndex++;
-					if (subtitleCountIndex<=subTitleList.Count-1)
-					{
-						fadeIn=true;
-						fadeOut=false;
-					}
-				}
-			}
-		}
-	}
 
 
 	//淡出
@@ -173,6 +143,8 @@ public class SubtitleCtrl : MonoBehaviour
 		temp_fadeOutTimer+=Time.deltaTime;
 		Color temp=subtitleText.color;
 		temp.a=Mathf.Lerp(1f,0,temp_fadeOutTimer/Constant.SUBTITLE_FADINGTIME);
+//		Debug.Log("Fade  out-----temp.a----"+temp.a);
+
 		subtitleText.color=temp;
 
 		if (temp_fadeOutTimer>=Constant.SUBTITLE_FADINGTIME) 
@@ -186,7 +158,8 @@ public class SubtitleCtrl : MonoBehaviour
 	{
 		temp_fadeInTimer+=Time.deltaTime;
 		Color temp=subtitleText.color;
-		temp.a=Mathf.Lerp(1f,0,temp_fadeInTimer/Constant.SUBTITLE_FADINGTIME);
+		temp.a=Mathf.Lerp(0f,1f,temp_fadeInTimer/Constant.SUBTITLE_FADINGTIME);
+//		Debug.Log("Fade  In-----temp.a----"+temp.a);
 		subtitleText.color=temp;
 
 		if (temp_fadeInTimer>=Constant.SUBTITLE_FADINGTIME) 

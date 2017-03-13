@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class VideoRecManager : MonoBehaviour
 {
-
+	public static VideoRecManager _instance;
 
 //	[DllImport("__Internal")]
 //	private static extern void _PauseShareREC();

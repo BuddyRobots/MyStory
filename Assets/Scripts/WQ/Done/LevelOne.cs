@@ -10,17 +10,25 @@ public class LevelOne : MonoBehaviour
 	public GameObject  grass;
 
 	private Animation grassAni;
+	private Animator mouseAnimator;
 	bool startStoryStraight=false;//是否可以直接开始故事
 	bool grassAniPlay;//草是否播放了动画
 	bool startStory;//该变量用来保证故事只进行一次
 
-	string grassAniName="GrassScale_new";
+	string grassAniName="Grass_2";
 
 	//第一关的场景中有老鼠和球
 	GameObject mouse;
 	GameObject ball;
 
-	Vector3 originMousePos=new Vector3(-1.9f,0,0);
+
+	Vector3 originMousePos=new Vector3(4.7f,-2.9f,0);
+	Vector3 originBallPos=new Vector3(0.39f,-2.9f,0);
+
+	[HideInInspector]
+	public bool secondSceneShow=false;
+
+
 
 	void Awake()
 	{
@@ -31,26 +39,28 @@ public class LevelOne : MonoBehaviour
 	{
 		grassAni=grass.GetComponent<Animation>();
 		startStoryStraight=false;
-		ShowFinger();
+		ShowFinger(grass.transform.localPosition);
+
+
 	}
 
-	void ShowFinger()
+	void ShowFinger(Vector3 pos)
 	{
-		BussinessManager._instance.ShowFinger(new Vector3(-5f,2f,0));//这个坐标位置可以灵活设置  ***********
+		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
 
 	}
 		
+
+	bool fingerToClickMouseShow;
+
 	void Update () 
 	{
 
 		if (!startStoryStraight) 
 		{
-//			Debug.Log("---------点击小草");
-			//如果点击了确认录音按钮，就点击小草无效   to  do.....
 			ClickTheGrass();
 		}
 
-	
 		///草的动画播放完以后再开始故事
 		if (grassAniPlay && !grassAni.IsPlaying(grassAniName)) //如果草播放了动画，且已经播完了
 		{
@@ -61,7 +71,32 @@ public class LevelOne : MonoBehaviour
 			}
 		}
 
+
+
+
+		if (secondSceneShow) 
+		{
+//			Debug.Log("进入第二部分");
+			//进入第二部分，出现小手提示点击老鼠，出现球，点击老鼠，播放动画，走到球的位置，播放踢球动画，球随机往前走
+			if (!fingerToClickMouseShow)
+			{
+				ShowBall();
+				ShowFinger(mouse.transform.position);
+				fingerToClickMouseShow=true;
+				if (mouse.GetComponent<MousePlayBall>()==null) 
+				{
+					mouse.AddComponent<MousePlayBall>();
+				}
+
+			}
+
+		}
+
+
+
 	}
+
+
 
 	void ClickTheGrass()
 	{
@@ -94,6 +129,7 @@ public class LevelOne : MonoBehaviour
 		}
 	}
 
+
 	/// <summary>
 	/// 正常开始故事（有旁白，字幕，或者动画等）
 	/// </summary>
@@ -104,7 +140,7 @@ public class LevelOne : MonoBehaviour
 		FormalScene._instance.ShowSubtitle();
 		GameObject.Find("Main Camera").GetComponent<AudioSource>().clip=LevelManager.currentLevelData.AudioAside;//Resources.Load<AudioClip>("Audio/Seagulls");
 		GameObject.Find("Main Camera").GetComponent<AudioSource>().Play();
-		SubtitleCtrl._instance.Init();
+//		SubtitleCtrl._instance.Init();
 	}
 
 	private void ShowMouse()
@@ -115,20 +151,33 @@ public class LevelOne : MonoBehaviour
 			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
 			//		mouse=Manager._instance.mouse;
 			mouse.transform.parent=transform;
-			mouse.transform.position=originMousePos;//Vector3.zero;
+			mouse.transform.localPosition=originMousePos;
 
-
-
-			/////to do....
-			//刚出现的小老鼠应该是不能点击的，碰撞体应设置一下false    
-			//字幕结束的时候屏幕变黑再变亮以后才可以点击小老鼠
 		
-
-
-
 			mouse.name="Mouse";
+
+			mouseAnimator=mouse.GetComponent<Animator>();
+
+
 		}
 	    
+
+	}
+
+
+
+
+	private void ShowBall()
+	{
+
+		if (ball==null) 
+		{
+			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
+			ball.transform.parent=transform;
+			ball.transform.localPosition=originBallPos;
+			ball.name="Ball";
+		
+		}
 
 	}
 	/// <summary>
@@ -136,7 +185,7 @@ public class LevelOne : MonoBehaviour
 	/// </summary>
 	public void PlayStoryWithAudioRecording()
 	{
-
+		//播放草的动画
 
 	}
 
@@ -166,6 +215,9 @@ public class LevelOne : MonoBehaviour
 
 	public void StartStoryToRecordAudioAndVideo()
 	{
+
+
+
 
 		//如果有小手提示点击，就销毁小手，点击失效   to  do.....
 		startStoryStraight=true;
@@ -207,8 +259,8 @@ public class LevelOne : MonoBehaviour
 		//如果有字幕，且在切换字幕，就暂停切换
 		PauseAnimation();
 		PauseNarratage();
-		SubtitleCtrl._instance.pauseChangeSubtitle=true;
-
+//		SubtitleCtrl._instance.pauseChangeSubtitle=true;
+		Show._instance.pause=true;
 		StopAllCoroutines();
 	}
 
@@ -217,7 +269,8 @@ public class LevelOne : MonoBehaviour
 	{
 		ResumeNarratage();
 		ResumeAnimation();
-		SubtitleCtrl._instance.pauseChangeSubtitle=false;
+//		SubtitleCtrl._instance.pauseChangeSubtitle=false;
+		Show._instance.pause=false;
 	}
 
 

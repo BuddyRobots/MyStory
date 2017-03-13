@@ -259,6 +259,9 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 		{  
 //			Debug.Log("RECORD_TIME is out! stop record!");  
 			StopRecord();  
+			//停止录屏
+//			VideoRecManager._instance.EndRec();
+
 		}  
 		yield return 0;  
 	}  

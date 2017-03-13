@@ -14,8 +14,10 @@ public class FormalScene : MonoBehaviour
 	public static FormalScene _instance;
 
 	private Button backBtn;
-	private Button nextBtn;
-	private Button recordBtn;
+	[HideInInspector]
+	public  Button nextBtn;
+	[HideInInspector]
+	public  Button recordBtn;
 	private Button shareBtn;
 	private Button saveVideoToAlbumBtn;
 	private Button cancelBtn;
@@ -58,7 +60,13 @@ public class FormalScene : MonoBehaviour
 	[HideInInspector]
 	public  bool screenGrowingDarkAndLight=false;
 	bool blackMaskShow=false;
-	Vector3 blackMask_originPos;
+	///这个标志用来判断---是否需要给老鼠，背景，摄像机等添加诸如Follow_WQ这种需要根据对象是否存在来动态设置变量的脚本
+	/// 比如背景移动，背景需要跟随摄像机，摄像机需要跟随老鼠，需要等预制体被复制成对象显示在界面上才能手动设置
+	[HideInInspector]
+	public 	bool addComponentToGo=false;
+
+	Vector3 blackMask_screenOutsidePos=new Vector3(0,1000f,0);//黑色遮罩在屏幕外面的位置
+	Vector3 blackMask_screenInsidePos=Vector3.zero;//黑色遮罩在屏幕中间的位置
 
 	void Awake()
 	{
@@ -91,9 +99,9 @@ public class FormalScene : MonoBehaviour
 		music=transform.Find("Music").gameObject;
 		mask=transform.Find("Mask").gameObject;
 		blackMask=transform.Find("BlackMask").gameObject;
-		blackMask_originPos=blackMask.transform.localPosition;
-
+//		blackMask_screenOutsidePos=blackMask.transform.localPosition;
 //		Debug.Log("blackMask---localPosition---"+blackMask.transform.localPosition);
+		blackMask.transform.localPosition=blackMask_screenInsidePos;
 
 
 		noticeToRecordFrame=transform.Find("NoticeToRecordFrame").gameObject;
@@ -137,18 +145,48 @@ public class FormalScene : MonoBehaviour
 
 
 
-
+		Manager._instance.levelOneSceneClosed=false;
 
 
 
 		//需要根据当前关卡信息来显示对应的关卡的故事情景
 		currentLevelID=LevelManager.currentLevelData.LevelID;
 		ShowSceneAccordingToLevelID(currentLevelID);
+		if (currentLevelID==1) {
+			nextBtn.gameObject.SetActive(false);
+		}
 	
+		StartCoroutine(ScreenGrowLight());
+
+		//屏幕变亮     to do....
+//		blackMask.GetComponent<Image>().CrossFadeAlpha(0,2f,true);
+//		blackMask.transform.localPosition=blackMask_screenOutsidePos;
 
 	}
 
 
+	IEnumerator ScreenGrowLight()
+	{
+		
+		blackMask.GetComponent<Image>().CrossFadeAlpha(0,2f,true);
+		yield return new WaitForSeconds(1.5f);
+		blackMask.transform.localPosition=blackMask_screenOutsidePos;
+
+
+	}
+
+
+
+	IEnumerator ScreenGrowDark()
+	{
+		blackMask.transform.localPosition=blackMask_screenInsidePos;
+		blackMask.GetComponent<Image>().CrossFadeAlpha(1,2f,true);
+		yield return new WaitForSeconds(2f);
+		blackMask.GetComponent<Image>().CrossFadeAlpha(0,2f,true);
+		yield return new WaitForSeconds(2f);
+		blackMask.transform.localPosition=blackMask_screenOutsidePos;
+
+	}
 
 
 	void ShowSceneAccordingToLevelID(int levelID)
@@ -219,48 +257,50 @@ public class FormalScene : MonoBehaviour
 
 
 		#region  第一关两个小节进行切换时屏幕变暗再变亮
-
-		if (screenGrowingDarkAndLight) 
+		if (LevelManager.currentLevelData.LevelID==1) 
 		{
-			if (!blackMaskShow) 
+			if (screenGrowingDarkAndLight) 
 			{
-				//这里会进来两次，screenGrowingDarkAndLight的值有两次为TRUE，为了确保这里只执行一次，需要再弄一个开关
-				Debug.Log("显示黑色遮罩");
-				blackMask.transform.localPosition=Vector3.zero;
-
-				blackMaskFadingTimer+=Time.deltaTime;
-				Color temp=blackMask.GetComponent<Image>().color;
-				temp.a=Mathf.Lerp(0,1f,blackMaskFadingTimer/1f);//慢慢变暗
-				blackMask.GetComponent<Image>().color=temp;
-
-				if (blackMaskFadingTimer>=1f) 
+				if (!blackMaskShow) 
 				{
-					temp.a=Mathf.Lerp(1f,0,1-((2-blackMaskFadingTimer)/1f));//慢慢变亮
-					blackMask.GetComponent<Image>().color=temp;
 
-					if (blackMaskFadingTimer>=2f) 
-					{
-						blackMaskFadingTimer=0;
-						blackMaskShow=true;
-						blackMask.transform.localPosition=blackMask_originPos;
 
-					}
-
+					blackMaskShow=true;
+					StartCoroutine(ScreenGrowDark());
+//					//这里会进来两次，screenGrowingDarkAndLight的值有两次为TRUE，为了确保这里只执行一次，需要再弄一个开关
+////					Debug.Log("显示黑色遮罩");
+//					blackMask.transform.localPosition=Vector3.zero;
+//
+//					blackMaskFadingTimer+=Time.deltaTime;
+//					Color temp=blackMask.GetComponent<Image>().color;
+//					temp.a=Mathf.Lerp(0,1f,blackMaskFadingTimer/1f);//慢慢变暗
+//					blackMask.GetComponent<Image>().color=temp;
+//
+//					if (blackMaskFadingTimer>=1f) 
+//					{
+//						temp.a=Mathf.Lerp(1f,0,1-((2-blackMaskFadingTimer)/1f));//慢慢变亮
+//						blackMask.GetComponent<Image>().color=temp;
+//
+//						if (blackMaskFadingTimer>=2f) 
+//						{
+//
+//							LevelOne._instance.secondSceneShow=true;
+//
+//							blackMaskFadingTimer=0;
+//							blackMaskShow=true;
+//							blackMask.transform.localPosition=blackMask_screenOutsidePos;
+//
+//						}
+//
+//
+//
+//					}
 
 
 				}
 
-
 			}
-
-
-//			blackMask.GetComponent<Image>().CrossFadeAlpha(0,1f,true);
-//			blackMask.GetComponent<Image>().CrossFadeAlpha(1f,0,true);
-//			blackMask.transform.localPosition=blackMask_originPos;
-//			screenGrowingDarkAndLight=false;
 		}
-
-
 		#endregion
 
 
@@ -310,19 +350,21 @@ public class FormalScene : MonoBehaviour
 		}
 		else
 		{
-			currentLevelID++;
-			if (currentLevelID>=9) 
+
+			if (currentLevelID==1) 
 			{
-				currentLevelID=9;
+
+				Manager._instance.levelOneSceneClosed=true;
+				MousePlayBall._instance.KickTheBallOutSide();	
+	
 			}
-			data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
-			LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
-//			SceneManager.LoadSceneAsync("6_FormalScene_0");
-			SceneManager.LoadSceneAsync("TRex_Copy");
+			else
+			{
+				UpgradeLevel();
+				SceneManager.LoadSceneAsync("6_FormalScene_0");
+
+			}	
 		}
-
-
-
 
 
 		////////////////////// for test....
@@ -331,6 +373,28 @@ public class FormalScene : MonoBehaviour
 
 
 	}
+
+
+	public void UpgradeLevel()
+	{
+		
+
+
+		currentLevelID++;
+		if (currentLevelID>=9) 
+		{
+			currentLevelID=9;
+
+
+		}
+		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
+		LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
+
+		PlayerPrefs.SetInt ("LevelID", currentLevelID);
+		PlayerPrefs.SetInt ("LevelProgress", 0);
+
+	}
+
 
 	private void OnRecordBtnClick(GameObject btn)
 	{
@@ -382,6 +446,7 @@ public class FormalScene : MonoBehaviour
 		ShowSubtitle();
 
 		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
+//		VideoRecManager._instance.StartRec();
 
 		sliderMoving=true;
 
@@ -445,6 +510,9 @@ public class FormalScene : MonoBehaviour
 	{
 
 		//保存视频到相册，并弹出保存成功提示框   to do...
+
+//		VideoRecManager._instance.SaveVideoToPhotoAlbum();
+
 	}
 
 
