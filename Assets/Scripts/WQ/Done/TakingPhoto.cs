@@ -44,12 +44,17 @@ public class TakingPhoto : MonoBehaviour
 
 		// Segmentation	
 		//TODO For test.
+		#if UNITY_IOS && !UNITY_EDITOR
 		Mat readMat = ReadPicture.ReadAsMat("Pictures/Mouses/1487573118");
 		Mouse mouse = new Mouse(readMat);
 
+
 		//Mouse mouse = new Mouse(Manager._instance.sourceMat);
 		Manager._instance.mouse = mouse;
+		#endif
+
 		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
+
 	}
 
 	private void OnBackBtnClick(GameObject btn)
