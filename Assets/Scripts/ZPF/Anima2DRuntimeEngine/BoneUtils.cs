@@ -60,6 +60,8 @@ namespace Anima2DRuntimeEngine
 			foreach (Bone2D bone2D in bone2Ds)
 				if (bone2D.name == name)
 					return bone2D;
+
+			Debug.Log("BoneUtils.cs FindBoneWithName() : Bone " + name + " not found!");
 			return new Bone2D();
 		}
 

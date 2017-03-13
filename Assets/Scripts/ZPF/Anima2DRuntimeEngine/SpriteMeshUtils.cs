@@ -103,6 +103,9 @@ namespace Anima2DRuntimeEngine
 			foreach (SpriteMeshInstance instance in instances)
 				if (instance.name == name)
 					return instance;
+
+			Debug.Log("SpriteMeshUtils.cs FindInstanceWithName : Instance " + name + " not found");
+
 			return new SpriteMeshInstance();
 		}
 			
