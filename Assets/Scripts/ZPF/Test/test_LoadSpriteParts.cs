@@ -10,6 +10,13 @@ public class test_LoadSpriteParts : MonoBehaviour
 {
 	public GameObject mouseSpriteRootGO;
 
+	private class BasicCord
+	{
+		public Vector3 center;
+		public Vector3 bottomLeft;
+		public Vector3 topRight;
+	}
+
 
 	// Use this for initialization
 	void Start ()
@@ -36,18 +43,29 @@ public class test_LoadSpriteParts : MonoBehaviour
 		GameObject oriMouseBoneRootGO = GameObject.Find("Hip");
 		GameObject newMouseBoneRootGO = BoneUtils.CreateFromAnima2DBone2D(oriMouseBoneRootGO);
 
-		// Find Key Points
-		Vector3[] new_leftArmCord = SpriteLocalToWorld(/*GameObject.Find("new_leftArm").GetComponent<SpriteMeshInstance>().spriteMesh.sprite*/GameObject.Find("body"));
-		GameObject center = new GameObject("center");
-		center.transform.position = new_leftArmCord[0];
-		GameObject topLeft = new GameObject("topLeft");
-		topLeft.transform.position = new_leftArmCord[1];
-		GameObject bottomRight = new GameObject("bottomRight");
-		bottomRight.transform.position = new_leftArmCord[2];
+		SetupBone_Body(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_Head(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_LeftEar(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_RightEar(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_LeftArm(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_RightArm(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_LeftLeg(mouseSpriteMeshRootGO, newMouseBoneRootGO);
+		SetupBone_RightLeg(mouseSpriteMeshRootGO, newMouseBoneRootGO);
 
+		// Update BindInfo
+		SpriteMeshUtils.BindBoneToInstance(mouseSpriteMeshRootGO);
 
+		// Add to a parent GameObject
+		GameObject newMouseAnimated = new GameObject("newMouseAnimated");
+		mouseSpriteMeshRootGO.transform.parent = newMouseAnimated.transform;
+		newMouseBoneRootGO.transform.parent = newMouseAnimated.transform;
 
+		// Add Animator to Mouse
+		Animator animator = newMouseAnimated.AddComponent<Animator>();
+		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/MouseStandPoseController") as RuntimeAnimatorController;
 
+		// Save to Manager
+		Manager._instance.mouseGo = newMouseAnimated;
 	}
 
 	private void SetCordinate(List<Texture2D> partTexList, out List<OpenCVForUnity.Rect> bbList)
@@ -73,30 +91,221 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 		for (var i = 0; i < values.Count; i++)
 			bbList.Add(new OpenCVForUnity.Rect(values[i][0], values[i][1], values[i][2], values[i][3]));
+	}		
+
+	// TODO Setup BoneList, can we simplify this routine?
+	// TODO We have not considered the length of the bone yet. Maybe something with bone's child.
+	// TODO Did not consider rotation problem.
+	private void SetupBone_Head(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_head"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "Head");
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.bottomLeft.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "Head"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_head"), 
+			boneList);		
+		boneList.Clear();
 	}
 
-	private void GetWorldCordFromMatCord()
-	{
-		
+	private void SetupBone_LeftEar(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_leftEar"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "L ear");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.bottomLeft.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "L ear"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_leftEar"), 
+			boneList);		
+		boneList.Clear();
 	}
 
-	private Vector3[] SpriteLocalToWorld(GameObject go) 
+	private void SetupBone_RightEar(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_rightEar"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "R ear");
+		bone.transform.position = new Vector3(basicCord.bottomLeft.x, basicCord.bottomLeft.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "R ear"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_rightEar"), 
+			boneList);		
+		boneList.Clear();
+	}
+
+	private void SetupBone_Body(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_body"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "Hip");
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.bottomLeft.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "Torso");
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.center.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "Hip"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "Torso"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_body"), 
+			boneList);		
+		boneList.Clear();
+	}
+
+	private void SetupBone_LeftArm(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_leftArm"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "L arm");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.topRight.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "L hand");
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.center.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "L arm"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "L hand"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_leftArm"), 
+			boneList);		
+		boneList.Clear();
+	}
+
+	private void SetupBone_RightArm(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_rightArm"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "R arm");
+		bone.transform.position = new Vector3(basicCord.bottomLeft.x, basicCord.topRight.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "R hand");
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.center.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "R arm"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "R hand"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_rightArm"), 
+			boneList);		
+		boneList.Clear();
+	}
+
+	private void SetupBone_LeftLeg(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_leftLeg"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "L leg");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.topRight.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "L leg2");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.center.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "L foot");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.bottomLeft.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "L leg"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "L leg2"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "L foot"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_leftLeg"), 
+			boneList);		
+		boneList.Clear();
+	}
+
+	private void SetupBone_RightLeg(GameObject spriteMeshRootGO, GameObject boneRootGO)
+	{		
+		// Find sprite key point (center, bottom left, top right).
+		BasicCord basicCord = GetBasicCord(FindSpriteMeshGOInChild(spriteMeshRootGO, "new_rightLeg"));
+
+		// Set bone position
+		GameObject bone = FindBoneGOInChild(boneRootGO, "R leg");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.topRight.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "R leg2");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.center.y, 0);
+		bone = FindBoneGOInChild(boneRootGO, "R foot");
+		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.bottomLeft.y, 0);
+
+		// Bind bone
+		List<Bone2D> boneList = new List<Bone2D>();
+
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "R leg"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "R leg2"));
+		boneList.Add(BoneUtils.FindBoneWithName(boneRootGO, "R foot"));
+		SpriteMeshInstanceEditor.SetupBoneList(
+			SpriteMeshUtils.FindInstanceWithName(spriteMeshRootGO, "new_rightLeg"), 
+			boneList);		
+		boneList.Clear();
+	}
+
+	private BasicCord GetBasicCord(GameObject go) 
 	{
-		SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+		MeshRenderer mr = go.GetComponent<MeshRenderer>();
 		Vector3 pos = go.transform.position;
-		Vector3 [] array = new Vector3[3];
+		BasicCord basicCord = new BasicCord();
 		// Center
-		array[0] = pos;
-
-
-		Debug.Log("test_LoadSpriteParts.cs SpriteLocalToWorld() : bounds.extend = " + sr.bounds.extents + " min = " + sr.bounds.min + " max = " + sr.bounds.max); 
-
-
+		basicCord.center = pos;
 		// Bottom Left
-		array[1] = sr.bounds.min;
+		basicCord.bottomLeft = mr.bounds.min;
 		// Top Right
-		array[2] = sr.bounds.max;
-		return array;
+		basicCord.topRight = mr.bounds.max;
+		return basicCord;
 	}
-}
 
+	private GameObject FindSpriteMeshGOInChild(GameObject spriteMeshRootGO, string name)
+	{
+		Transform[] children = spriteMeshRootGO.GetComponentsInChildren<Transform>();
+		foreach(Transform child in children)
+		{
+			if(child.gameObject.name == name)
+			{
+				return child.gameObject;
+			}
+		}
+		return new GameObject("sprite mesh go not found");
+	}
+
+	private GameObject FindBoneGOInChild(GameObject boneRootGo, string name)
+	{
+		Transform[] children = boneRootGo.GetComponentsInChildren<Transform>();
+		foreach(Transform child in children)
+		{
+			if(child.gameObject.name == name)
+			{
+				return child.gameObject;
+			}
+		}
+		return new GameObject("bone go not found");
+	}		
+}

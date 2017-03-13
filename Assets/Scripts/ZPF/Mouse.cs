@@ -37,15 +37,15 @@ namespace MyStory
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
 			modelSizeMat = Segmentation.Segment(inputMat, out partList, out bbList);
 
-			head     = new BodyPart(partList[0], bbList[0], "head", 2);
-			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 0);
-			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 1);
-			body     = new BodyPart(partList[3], bbList[3], "body", 1);
-			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 0);
-			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 1);
-			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 0);
-			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 2);
-			tail     = new BodyPart(partList[8], bbList[8], "tail", 0);
+			head     = new BodyPart(partList[0], bbList[0], "head", 9);
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 7);
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 8);
+			body     = new BodyPart(partList[3], bbList[3], "body", 4);
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 3);
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 20);
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 2);
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 5);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 1);
 
 			AddPartsToList();
 		}
@@ -53,15 +53,15 @@ namespace MyStory
 		// Test : Constructor For Test.
 		public Mouse(List<Texture2D> partList, List<OpenCVForUnity.Rect> bbList)
 		{
-			head     = new BodyPart(partList[0], bbList[0], "head", 2);
-			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 0);
-			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 1);
-			body     = new BodyPart(partList[3], bbList[3], "body", 1);
-			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 0);
-			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 1);
-			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 0);
-			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 2);
-			tail     = new BodyPart(partList[8], bbList[8], "tail", 0);
+			head     = new BodyPart(partList[0], bbList[0], "head", 9);
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 7);
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 8);
+			body     = new BodyPart(partList[3], bbList[3], "body", 4);
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 3);
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 20);
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 2);
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 5);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 1);
 
 			AddPartsToList();
 		}
