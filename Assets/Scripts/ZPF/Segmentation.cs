@@ -133,6 +133,7 @@ namespace MyStory
 
 		private static void Call_dll_Segment(float[] inputImageArray, out float[] segmentationResultArray)
 		{
+			
 			segmentationResultArray = new float[Constant.MODEL_WIDTH*Constant.MODEL_HEIGHT*Constant.NUM_OF_CLASS];
 
 			GCHandle inputHandle = GCHandle.Alloc(inputImageArray, GCHandleType.Pinned);
