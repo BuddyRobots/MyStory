@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ContinuousMoving : MonoBehaviour 
 {
+	
 	public float speed;
 	public Vector3 leftPos;//左边界点
 	public Vector3 rightPos;//右边界点
@@ -21,12 +22,28 @@ public class ContinuousMoving : MonoBehaviour
 
 	void Update () 
 	{
+		move=Manager._instance.move;
+
+
+
+		//往左移动
+//		if (move) 
+//		{
+//			transform.localPosition-=offset*speed;
+//			if (transform.localPosition.x<=leftPos.x) 
+//			{
+//				transform.localPosition=rightPos;
+//			}
+//
+//
+//		}
+		//往右移动
 		if (move) 
 		{
-			transform.localPosition-=offset*speed;
-			if (transform.localPosition.x<=leftPos.x) 
+			transform.localPosition+=offset*speed;
+			if (transform.localPosition.x>=rightPos.x) 
 			{
-				transform.localPosition=rightPos;
+				transform.localPosition=leftPos;
 			}
 
 

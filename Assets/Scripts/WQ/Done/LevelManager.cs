@@ -128,7 +128,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	{
 //		Debug.Log("levelManager-----awake()");
 //		code for test...
-		PlayerPrefs.SetInt ("LevelID",3);
+		PlayerPrefs.SetInt ("LevelID",1);
 		PlayerPrefs.SetInt ("LevelProgress",0);
 
 		ReadSubtitleText();
@@ -248,7 +248,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	public void LoadLocalLevelProgressData()
 	{
-//		Debug.Log("----LoadLocalLevelProgressData");
+		Debug.Log("----LoadLocalLevelProgressData");
 		int levelID = 0;
 		int levelPro = 0;
 		if (PlayerPrefs.HasKey ("LevelID"))

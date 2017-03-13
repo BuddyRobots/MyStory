@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 [RequireComponent(typeof(SpriteCycle_WQ))]
 public class SpriteCycleParallax_WQ : MonoBehaviour
 {

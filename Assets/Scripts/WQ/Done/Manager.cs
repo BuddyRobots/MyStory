@@ -41,7 +41,11 @@ public class Manager :MonoBehaviour
 	public GameObject ball;//存储的球
 	[HideInInspector]
 	public GameObject garland;//存储的花环
+	[HideInInspector]
+	public bool move;//背景是否移动的标志
 
+
+	public bool levelOneSceneClosed;
 
 	void Awake()
 	{

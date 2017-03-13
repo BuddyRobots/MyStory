@@ -24,15 +24,10 @@ public class SelectLevel : MonoBehaviour
 			EventTriggerListener.Get(levelBtns[i].gameObject).onClick=OnLevelBtnClick;
 		}
 
-
+		LevelManager.Instance.LoadLocalLevelProgressData();
 		RefreshLevelUI();
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
+
 
 	private void OnBackBtnClick(GameObject btn)
 	{
@@ -112,7 +107,11 @@ public class SelectLevel : MonoBehaviour
 
 	public void RefreshLevelUI()
 	{
-		
+
+
+
+
+		Debug.Log("----RefreshLevelUI()");
 		LevelItemData data=null;
 		for (int i = 0; i < LevelManager.Instance.levelItemDataList.Count; i++) 
 		{
