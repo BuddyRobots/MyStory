@@ -52,7 +52,7 @@ public class test_MouseSprite : MonoBehaviour {
 
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimated.AddComponent<Animator>();
-		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/MouseStandPoseController") as RuntimeAnimatorController;
+		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/TestAnimations/TestController") as RuntimeAnimatorController;
 
 		// Save to Manager
 		Manager._instance.mouseGo = newMouseAnimated;

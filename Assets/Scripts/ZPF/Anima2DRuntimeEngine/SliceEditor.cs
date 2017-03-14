@@ -15,9 +15,9 @@ namespace Anima2DRuntimeEngine
 
 		public SliceEditor()
 		{
-			detail = 0.25f;
-			alpha = 0.05f;
-			tessellation = 0.0f;
+			detail = 1.0f;
+			alpha = 0.95f;
+			tessellation = 1.0f;
 			holes = false;
 		}
 
@@ -25,7 +25,7 @@ namespace Anima2DRuntimeEngine
 		{
 			if(spriteMeshCache.spriteMeshInstance)
 			{
-				//spriteMeshCache.InitFromOutline(detail, alpha, holes, tessellation);
+				spriteMeshCache.InitFromOutline(detail, alpha, holes, tessellation);
 			}
 		}
 	}

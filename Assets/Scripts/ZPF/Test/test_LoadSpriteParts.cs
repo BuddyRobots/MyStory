@@ -62,7 +62,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimated.AddComponent<Animator>();
-		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/MouseStandPoseController") as RuntimeAnimatorController;
+		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/TestAnimations/TestController") as RuntimeAnimatorController;
 
 		// Save to Manager
 		Manager._instance.mouseGo = newMouseAnimated;
@@ -226,9 +226,9 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 		// Set bone position
 		GameObject bone = FindBoneGOInChild(boneRootGO, "L leg");
-		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.topRight.y, 0);
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.topRight.y, 0);
 		bone = FindBoneGOInChild(boneRootGO, "L leg2");
-		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.center.y, 0);
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.center.y, 0);
 		bone = FindBoneGOInChild(boneRootGO, "L foot");
 		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.bottomLeft.y, 0);
 
@@ -251,9 +251,9 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 		// Set bone position
 		GameObject bone = FindBoneGOInChild(boneRootGO, "R leg");
-		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.topRight.y, 0);
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.topRight.y, 0);
 		bone = FindBoneGOInChild(boneRootGO, "R leg2");
-		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.center.y, 0);
+		bone.transform.position = new Vector3(basicCord.center.x, basicCord.center.y, 0);
 		bone = FindBoneGOInChild(boneRootGO, "R foot");
 		bone.transform.position = new Vector3(basicCord.topRight.x, basicCord.bottomLeft.y, 0);
 

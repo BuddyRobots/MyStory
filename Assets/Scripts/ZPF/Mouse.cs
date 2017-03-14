@@ -21,8 +21,7 @@ namespace MyStory
 		// Test : For test.
 		public Mat modelSizeMat;
 
-		// TODO Change this to private when publish.
-		public List<BodyPart> bodyPartList;
+		private List<BodyPart> bodyPartList;
 		private List<GameObject> oriSpriteGOList;
 
 		private const float pixelsPerUnit = 100.0f;
@@ -146,17 +145,6 @@ namespace MyStory
 			{
 				oriSpriteGOList[i].transform.localPosition = matCordList[i];
 			}
-		}
-
-		// Test maybe do not need this
-		public void test_CreateSprite(GameObject oriSpriteRootGO)
-		{
-			CreateSpriteStructure(oriSpriteRootGO);
-			for (var i = 0; i < oriSpriteGOList.Count; i++)
-				SetSpriteTexture(oriSpriteGOList[i], bodyPartList[i].texture);
-
-
-
 		}
 	}
 }

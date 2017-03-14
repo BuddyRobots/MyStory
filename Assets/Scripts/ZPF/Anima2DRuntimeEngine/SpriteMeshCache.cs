@@ -312,6 +312,32 @@ namespace Anima2DRuntimeEngine
 			{
 				SpriteMeshUtils.UpdateRenderer(spriteMeshInstance);
 			}
-		}			
+		}
+
+		public void InitFromOutline(float detail, float alphaTolerance, bool holeDetection, float tessellation)
+		{
+			float pixelsPerUnit = SpriteMeshUtils.GetSpritePixelsPerUnit(spriteMesh.sprite);
+			float factor =  pixelsPerUnit / spriteMesh.sprite.pixelsPerUnit;
+			Vector2 position = rect.position / factor;
+			Vector2 size = rect.size / factor;
+
+			Rect l_rect = new Rect(position.x,position.y,size.x,size.y);
+
+			Texture2D texture = spriteMesh.sprite.texture;
+			Rect clampedRect = MathUtils.ClampRect(MathUtils.OrderMinMax(l_rect),new Rect(0f,0f,texture.width,texture.height));
+
+			List<Vector2> l_texcoords;
+			List<IndexedEdge> l_indexedEdges;
+			List<int> l_indices;
+
+			SpriteMeshUtils.InitFromOutline(texture,clampedRect,detail,alphaTolerance,holeDetection, out l_texcoords, out l_indexedEdges, out l_indices);
+			SpriteMeshUtils.Tessellate(l_texcoords,l_indexedEdges,holes,l_indices,tessellation * 10f);
+
+			nodes = l_texcoords.ConvertAll( v => Node.Create(l_texcoords.IndexOf(v)) );
+			edges = l_indexedEdges.ConvertAll( e => Edge.Create(nodes[e.index1], nodes[e.index2]) );
+			m_TexVertices = l_texcoords.ConvertAll( v => v * factor );
+			boneWeights = l_texcoords.ConvertAll( v => BoneWeight.Create() );
+			indices = l_indices;
+		}
 	}
 }

@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
+using UnityEditor.Sprites;
 using System.IO;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using TriangleNet.Geometry;
+using System;
+using OpenCVForUnity;
 
 
 namespace Anima2DRuntimeEngine
@@ -103,9 +106,6 @@ namespace Anima2DRuntimeEngine
 			foreach (SpriteMeshInstance instance in instances)
 				if (instance.name == name)
 					return instance;
-
-			Debug.Log("SpriteMeshUtils.cs FindInstanceWithName : Instance " + name + " not found");
-
 			return new SpriteMeshInstance();
 		}
 			
@@ -117,6 +117,15 @@ namespace Anima2DRuntimeEngine
 			foreach (SpriteMeshInstance instance in instances)
 			{
 				SpriteMeshEditorWindow spriteMeshEditorWindow = new SpriteMeshEditorWindow();
+
+
+				///
+				Debug.Log("SpriteMeshUtils.cs BindBoneToInstance() : name = " + instance.name);
+				///
+
+
+
+
 				spriteMeshEditorWindow.UpdateFromSelection(instance.gameObject, instance.spriteMeshData);
 				spriteMeshEditorWindow.HandleAddBindPose();
 				instance.UpdateCurrentMesh();
@@ -587,59 +596,15 @@ namespace Anima2DRuntimeEngine
 			return false;
 		}
 
-		public static Rect GetRect(Sprite sprite)
+		public static UnityEngine.Rect GetRect(Sprite sprite)
 		{
 			float pixelsPerUnit = GetSpritePixelsPerUnit(sprite);
 			float factor = pixelsPerUnit / sprite.pixelsPerUnit;
 			Vector2 position = sprite.rect.position * factor;
 			Vector2 size = sprite.rect.size * factor;
 
-			return new Rect(position.x,position.y,size.x,size.y);
-		}
-
-		/*public static void InitFromOutline(Texture2D texture, Rect rect, float detail, float alphaTolerance, bool holeDetection,
-			out List<Vector2> vertices, out List<IndexedEdge> indexedEdges, out List<int> indices)
-		{
-			vertices = new List<Vector2>();
-			indexedEdges = new List<IndexedEdge>();
-			indices = new List<int>();
-
-			if(texture)
-			{
-				Vector2[][] paths = GenerateOutline(texture,rect,detail,(byte)(alphaTolerance * 255f),holeDetection);
-
-				int startIndex = 0;
-				for (int i = 0; i < paths.Length; i++)
-				{
-					Vector2[] path = paths [i];
-					for (int j = 0; j < path.Length; j++)
-					{
-						vertices.Add(path[j] + rect.center);
-						indexedEdges.Add(new IndexedEdge(startIndex + j,startIndex + ((j+1) % path.Length)));
-					}
-					startIndex += path.Length;
-				}
-				List<Hole> holes = new List<Hole>();
-				Triangulate(vertices,indexedEdges,holes,ref indices);
-			}
-		}
-
-		static Vector2[][] GenerateOutline(Texture2D texture, Rect rect, float detail, byte alphaTolerance, bool holeDetection)
-		{
-			Vector2[][] paths = null;
-
-			MethodInfo methodInfo = typeof(SpriteUtility).GetMethod("GenerateOutline", BindingFlags.Static | BindingFlags.NonPublic);
-
-			if(methodInfo != null)
-			{
-				object[] parameters = new object[] { texture,rect,detail,alphaTolerance,holeDetection,null };
-				methodInfo.Invoke(null,parameters);
-
-				paths = (Vector2[][]) parameters[5];
-			}
-
-			return paths;
-		}*/
+			return new UnityEngine.Rect(position.x,position.y,size.x,size.y);
+		}			
 
 		public static void Triangulate(List<Vector2> vertices, List<IndexedEdge> edges, List<Hole> holes,ref List<int> indices)
 		{
@@ -767,6 +732,78 @@ namespace Anima2DRuntimeEngine
 			}
 
 			return texCoord;
+		}
+
+		public static void InitFromOutline(Texture2D texture, UnityEngine.Rect rect, float detail, float alphaTolerance, bool holeDetection,
+			out List<Vector2> vertices, out List<IndexedEdge> indexedEdges, out List<int> indices)
+		{
+			vertices = new List<Vector2>();
+			indexedEdges = new List<IndexedEdge>();
+			indices = new List<int>();
+
+			if(texture)
+			{
+				Vector2[][] paths = GenerateOutline(texture,rect,detail,(byte)(alphaTolerance * 255f),holeDetection);
+
+				int startIndex = 0;
+				for (int i = 0; i < paths.Length; i++)
+				{
+					Vector2[] path = paths [i];
+					for (int j = 0; j < path.Length; j++)
+					{
+						vertices.Add(path[j] + rect.center);
+						indexedEdges.Add(new IndexedEdge(startIndex + j,startIndex + ((j+1) % path.Length)));
+					}
+					startIndex += path.Length;
+				}
+				List<Hole> holes = new List<Hole>();
+				Triangulate(vertices,indexedEdges,holes,ref indices);
+			}
+		}
+
+		static Vector2[][] GenerateOutline(Texture2D texture, UnityEngine.Rect rect, float detail, byte alphaTolerance, bool holeDetection)
+		{
+			Vector2[][] paths = null;
+
+			MethodInfo methodInfo = typeof(SpriteUtility).GetMethod("GenerateOutline", BindingFlags.Static | BindingFlags.NonPublic);
+
+			if(methodInfo != null)
+			{
+				object[] parameters = new object[] { texture,rect,detail,alphaTolerance,holeDetection,null };
+				methodInfo.Invoke(null,parameters);
+
+				paths = (Vector2[][]) parameters[5];
+			}
+
+
+
+			///
+			GetTexture2DOutline(texture, detail);
+			///
+//			Debug.Log("SpriteMeshUtils.cs GenerateOutline() : texture.format = " + texture.format);
+//			for (var i = 0; i < paths.GetLength(0); i++)
+//				for (var j = 0; j < paths[i].GetLength(0); j++)
+//					Debug.Log("SpriteMeshUtils.cs GenerateOutline() : paths["+i+"]["+j+"] = " + paths[i][j]);
+			///
+
+			return paths;
+		}
+
+		static void GetTexture2DOutline(Texture2D texture, float detail)
+		{
+			Mat image = new Mat(texture.height, texture.width, CvType.CV_8UC4);
+			Utils.texture2DToMat(texture, image);
+
+			List<Mat> mv = new List<Mat>();
+			Core.split(image, mv);
+
+			Mat binaryImage = new Mat(mv[3].rows(), mv[3].cols(), CvType.CV_8UC1);
+			Imgproc.threshold(mv[3], binaryImage, 1, 255, Imgproc.THRESH_BINARY);
+
+
+
+
+
 		}
 	}
 }

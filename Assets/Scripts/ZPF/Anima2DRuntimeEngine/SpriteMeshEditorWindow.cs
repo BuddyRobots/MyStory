@@ -21,6 +21,7 @@ namespace Anima2DRuntimeEngine
 			if(selection)
 			{
 				l_spriteMeshInstance = selection.GetComponent<SpriteMeshInstance>();
+				m_SpriteMeshCache.name = l_spriteMeshInstance.name;
 			}
 
 			if(l_spriteMeshInstance)

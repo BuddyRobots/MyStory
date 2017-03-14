@@ -16,7 +16,7 @@ public class ButtonClicked : MonoBehaviour {
 		Manager._instance.sourceMat = sourceMat;
 
 		// Segmentation
-		#if UNITY_IOS && !UNITY_EDITOR
+		#if !UNITY_EDITOR
 		Mouse mouse = new Mouse(sourceMat);
 		Manager._instance.mouse = mouse;
 		#endif

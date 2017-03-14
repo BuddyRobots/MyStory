@@ -132,6 +132,18 @@ extern "C"
     {
         LOG(INFO) << "test_tensorflow.mm : in function dll_SendArray.";
 
+        
+        
+        ///
+        for (int i = 0; i < 30; i++)
+        {
+            LOG(INFO) << "test_tensorflow.mm : sourceData[" << i << "] = " << sourceData[i];
+        }
+        ///
+        
+        
+        
+        
         // Cast double array[] to TensorFlow Tensor
         tensorflow::Tensor inputTensor(tensorflow::DT_FLOAT,
                                        tensorflow::TensorShape({1, height, width, channel}));
@@ -173,13 +185,44 @@ extern "C"
                 
                 LOG(INFO) << "test_tensorflow.mm : prediction.size() = " << predictions.size();
 
+                
+                
+                
+                ///
+                int numOfDebug = 30;
+                ///
+                
+                
+                
                 for (int i = 0; i < predictions.size(); i++)
                 {
                     float predictionValue = predictions(i);
+                    
+                    
+                    ///
+                    if (numOfDebug-- > 0)
+                        LOG(INFO) << "test_tensorflow.mm : predictionValue[" << i << "] = " << predictionValue;
+                    ///
+                    
+                    
+                    
+                    
                     outputArray[i] = predictionValue;
                 }  
             }
         }
+        
+        
+        
+        ///
+        for (int i = 0; i < 30; i++)
+        {
+            LOG(INFO) << "test_tensorflow.mm : outputArray[" << i << "] = " << outputArray[i];
+        }
+        ///
+        
+        
+        
         return 0;
     }
 }
