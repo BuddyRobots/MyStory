@@ -31,6 +31,8 @@ namespace MyStory
 			Mat originMaskImage = new Mat(sourceImage.size(), CvType.CV_8UC3);
 			Imgproc.resize(modelMaskImage, originMaskImage, originMaskImage.size(), 0, 0, Imgproc.INTER_NEAREST);
 
+			FillHoles(originMaskImage);
+
 			GetLists(sourceImage, originMaskImage, out partList, out bbList);
 
 			return modelSizeImage;
@@ -277,6 +279,12 @@ namespace MyStory
 				image.put(0, j, zero);
 				image.put(image.rows() - 1, j, zero);
 			}
+		}
+	
+		private static void FillHoles(Mat originMaskImage)
+		{
+			Imgproc.morphologyEx(originMaskImage, originMaskImage, Imgproc.MORPH_CLOSE,
+				Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(2, 2)));
 		}
 	}
 }

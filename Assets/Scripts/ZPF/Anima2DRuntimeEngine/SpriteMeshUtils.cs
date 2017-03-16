@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor.Sprites;
 using System.IO;
 using System.Linq;
 using System.Collections;
@@ -117,15 +116,6 @@ namespace Anima2DRuntimeEngine
 			foreach (SpriteMeshInstance instance in instances)
 			{
 				SpriteMeshEditorWindow spriteMeshEditorWindow = new SpriteMeshEditorWindow();
-
-
-				///
-				Debug.Log("SpriteMeshUtils.cs BindBoneToInstance() : name = " + instance.name);
-				///
-
-
-
-
 				spriteMeshEditorWindow.UpdateFromSelection(instance.gameObject, instance.spriteMeshData);
 				spriteMeshEditorWindow.HandleAddBindPose();
 				instance.UpdateCurrentMesh();
@@ -763,33 +753,15 @@ namespace Anima2DRuntimeEngine
 
 		static Vector2[][] GenerateOutline(Texture2D texture, UnityEngine.Rect rect, float detail, byte alphaTolerance, bool holeDetection)
 		{
-			Vector2[][] paths = null;
-
-			MethodInfo methodInfo = typeof(SpriteUtility).GetMethod("GenerateOutline", BindingFlags.Static | BindingFlags.NonPublic);
-
-			if(methodInfo != null)
-			{
-				object[] parameters = new object[] { texture,rect,detail,alphaTolerance,holeDetection,null };
-				methodInfo.Invoke(null,parameters);
-
-				paths = (Vector2[][]) parameters[5];
-			}
-
-
-
-			///
-			GetTexture2DOutline(texture, detail);
-			///
-//			Debug.Log("SpriteMeshUtils.cs GenerateOutline() : texture.format = " + texture.format);
-//			for (var i = 0; i < paths.GetLength(0); i++)
-//				for (var j = 0; j < paths[i].GetLength(0); j++)
-//					Debug.Log("SpriteMeshUtils.cs GenerateOutline() : paths["+i+"]["+j+"] = " + paths[i][j]);
-			///
+			Vector2[][] paths;
+			GetTexture2DOutline(texture, detail, out paths);
 
 			return paths;
 		}
 
-		static void GetTexture2DOutline(Texture2D texture, float detail)
+
+		// TODO change to private when publish.
+		public static Mat GetTexture2DOutline(Texture2D texture, float detail, out Vector2[][] paths)
 		{
 			Mat image = new Mat(texture.height, texture.width, CvType.CV_8UC4);
 			Utils.texture2DToMat(texture, image);
@@ -800,10 +772,47 @@ namespace Anima2DRuntimeEngine
 			Mat binaryImage = new Mat(mv[3].rows(), mv[3].cols(), CvType.CV_8UC1);
 			Imgproc.threshold(mv[3], binaryImage, 1, 255, Imgproc.THRESH_BINARY);
 
+			// Find Contours
+			List<MatOfPoint> contours = new List<MatOfPoint>();
+			Mat hierarchy = new Mat();
+			Mat binaryClone = binaryImage.clone();
+			Imgproc.findContours(binaryClone, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE, new OpenCVForUnity.Point(0, 0));
+
+			// Find max contour id
+			double maxArea = 0.0;
+			int maxIdx = 0;
+			for (var j = 0; j < contours.Count; j++)
+			{
+				double area = Imgproc.contourArea(contours[j]);
+				if (area > maxArea)
+				{
+					maxArea = area;
+					maxIdx = j;
+				}
+			}
+
+			OpenCVForUnity.Point[] points = contours[maxIdx].toArray();
+
+			// Convert Point[] to Vector2[0][]
+			paths = new Vector2[1][];
+			paths[0] = new Vector2[Mathf.FloorToInt(detail*(float)points.Length)];
+
+			for (var i = 0; i < paths[0].Length; i++)
+			{
+				OpenCVForUnity.Point p = points[(int)((float)i/detail)];
+				paths[0][i] = new Vector2((float)p.x - (float)texture.width/2.0f, -((float)p.y - (float)texture.height/2.0f));
+			}
 
 
+			// TODO for test draw contour points
+			Mat displayImage = Mat.zeros(binaryImage.rows(), binaryImage.cols(), CvType.CV_8UC1);
+			for (var i = 0; i < paths[0].Length; i++)
+			{
+				OpenCVForUnity.Point p = points[(int)((float)i/detail)];
+				Imgproc.circle(displayImage, p, 0, new Scalar(255));
+			}
 
-
+			return displayImage;
 		}
 	}
 }

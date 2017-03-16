@@ -16,8 +16,8 @@ namespace Anima2DRuntimeEngine
 		public SliceEditor()
 		{
 			detail = 1.0f;
-			alpha = 0.95f;
-			tessellation = 1.0f;
+			alpha = 0.0f;
+			tessellation = 0.5f;
 			holes = false;
 		}
 
