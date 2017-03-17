@@ -16,6 +16,7 @@ public class Manager :MonoBehaviour
 	public static bool recordingDone=false;//录音是否结束的标志
 
 	public static ModelType modelType;//玩家选择画的角色类型，作为绘画展示界面显示什么图片的依据
+	public static StoryStatus storyStatus;//故事的进行状态，是正常进行的，还是非正常进行的（录音与播放的是非正常状态）
 
 	public bool bgMusicFadeOut;
 	public bool bgMusicFadeIn;
@@ -30,8 +31,12 @@ public class Manager :MonoBehaviour
 	public Mouse mouse;
 
 	private float musicFadingTimer;//淡入淡出计时器
-	private GameObject manager;
 
+	/// <summary>
+	/// 手是移动还是暂停移动的标志
+	/// </summary>
+	[HideInInspector]
+	public bool fingerMove=true;
 
 	public List<AudioClip> audioAside;
 
@@ -45,7 +50,7 @@ public class Manager :MonoBehaviour
 	public bool move;//背景是否移动的标志
 
 
-	public bool levelOneSceneClosed;
+	public bool levelOneOver;
 
 	void Awake()
 	{
@@ -75,9 +80,6 @@ public class Manager :MonoBehaviour
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
 
-
-//		mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-//		GameObject.DontDestroyOnLoad(mouse);
 	}
 		
 
@@ -136,7 +138,7 @@ public class Manager :MonoBehaviour
 			
 		}
 		#endregion
-
+	
 	}
 
 

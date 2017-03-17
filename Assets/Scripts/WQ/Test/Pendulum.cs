@@ -24,7 +24,7 @@ public class Pendulum : MonoBehaviour {
 		while (true)
 		{
 			float tempData = Mathf.Abs(angle/temp_Angle);
-			tempData = tempData > 5 ? 5 : tempData;
+			tempData = tempData > 2 ? 2 : tempData;
 			if (Mathf.Abs(temp_Angle) + tempData<= angle+2) 
 			{ 
 				// 如果是左，往右走，就是加；如果是右，往左走，就是减
@@ -65,7 +65,7 @@ public class Pendulum : MonoBehaviour {
 		transform.position = tempPos;
 	}
 
-	bool JudgeLeft()
+	bool JudgeLeft()//判断是在左边还是在右边，左边为TRUE
 	{
 		return Vector3.Dot (Vector3.forward, Vector3.Cross (Vector3.down, transform.position - center.position)) < 0;
 	}

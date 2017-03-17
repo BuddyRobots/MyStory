@@ -43,6 +43,7 @@ public class FormalScene : MonoBehaviour
 	private Slider recordTimeSlider;
 
 	private bool sliderMoving=false;
+	bool screenLightenDone;//屏幕是否亮完了的标志，值为true以后才能出现小手开始游戏
 
 	private float sliderMovingTimer=0;
 	float blackMaskFadingTimer;
@@ -57,9 +58,15 @@ public class FormalScene : MonoBehaviour
 
 	public GameObject sceneLevel_1;
 	public GameObject sceneLevel_2;
+	public GameObject sceneLevel_3;
+	public GameObject sceneLevel_4;
+
 	[HideInInspector]
 	public  bool screenGrowingDarkAndLight=false;
 	bool blackMaskShow=false;
+	[HideInInspector]
+	public bool storyBegin=false;//故事场景是否开始的标志---得等屏幕亮完以后才开始（比如出现小手等）
+
 	///这个标志用来判断---是否需要给老鼠，背景，摄像机等添加诸如Follow_WQ这种需要根据对象是否存在来动态设置变量的脚本
 	/// 比如背景移动，背景需要跟随摄像机，摄像机需要跟随老鼠，需要等预制体被复制成对象显示在界面上才能手动设置
 	[HideInInspector]
@@ -68,17 +75,15 @@ public class FormalScene : MonoBehaviour
 	Vector3 blackMask_screenOutsidePos=new Vector3(0,1000f,0);//黑色遮罩在屏幕外面的位置
 	Vector3 blackMask_screenInsidePos=Vector3.zero;//黑色遮罩在屏幕中间的位置
 
+
+
 	void Awake()
 	{
 		_instance=this;
 	}
 
-
-
 	void Start () 
 	{
-		
-
 //		Debug.Log("fomalScene --初始化");
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		nextBtn=transform.Find("Next").GetComponent<Button>();
@@ -99,8 +104,7 @@ public class FormalScene : MonoBehaviour
 		music=transform.Find("Music").gameObject;
 		mask=transform.Find("Mask").gameObject;
 		blackMask=transform.Find("BlackMask").gameObject;
-//		blackMask_screenOutsidePos=blackMask.transform.localPosition;
-//		Debug.Log("blackMask---localPosition---"+blackMask.transform.localPosition);
+
 		blackMask.transform.localPosition=blackMask_screenInsidePos;
 
 
@@ -112,8 +116,6 @@ public class FormalScene : MonoBehaviour
 		subtitle.SetActive(false);
 		recordTimeSlider=transform.Find("RecordingFrame/RecordTimeSlider").GetComponent<Slider>();
 
-
-
 		audioSource=GameObject.Find("Manager").GetComponent<AudioSource>();
 
 
@@ -123,7 +125,7 @@ public class FormalScene : MonoBehaviour
 		sceneParent=GameObject.Find("SceneParent");
 
 		sliderMoving=false;
-
+		storyBegin=false;
 
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
@@ -141,11 +143,7 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 
 
-
-
-
-
-		Manager._instance.levelOneSceneClosed=false;
+		Manager._instance.levelOneOver=false;
 
 
 
@@ -156,37 +154,82 @@ public class FormalScene : MonoBehaviour
 			nextBtn.gameObject.SetActive(false);
 		}
 	
-		StartCoroutine(ScreenGrowLight());
+		//屏幕变亮
+		StartCoroutine(ScreenLighten());
 
-		//屏幕变亮     to do....
-//		blackMask.GetComponent<Image>().CrossFadeAlpha(0,2f,true);
-//		blackMask.transform.localPosition=blackMask_screenOutsidePos;
+	
 
 	}
 
 
-	IEnumerator ScreenGrowLight()
+	public void ScreenDarkenThenReloadFormalScene()
 	{
-		
-		blackMask.GetComponent<Image>().CrossFadeAlpha(0,2f,true);
-		yield return new WaitForSeconds(1.5f);
+
+		StartCoroutine( ScreenDarkenThenLoadSceneAsync());
+	}
+
+	IEnumerator ScreenLighten()
+	{
+		//首先把blackmask透明度渐变成0,再移到屏幕外面
+		blackMask.GetComponent<Image>().CrossFadeAlpha(0,Constant.SCREEN_FADINGTIME,true);
+		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
 		blackMask.transform.localPosition=blackMask_screenOutsidePos;
 
+		storyBegin=true;
 
 	}
 
-
-
-	IEnumerator ScreenGrowDark()
+	IEnumerator ScreenDarken()
 	{
+		//首先把blackmask移到屏幕中间，透明度渐变成1
 		blackMask.transform.localPosition=blackMask_screenInsidePos;
-		blackMask.GetComponent<Image>().CrossFadeAlpha(1,2f,true);
-		yield return new WaitForSeconds(2f);
-		blackMask.GetComponent<Image>().CrossFadeAlpha(0,2f,true);
-		yield return new WaitForSeconds(2f);
-		blackMask.transform.localPosition=blackMask_screenOutsidePos;
+		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
+		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+
 
 	}
+
+	IEnumerator ScreenDarkenThenLoadSceneAsync()
+	{
+		//首先把blackmask移到屏幕中间，透明度渐变成1
+		blackMask.transform.localPosition=blackMask_screenInsidePos;
+		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
+		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+		SceneManager.LoadSceneAsync("6_FormalScene_0");
+
+	}
+
+
+	IEnumerator ChangeSceneToLeveSelect()
+	{
+
+		blackMask.transform.localPosition=blackMask_screenInsidePos;
+		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
+		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+		SceneManager.LoadSceneAsync("5_SelectLevel");
+	}
+
+
+	IEnumerator ScreenDarkenThenLighten()
+	{
+		//只有第一关里从第一部分进入到第二部分的时候需要先变暗再变亮
+		blackMask.transform.localPosition=blackMask_screenInsidePos;
+		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
+		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+		blackMask.GetComponent<Image>().CrossFadeAlpha(0,Constant.SCREEN_FADINGTIME,true);
+		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+		blackMask.transform.localPosition=blackMask_screenOutsidePos;
+
+
+		//告诉第一关，第一部分结束了，进入到第二部分
+		LevelOne._instance.secondSceneShow=true;
+		LevelOne._instance.showFingerOnMouse=false;
+		Debug.Log("第一部分结束，进入到第二部分");
+
+	}
+
+
+
 
 
 	void ShowSceneAccordingToLevelID(int levelID)
@@ -212,6 +255,14 @@ public class FormalScene : MonoBehaviour
 		case 2:
 			tempScene=Instantiate<GameObject>(sceneLevel_2);
 //			Debug.Log("克隆了第二关场景");
+			break;
+		case 3:
+			tempScene=Instantiate<GameObject>(sceneLevel_3);
+			//			Debug.Log("克隆了第二关场景");
+			break;
+		case 4:
+			tempScene=Instantiate<GameObject>(sceneLevel_4);
+
 			break;
 
 		default:
@@ -241,85 +292,41 @@ public class FormalScene : MonoBehaviour
 		}
 		if (sliderMoving) 
 		{
-			
 			sliderMovingTimer+=Time.deltaTime;
 			recordTimeSlider.value=Mathf.Lerp(0,1, sliderMovingTimer/LevelManager.currentLevelData.RecordTime);
 
 			if (sliderMovingTimer>=LevelManager.currentLevelData.RecordTime) 
 			{
-//				sliderMovingTimer=LevelManager.currentLevelData.RecordTime;
 				sliderMoving=false;
 				sliderMovingTimer=0;
 			}
 		}
 
-
-
-
-		#region  第一关两个小节进行切换时屏幕变暗再变亮
+		#region  第一关第一小节结束后，屏幕变暗再变亮，进入到第二小节
 		if (LevelManager.currentLevelData.LevelID==1) 
 		{
 			if (screenGrowingDarkAndLight) 
 			{
-				if (!blackMaskShow) 
+//				if (!blackMaskShow) 
 				{
-
-
-					blackMaskShow=true;
-					StartCoroutine(ScreenGrowDark());
-//					//这里会进来两次，screenGrowingDarkAndLight的值有两次为TRUE，为了确保这里只执行一次，需要再弄一个开关
-////					Debug.Log("显示黑色遮罩");
-//					blackMask.transform.localPosition=Vector3.zero;
-//
-//					blackMaskFadingTimer+=Time.deltaTime;
-//					Color temp=blackMask.GetComponent<Image>().color;
-//					temp.a=Mathf.Lerp(0,1f,blackMaskFadingTimer/1f);//慢慢变暗
-//					blackMask.GetComponent<Image>().color=temp;
-//
-//					if (blackMaskFadingTimer>=1f) 
-//					{
-//						temp.a=Mathf.Lerp(1f,0,1-((2-blackMaskFadingTimer)/1f));//慢慢变亮
-//						blackMask.GetComponent<Image>().color=temp;
-//
-//						if (blackMaskFadingTimer>=2f) 
-//						{
-//
-//							LevelOne._instance.secondSceneShow=true;
-//
-//							blackMaskFadingTimer=0;
-//							blackMaskShow=true;
-//							blackMask.transform.localPosition=blackMask_screenOutsidePos;
-//
-//						}
-//
-//
-//
-//					}
-
+//					blackMaskShow=true;
+					StartCoroutine(ScreenDarkenThenLighten());
 
 				}
-
+				screenGrowingDarkAndLight=false;
 			}
 		}
 		#endregion
 
-
-
 	}
-
-
-
-
-
-
 
 	private void OnBackBtnClick(GameObject btn)
 	{
 		//先获取当前是第几关，在当前关卡上减一关，再修改当前关卡为减去一关的关卡
 
-		if (currentLevelID==1) 
+		if (currentLevelID==1) //如果是第一关，点击该按钮应该切换到选关界面
 		{
-			SceneManager.LoadSceneAsync("5_SelectLevel");
+			StartCoroutine(ChangeSceneToLeveSelect());
 		}
 		else
 		{
@@ -330,14 +337,10 @@ public class FormalScene : MonoBehaviour
 			}
 			data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
 			LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
-			SceneManager.LoadSceneAsync("6_FormalScene_0");
+			ScreenDarkenThenReloadFormalScene();
 		}
-
-		////////////////////////for test...
-		Manager._instance.bgMusicFadeOut=true;
-		///////////////////////////
-	
 	}
+
 
 	private void OnNextBtnClick(GameObject btn)
 	{
@@ -350,36 +353,24 @@ public class FormalScene : MonoBehaviour
 		}
 		else
 		{
-
 			if (currentLevelID==1) 
 			{
 
-				Manager._instance.levelOneSceneClosed=true;
-				MousePlayBall._instance.KickTheBallOutSide();	
+				Manager._instance.levelOneOver=true;
+				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
 	
 			}
 			else
 			{
 				UpgradeLevel();
-				SceneManager.LoadSceneAsync("6_FormalScene_0");
-
+				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
 			}	
 		}
-
-
-		////////////////////// for test....
-		Manager._instance.bgMusicFadeIn=true;
-		/////////////////////
-
-
 	}
 
 
 	public void UpgradeLevel()
 	{
-		
-
-
 		currentLevelID++;
 		if (currentLevelID>=9) 
 		{
@@ -404,7 +395,7 @@ public class FormalScene : MonoBehaviour
 		noticeToRecordFrame.SetActive(true);
 
 		BussinessManager._instance.PauseStory();
-
+		Manager ._instance.fingerMove=false;
 	}
 
 	private void OnShareBtnClick(GameObject btn)
@@ -428,13 +419,15 @@ public class FormalScene : MonoBehaviour
 		recordBtn.transform.gameObject.SetActive(true);
 
 		BussinessManager._instance.ResumeStory();//故事场景恢复
-
+		Manager ._instance.fingerMove=true;
 	}
 
 
 
 	private void OnStartRecordBtnClick(GameObject btn)
 	{
+		Manager.storyStatus=StoryStatus.UnNormal;
+
 		mask.SetActive(false);
 		noticeToRecordFrame.SetActive(false);
 		recordingFrame.SetActive(true);
@@ -451,6 +444,9 @@ public class FormalScene : MonoBehaviour
 		sliderMoving=true;
 
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
+
+
+		Manager ._instance.fingerMove=true;
 	
 	}
 		
@@ -474,6 +470,9 @@ public class FormalScene : MonoBehaviour
 		mask.SetActive(false);
 		recordDoneFrame.SetActive(false);
 		recordingFrame.SetActive(true);
+
+
+		//字幕不是一开始录音就显示的
 		subtitle.SetActive(true);
 		music.SetActive(false);
 
@@ -481,6 +480,7 @@ public class FormalScene : MonoBehaviour
 		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 		sliderMoving=true;
 
+		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
 
 	}
 		
@@ -503,6 +503,8 @@ public class FormalScene : MonoBehaviour
 		HideSubtitle();
 		ShowSubtitle();
 
+		BussinessManager._instance.PlayStoryWithAudioRecording();
+
 
 	}
 
@@ -524,19 +526,22 @@ public class FormalScene : MonoBehaviour
 
 	public void ShowSubtitle()
 	{
-		Debug.Log("Formalscene------ShowSubtitle()");
+//		Debug.Log("Formalscene------ShowSubtitle()");
 		subtitle.SetActive(true);
-		Debug.Log("-ShowSubtitle()-----done");
+//		Debug.Log("-ShowSubtitle()-----done");
 	}
 
 	public void HideSubtitle()
 	{
-		Debug.Log("Formalscene------HideSubtitle()");
+//		Debug.Log("Formalscene------HideSubtitle()");
 
 		subtitle.SetActive(false);
-		Debug.Log("-HideSubtitle()-----done");
+//		Debug.Log("-HideSubtitle()-----done");
 
 	}
 
-
+	void OnDestroy()
+	{
+		Manager._instance.fingerMove=true;
+	}
 }
