@@ -30,33 +30,46 @@ public class FingerCtrl : MonoBehaviour
 	//出现手指，需要传入坐标
 	public void FingerShow(Vector3 fingerPos)
 	{
-		transform.localPosition = fingerPos;
+		transform.position = fingerPos;
 		startPos=fingerPos;
 		dest =startPos - moveOffset;
+
 		StartCoroutine (FingerMove(startPos, dest));
+
+	
 	}
 
 
 	IEnumerator FingerMove(Vector3 start, Vector3 end) 
 	{
 		
-		while (Vector3.Distance(transform.localPosition , end) > 0.1f) //这里小手不放在UI层，距离判断取值为0.1f,小手放在UI层的话距离取值为1合适
-		{
+			while (Vector3.Distance(transform.localPosition , end) > 0.1f) //这里小手不放在UI层，距离判断取值为0.1f,小手放在UI层的话距离取值为1合适
+			{
+
+				if (Manager ._instance.fingerMove) 
+				{
+					transform.localPosition = Vector3.Lerp (transform.localPosition, end, speed * Time.deltaTime);
 			
+				}
+					yield return new WaitForFixedUpdate ();
 
-			transform.localPosition = Vector3.Lerp (transform.localPosition, end, speed * Time.deltaTime);
-			yield return new WaitForFixedUpdate ();
+			}
+			yield return new WaitForSeconds (0.1f);
+
+			while (Vector3.Distance (transform.localPosition, start) >0.1f) 
+			{
+
+				if (Manager ._instance.fingerMove) 
+				{
+					transform.localPosition = Vector3.Lerp (transform.localPosition, start, speed * Time.deltaTime);
+				}
+				yield return new WaitForFixedUpdate ();
+
+			}
+			StartCoroutine (FingerMove (start, end));//协同递归，保证一直移动
+			
 		}
-		yield return new WaitForSeconds (0.1f);
-
-		while (Vector3.Distance (transform.localPosition, start) >0.1f) 
-		{
 
 
-			transform.localPosition = Vector3.Lerp (transform.localPosition, start, speed * Time.deltaTime);
-			yield return new WaitForFixedUpdate ();
-		}
-		StartCoroutine (FingerMove (start, end));//协同递归，保证一直移动
-	}
 
 }

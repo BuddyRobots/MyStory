@@ -15,7 +15,7 @@ public enum ModelType
 
 public enum Level
 {
-	One=1,
+	One,
 	Two,
 	Three,
 	Four,
@@ -30,7 +30,15 @@ public enum Level
 public enum LevelProgress
 {
 
-	Todo=0,
+	Todo,
 	Done
+}
+
+
+public enum StoryStatus
+{
+	Normal,
+	UnNormal
+
 }
 	

@@ -79,6 +79,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 		// Save to Manager
 		Manager._instance.mouseGo = newMouseAnimated;
+		GameObject.DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
 
 	private void SetCordinate(List<Texture2D> partTexList, out List<OpenCVForUnity.Rect> bbList)
