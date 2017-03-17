@@ -44,7 +44,7 @@ namespace MyStory
 			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 20);
 			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 2);
 			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 5);
-			tail     = new BodyPart(partList[8], bbList[8], "tail", 1);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 2);
 
 			AddPartsToList();
 		}
@@ -60,7 +60,7 @@ namespace MyStory
 			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 20);
 			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 2);
 			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 5);
-			tail     = new BodyPart(partList[8], bbList[8], "tail", 1);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 2);
 
 			AddPartsToList();
 		}
