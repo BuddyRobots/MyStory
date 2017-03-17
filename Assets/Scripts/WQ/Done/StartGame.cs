@@ -13,6 +13,7 @@ public class StartGame : MonoBehaviour
 	{
 		startBtn=transform.Find("StartGameBtn").GetComponent<Button>();
 		EventTriggerListener.Get(startBtn.gameObject).onClick=OnStartBtnClick;
+//		GameObject.Find("Manager").GetComponent<AudioSource>().clip=Manager._instance.audioAside[0];
 
 	}
 	

@@ -12,8 +12,14 @@ public class LevelOne : MonoBehaviour
 	private Animation grassAni;
 	private Animator mouseAnimator;
 	bool startStoryStraight=false;//是否可以直接开始故事
-	bool grassAniPlay;//草是否播放了动画
-	bool startStory;//该变量用来保证故事只进行一次
+	bool startStoryNormally;//该变量用来保证故事只进行一次
+
+
+	bool storyBegin;//故事是否开始的标志
+	bool showFingerOnGrass;//是否出现小手提示点击草
+	[HideInInspector]
+	public bool showFingerOnMouse;//是否出现小手提示点击老鼠
+	bool grassClicked;//是否点击了草
 
 	string grassAniName="Grass_2";
 
@@ -30,6 +36,7 @@ public class LevelOne : MonoBehaviour
 
 
 
+
 	void Awake()
 	{
 		_instance=this;
@@ -39,8 +46,7 @@ public class LevelOne : MonoBehaviour
 	{
 		grassAni=grass.GetComponent<Animation>();
 		startStoryStraight=false;
-		ShowFinger(grass.transform.localPosition);
-
+		showFingerOnGrass=false;
 
 	}
 
@@ -51,48 +57,73 @@ public class LevelOne : MonoBehaviour
 	}
 		
 
-	bool fingerToClickMouseShow;
+
 
 	void Update () 
 	{
-
-		if (!startStoryStraight) 
+		storyBegin =FormalScene._instance.storyBegin ;
+		//屏幕亮完以后故事才开始
+		if (storyBegin) 
 		{
-			ClickTheGrass();
-		}
-
-		///草的动画播放完以后再开始故事
-		if (grassAniPlay && !grassAni.IsPlaying(grassAniName)) //如果草播放了动画，且已经播完了
-		{
-			if (!startStory) 
+			//如果没有出现小手提示点击草，就出现小手提示点击草
+			if (!showFingerOnGrass) 
 			{
-				StartStoryNormally();
-				startStory=true;
+				Debug.Log("小手出现提示点击小草");
+				ShowFinger(grass.transform.localPosition);
+
+				showFingerOnGrass=true;
 			}
-		}
 
 
 
 
-		if (secondSceneShow) 
-		{
-//			Debug.Log("进入第二部分");
-			//进入第二部分，出现小手提示点击老鼠，出现球，点击老鼠，播放动画，走到球的位置，播放踢球动画，球随机往前走
-			if (!fingerToClickMouseShow)
+			//出现小手提示点击草以后，点击草
+			if (showFingerOnGrass) 
 			{
-				ShowBall();
-				ShowFinger(mouse.transform.position);
-				fingerToClickMouseShow=true;
-				if (mouse.GetComponent<MousePlayBall>()==null) 
+				//如果没有点击草
+				if (!grassClicked) 
 				{
-					mouse.AddComponent<MousePlayBall>();
+					ClickTheGrass();
+
+				}
+
+				
+			}
+
+			//如果点击了草，并且草播放完了动画
+			if (grassClicked && !grassAni.IsPlaying(grassAniName)) 
+			{
+
+				if (!startStoryNormally) 
+				{
+					StartStoryNormally();
+					startStoryNormally=true;
+				}
+
+			}
+				
+			//如果进入了第二部分
+			if (secondSceneShow) 
+			{
+//				Debug.Log("进入第二部分---出现小球");
+				//进入第二部分，出现小手提示点击老鼠，出现球，给老鼠添加脚本
+				if (!showFingerOnMouse)
+				{
+					
+					ShowBall();
+					ShowFinger(mouse.transform.position);
+
+					if (mouse.GetComponent<MousePlayBall>()==null) 
+					{
+						mouse.AddComponent<MousePlayBall>();
+					}
+
+					showFingerOnMouse=true;
 				}
 
 			}
 
 		}
-
-
 
 	}
 
@@ -113,17 +144,21 @@ public class LevelOne : MonoBehaviour
 				if (hit.collider.tag=="ClickObj") 
 				{
 					Debug.Log("点了小草-------");
+
+					//如果没有销毁小手，则销毁小手，同时播放草的动画
 					if (BussinessManager._instance.finger!=null) 
 					{
-
-						startStoryStraight=true;
+						
 						Destroy(BussinessManager._instance.finger);
+
 						Debug.Log("销毁了小手");
 
-						//TODO....动画播放完以后，出现小老鼠，同时播放旁白,显示字幕  
+
 						PlayAnimation();
-						//StartStoryNormally();
+
 					}
+
+					grassClicked=true;
 				}
 			}
 		}
@@ -135,11 +170,9 @@ public class LevelOne : MonoBehaviour
 	/// </summary>
 	void StartStoryNormally()
 	{
-//		PlayAnimation();
 		ShowMouse();
 		FormalScene._instance.ShowSubtitle();
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().clip=LevelManager.currentLevelData.AudioAside;//Resources.Load<AudioClip>("Audio/Seagulls");
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().Play();
+		BussinessManager._instance.PlayAudioAside();
 //		SubtitleCtrl._instance.Init();
 	}
 
@@ -149,15 +182,19 @@ public class LevelOne : MonoBehaviour
 		{
 			
 			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-			//		mouse=Manager._instance.mouse;
-			mouse.transform.parent=transform;
+//			mouse=Manager._instance.mouseGo;
+			if (mouse==null) 
+			{
+				Debug.Log("老鼠为空");
+			}
+//			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
 			mouse.transform.localPosition=originMousePos;
 
-		
 			mouse.name="Mouse";
 
-			mouseAnimator=mouse.GetComponent<Animator>();
-
+//			mouseAnimator=mouse.GetComponent<Animator>();
+		
+			GameObject.DontDestroyOnLoad(mouse);
 
 		}
 	    
@@ -173,7 +210,6 @@ public class LevelOne : MonoBehaviour
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.parent=transform;
 			ball.transform.localPosition=originBallPos;
 			ball.name="Ball";
 		
@@ -185,7 +221,14 @@ public class LevelOne : MonoBehaviour
 	/// </summary>
 	public void PlayStoryWithAudioRecording()
 	{
-		//播放草的动画
+		
+		//重新开始故事----只不过录音被替换
+		PlayAnimation();
+		ShowMouse();
+
+
+
+
 
 	}
 
@@ -193,7 +236,6 @@ public class LevelOne : MonoBehaviour
 	void PlayAnimation()
 	{
 		grassAni.Play(grassAniName);
-		grassAniPlay=true;
 	}
 
 	void PauseAnimation()
@@ -215,22 +257,20 @@ public class LevelOne : MonoBehaviour
 
 	public void StartStoryToRecordAudioAndVideo()
 	{
+		//如果有小手提示点击，就销毁小手，点击失效 
 
-
-
-
-		//如果有小手提示点击，就销毁小手，点击失效   to  do.....
-		startStoryStraight=true;
 		if (BussinessManager._instance.finger!=null) 
 		{
-
-			startStoryStraight=true;
 			Destroy(BussinessManager._instance.finger);
 		
 		}
+		PlayAnimation();
 		ShowMouse();
-	
 
+		//如果有球的话，球要隐藏
+		if (ball !=null) {
+			ball.SetActive(false);
+		}
 	}
 
 
@@ -260,7 +300,7 @@ public class LevelOne : MonoBehaviour
 		PauseAnimation();
 		PauseNarratage();
 //		SubtitleCtrl._instance.pauseChangeSubtitle=true;
-		Show._instance.pause=true;
+		SubtitleShow._instance.pause=true;
 		StopAllCoroutines();
 	}
 
@@ -270,7 +310,7 @@ public class LevelOne : MonoBehaviour
 		ResumeNarratage();
 		ResumeAnimation();
 //		SubtitleCtrl._instance.pauseChangeSubtitle=false;
-		Show._instance.pause=false;
+		SubtitleShow._instance.pause=false;
 	}
 
 

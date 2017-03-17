@@ -16,6 +16,7 @@ public class BussinessManager : MonoBehaviour
 
 
 	private GameObject sceneParent;
+	private AudioSource audioSource;
 
 	void Awake()
 	{
@@ -23,6 +24,7 @@ public class BussinessManager : MonoBehaviour
 
 		fingerPrefab=Resources.Load("Prefab/Finger",typeof(GameObject)) as GameObject;
 		sceneParent=GameObject.Find("SceneParent");
+		audioSource=GameObject.Find("Main Camera").GetComponent<AudioSource>();
 	}
 
 	void Start () 
@@ -91,6 +93,7 @@ public class BussinessManager : MonoBehaviour
 
 			break;
 		case 2:
+			LevelTwo_new._instance.StartStoryToRecordAudioAndVideo();
 			break;
 		case 3:
 			break;
@@ -148,6 +151,112 @@ public class BussinessManager : MonoBehaviour
 	public void PlayStoryWithAudioRecording()
 	{
 
+		switch (LevelManager.currentLevelData.LevelID)
+		{
+		case 1:
+
+
+			break;
+		case 2:
+			LevelTwo_new._instance.PlayStoryWithAudioRecording();
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
+
+
+	public void Init()
+	{
+
+		switch (LevelManager.currentLevelData.LevelID)
+		{
+		case 1:
+
+
+			break;
+		case 2:
+			LevelTwo_new._instance.Init();
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
+	public void DestroyFinger()
+	{
+
+		if (finger!=null) 
+		{
+
+			Destroy(finger);
+
+		}
+	}
+
+
+	/// <summary>
+	/// 播放旁白
+	/// </summary>
+	public void PlayAudioAside()
+	{
+		Debug.Log("PlayAudioAside--Manager.storyStatus--"+Manager.storyStatus);
+
+		Debug.Log("播放旁白  关卡是--"+LevelManager.currentLevelData.LevelID);
+		audioSource.clip=Manager._instance.audioAside[LevelManager.currentLevelData.LevelID-1];
+		audioSource.Play();
+		Debug.Log("音频的名字----"+audioSource.clip.name);
+	}
+
+
+
+	/// <summary>
+	/// 暂停旁白播放
+	/// </summary>
+	public void PauseAudioAside()
+	{
+		audioSource.Pause();
+	}
+
+	/// <summary>
+	/// 恢复旁白播放
+	/// </summary>
+	public 	void ResumeAudioAside()
+	{
+		audioSource.UnPause();
 
 	}
 
