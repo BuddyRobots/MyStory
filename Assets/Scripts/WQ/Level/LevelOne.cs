@@ -188,8 +188,8 @@ public class LevelOne : MonoBehaviour
 		if (mouse ==null) 
 		{
 			
-			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-//			mouse=Manager._instance.mouseGo;
+//			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+			mouse=Manager._instance.mouseGo;
 			if (mouse==null) 
 			{
 				Debug.Log("老鼠为空");
@@ -201,7 +201,7 @@ public class LevelOne : MonoBehaviour
 
 			mouseAnimator=mouse.GetComponent<Animator>();
 		
-			GameObject.DontDestroyOnLoad(mouse);
+//			GameObject.DontDestroyOnLoad(mouse);
 
 		}
 	    

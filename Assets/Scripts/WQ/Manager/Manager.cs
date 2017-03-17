@@ -51,6 +51,10 @@ public class Manager :MonoBehaviour
 
 
 	public bool levelOneOver;
+	/// <summary>
+	/// 老鼠在屏幕外的位置
+	/// </summary>
+	public Vector3 outsideScreenPos=new Vector3(0,20f,0);
 
 	void Awake()
 	{
@@ -79,7 +83,7 @@ public class Manager :MonoBehaviour
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
-
+	
 	}
 		
 

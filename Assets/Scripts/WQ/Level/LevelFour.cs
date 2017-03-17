@@ -17,7 +17,7 @@ public class LevelFour : MonoBehaviour
 
 	Animator mouseAnimator;
 
-	Vector3 originMousePos=new Vector3(-0.3f,2f,0);
+	Vector3 originMousePos=new Vector3(1.5f,2.7f,0);
 	Vector3 outsidePos=new Vector3(50f,50f,0);
 
 	[HideInInspector]
@@ -63,7 +63,7 @@ public class LevelFour : MonoBehaviour
 			{
 				Debug.Log("老鼠为空");
 			}
-			mouse.transform.localPosition=originMousePos;
+			mouse.transform.position=originMousePos;
 			mouse.name="Mouse";
 			mouseAnimator=mouse.GetComponent<Animator>();
 

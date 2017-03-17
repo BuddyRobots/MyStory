@@ -14,6 +14,8 @@ public class ModelChoose : MonoBehaviour {
 
 	private GameObject manager;
 
+	[HideInInspector]
+	public GameObject mouse;
 
 	void Start () 
 	{
@@ -31,7 +33,11 @@ public class ModelChoose : MonoBehaviour {
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
 
-		
+		mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+		mouse.name="Mouse";
+		mouse.transform.position=Manager._instance.outsideScreenPos;
+		Manager._instance.mouseGo=mouse;
+		DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
 	
 
