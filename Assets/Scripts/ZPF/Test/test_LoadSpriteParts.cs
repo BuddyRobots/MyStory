@@ -11,6 +11,7 @@ using OpenCVForUnity;
 public class test_LoadSpriteParts : MonoBehaviour
 {
 	public GameObject mouseSpriteRootGO;
+	public RuntimeAnimatorController animationController;
 
 	private class WorldCord
 	{
@@ -75,7 +76,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimated.AddComponent<Animator>();
 		//animator.runtimeAnimatorController = Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
-		animator.runtimeAnimatorController = Resources.Load("Animation/WJ/TestAnimations/TestController") as RuntimeAnimatorController;
+		animator.runtimeAnimatorController = animationController;
 
 		// Save to Manager
 		Manager._instance.mouseGo = newMouseAnimated;
