@@ -150,10 +150,7 @@ public class LevelTwo_new : MonoBehaviour
 			//如果点击了球，且销毁了小手，就要显示字幕，播放旁白，并且小老鼠移动到第二个点并且爬向第三个点
 			if (ballClicked ) 
 			{
-				#region 显示字幕
-				FormalScene._instance.ShowSubtitle();
-				#endregion
-
+				
 
 
 
@@ -162,6 +159,12 @@ public class LevelTwo_new : MonoBehaviour
 				{
 					Debug.Log("在正常状态下");
 					BussinessManager._instance.PlayAudioAside();
+
+
+					#region 显示字幕
+					FormalScene._instance.ShowSubtitle();
+					#endregion
+
 
 				}
 				#endregion
@@ -269,6 +272,7 @@ public class LevelTwo_new : MonoBehaviour
 			mouse.name="Mouse";
 
 			mouseAnimator=mouse.GetComponent<Animator>();
+//			mouse.GetComponent<RigidbodyType2D>().
 
 			GameObject.DontDestroyOnLoad(mouse);
 
