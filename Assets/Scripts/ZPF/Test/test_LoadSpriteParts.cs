@@ -395,7 +395,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 			columnList.Add(startCol + step*i);
 		}
 			
-		for (var j =0; j < amount;)
+		for (var j = 0; j < amount;)
 		{
 			bool scanned = false;
 			for (var i = 0; i < height; i++)
@@ -408,6 +408,41 @@ public class test_LoadSpriteParts : MonoBehaviour
 				columnList[j]++;
 			else
 				j++;
+		}			
+		return scannedPoints;
+	}
+
+	private List<List<Vector2>> HorizontalScanLine(Mat binaryImage, int startRow, int endRow, int amount)
+	{
+		int width = binaryImage.cols();
+		int height = binaryImage.rows();
+		byte[] imageData = new byte[width*height];
+		binaryImage.get(0, 0, imageData);
+
+		// scannedPoints[amount][pointsEachLine]
+		List<List<Vector2>> scannedPoints = new List<List<Vector2>>();
+		int step = Mathf.FloorToInt((float)(endRow - startRow)/(float)amount);
+
+		List<int> rowList = new List<int>();
+		for (var i = 0; i < amount; i++)
+		{
+			scannedPoints.Add(new List<Vector2>());
+			rowList.Add(startRow + step*i);
+		}
+
+		for (var i = 0; i < amount;)
+		{
+			bool scanned = false;
+			for (var j = 0; j < width; j++)
+				if (imageData[rowList[i]*width + j] != 0)
+				{
+					scannedPoints[i].Add(new Vector2(j, rowList[i]));
+					scanned = true;
+				}
+			if (!scanned)
+				rowList[i]++;
+			else
+				i++;
 		}			
 		return scannedPoints;
 	}
