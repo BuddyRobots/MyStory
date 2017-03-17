@@ -97,12 +97,12 @@ public class MousePlayBall : MonoBehaviour
 	/// <param name="coll">Coll.</param>
 	void OnCollisionEnter2D(Collision2D coll)
 	{
-		Debug.Log("OnCollisionEnter2D");
-		if (coll.gameObject.tag!=null) 
-		{
-
-			Debug.Log("coll.gameObject.tag!=null----name is: "+coll.gameObject.name);
-		}
+//		Debug.Log("OnCollisionEnter2D");
+//		if (coll.gameObject.tag!=null) 
+//		{
+//
+//			Debug.Log("coll.gameObject.tag!=null----name is: "+coll.gameObject.name);
+//		}
 		if (coll.gameObject.tag=="Ball") 
 		{
 			Manager._instance.move=false;

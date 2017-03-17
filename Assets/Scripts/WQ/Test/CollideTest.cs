@@ -5,12 +5,14 @@ using UnityEngine;
 public class CollideTest : MonoBehaviour {
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		Debug.Log(".....");
 	}
 	
 
-	void Update () {
+	void Update () 
+	{
 		transform.Translate(Vector3.left*Time.deltaTime);
 	}
 

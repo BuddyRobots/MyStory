@@ -126,6 +126,7 @@ public class LevelThree : MonoBehaviour {
 
 
 					BussinessManager._instance.PlayAudioAside();
+					FormalScene._instance.ShowSubtitle();
 				}
 				else
 				{
@@ -136,7 +137,7 @@ public class LevelThree : MonoBehaviour {
 				//播放动画，显示字幕
 
 
-				FormalScene._instance.ShowSubtitle();
+
 
 
 			}

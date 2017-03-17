@@ -17,10 +17,8 @@ public class DrawModelShow : MonoBehaviour {
 	public  Sprite[] destBallSprites;//事先准备好的老鼠的展示图（数目>=3）
 	public  Sprite[] destGarlandSprites;//事先准备好的老鼠的展示图（数目>=3）
 
-	private List<Sprite> showSprites=new List<Sprite>();//3张需要展示的图片
-
 	private List<int> indexList=new List<int>();//用来存储destMouseSprites每一个元素的指数（比如destMouseSprites有3张图，那么指数就是0，1，2）
-
+	List<int> randomList=new List<int>();//随机生成的3个不重复的数字的集合
 	public Image[] demoImages;//界面用来显示展示图片的3个Image
 	public Image dottedImage;//界面上的虚线框图片
 
@@ -31,11 +29,8 @@ public class DrawModelShow : MonoBehaviour {
 		EventTriggerListener.Get(takePhotoBtn.gameObject).onClick=OnTakePhotoBtnClick;
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 
-
 		ShowModelAccordingToModelChozen(Manager.modelType);
 	}
-
-
 
 
 	void ShowModelAccordingToModelChozen(ModelType ModelType)
@@ -60,10 +55,6 @@ public class DrawModelShow : MonoBehaviour {
 
 	}
 
-
-
-
-
 	void ShowMouseImages()
 	{
 		ClearList();
@@ -74,29 +65,16 @@ public class DrawModelShow : MonoBehaviour {
 			indexList.Add(i);
 		}
 
-		//随机选择3张图片保存到showSprites中
-		for (int j = 3; j >0; j--) 
+		GenerateListForRandomIndex();
+		//列表中的随机数其实就是要从图片列表中选择的元素的下标，把这3张图片复制给需要界面UI列表demoImages
+		for (int i = 0; i < randomList.Count; i++)
 		{
-			int index=Random.Range(0,indexList.Count);
-			showSprites.Add(destMouseSprites[indexList[index]]);
-			indexList.Remove(index);
-		}	
-
-//		Debug.Log("需要展示的老鼠图片数量（正常为3）--"+showSprites.Count);
-
-
-		//把随机出来的3张图赋值给界面UI
-		for (int i = 0; i < showSprites.Count; i++) 
-		{
-			demoImages[i].sprite=showSprites[i];
+			demoImages[i].sprite=destMouseSprites[randomList[i]];
 		}
 		//给虚线框图片赋值
 		dottedImage.sprite=mouseDotted;
 
 	}
-
-
-
 
 
 	void ShowBallImages()
@@ -109,67 +87,103 @@ public class DrawModelShow : MonoBehaviour {
 			indexList.Add(i);
 		}
 
-		//随机选择3张图片保存到showSprites中
-		for (int j = 3; j >0; j--) 
+		GenerateListForRandomIndex();
+		//列表中的随机数其实就是要从图片列表中选择的元素的下标，把这3张图片复制给需要界面UI列表demoImages
+		for (int i = 0; i < randomList.Count; i++)
 		{
-			int index=Random.Range(0,indexList.Count);
-			showSprites.Add(destBallSprites[indexList[index]]);
-			indexList.Remove(index);
-		}	
-
-
-
-		Debug.Log("需要展示的皮球图片数量（正常为3）--"+showSprites.Count);
-
-
-
-		//把随机出来的3张图赋值给界面UI
-		for (int i = 0; i < showSprites.Count; i++) 
-		{
-			demoImages[i].sprite=showSprites[i];
+			demoImages[i].sprite=destBallSprites[randomList[i]];
 		}
 		//给虚线框图片赋值
 		dottedImage.sprite=ballDotted;
 
 	}
-
 	void ShowGarlandImages()
 	{
 
 		ClearList();
 		int count=destGarlandSprites.Length;
+
 		for (int i = 0; i < count; i++) 
 		{
 			indexList.Add(i);
 		}
 
-		//随机选择3张图片保存到showSprites中
-		for (int j = 3; j >0; j--) 
+		GenerateListForRandomIndex();
+
+		//列表中的随机数其实就是要从图片列表中选择的元素的下标，把这3张图片复制给需要界面UI列表demoImages
+		for (int i = 0; i < randomList.Count; i++)
 		{
-			int index=Random.Range(0,indexList.Count);
-			showSprites.Add(destGarlandSprites[indexList[index]]);
-			indexList.Remove(index);
-		}	
-
-
-		Debug.Log("需要展示的--花环--图片数量（正常为3）--"+showSprites.Count);
-
-
-
-		//把随机出来的3张图赋值给界面UI
-		for (int i = 0; i < showSprites.Count; i++) 
-		{
-			demoImages[i].sprite=showSprites[i];
+			demoImages[i].sprite=destGarlandSprites[randomList[i]];
 		}
+
+		SetImagesForShowUI(destGarlandSprites);
+
 		//给虚线框图片赋值
 		dottedImage.sprite=garlandDotted;
 
 	}
 
+	void SetImagesForShowUI(Sprite[] showSpriteArr )
+	{
+
+		for (int i = 0; i < randomList.Count; i++)
+		{
+			demoImages[i].sprite=showSpriteArr[randomList[i]];
+		}
+	}
+
+		
+	/// <summary>
+	/// 随机生成三个不重复的数，并加入列表中
+	/// </summary>
+	void GenerateListForRandomIndex()
+	{
+		//首先随机生成3个不相同的随机数，并用列表存储
+		for (int i=0; randomList.Count<3;) 
+		{
+			int index=Random.Range(0,indexList.Count);
+			if (randomList.Count==0)
+			{
+				randomList.Add(index);
+			}
+			else
+			{
+				bool isNumContain=JudgeIfNumberIsInList(index,randomList);
+				if(isNumContain)
+				{
+
+
+				}
+				else
+				{
+					randomList.Add(index);
+				}
+			}
+		}
+			
+	}
+
+
+	bool JudgeIfNumberIsInList(int num, List<int> list)
+	{
+		for (int i = 0; i < list.Count; i++) 
+		{
+			if (num.Equals(list[i])) 
+			{
+				return true;
+			}
+		}
+		return false;
+
+	}
+
+
+
 	void ClearList()
 	{
-		showSprites.Clear();
+		randomList.Clear();
 		indexList.Clear();
+
 	}
 
 	void OnTakePhotoBtnClick(GameObject btn)

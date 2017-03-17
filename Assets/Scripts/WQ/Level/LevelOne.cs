@@ -7,7 +7,9 @@ public class LevelOne : MonoBehaviour
 {
 	public static LevelOne _instance;
 
-	public GameObject  grass;
+	public GameObject  grassL;
+	public GameObject  grassR;
+
 
 	private Animation grassAni;
 	private Animator mouseAnimator;
@@ -44,7 +46,7 @@ public class LevelOne : MonoBehaviour
 
 	void Start () 
 	{
-		grassAni=grass.GetComponent<Animation>();
+		grassAni=grassL.GetComponent<Animation>();
 		startStoryStraight=false;
 		showFingerOnGrass=false;
 
@@ -69,7 +71,7 @@ public class LevelOne : MonoBehaviour
 			if (!showFingerOnGrass) 
 			{
 				Debug.Log("小手出现提示点击小草");
-				ShowFinger(grass.transform.localPosition);
+				ShowFinger(grassL.transform.localPosition);
 
 				showFingerOnGrass=true;
 			}
@@ -83,7 +85,7 @@ public class LevelOne : MonoBehaviour
 				//如果没有点击草
 				if (!grassClicked) 
 				{
-					ClickTheGrass();
+					ClickGrass();
 
 				}
 
@@ -129,7 +131,7 @@ public class LevelOne : MonoBehaviour
 
 
 
-	void ClickTheGrass()
+	void ClickGrass()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
@@ -158,7 +160,12 @@ public class LevelOne : MonoBehaviour
 
 					}
 
+					grassL.GetComponent<BoxCollider2D>().enabled=false;
+					grassR.GetComponent<BoxCollider2D>().enabled=false;
+
 					grassClicked=true;
+
+
 				}
 			}
 		}
@@ -192,7 +199,7 @@ public class LevelOne : MonoBehaviour
 
 			mouse.name="Mouse";
 
-//			mouseAnimator=mouse.GetComponent<Animator>();
+			mouseAnimator=mouse.GetComponent<Animator>();
 		
 			GameObject.DontDestroyOnLoad(mouse);
 
