@@ -36,6 +36,7 @@ public class ModelChoose : MonoBehaviour {
 		mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
 		mouse.name="Mouse";
 		mouse.transform.position=Manager._instance.outsideScreenPos;
+		Destroy(Manager._instance.mouseGo);
 		Manager._instance.mouseGo=mouse;
 		DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
