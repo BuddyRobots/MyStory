@@ -50,8 +50,8 @@ public class LevelThree : MonoBehaviour {
 
 	void Init()
 	{
-		originMousePos=new Vector3(-4.9f,1.73f,0);
-		originBallPos=new Vector3(-6f,2.21f,0);
+		originMousePos=new Vector3(-4.4f,2.06f,0);
+		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
 		ShowMouse();
 		ShowBall();
@@ -106,7 +106,8 @@ public class LevelThree : MonoBehaviour {
 						}
 					}
 				}
-				else if (Manager.storyStatus==StoryStatus.UnNormal) {
+				else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
+				{
 					Debug.Log("Manager.storyStatus--"+Manager.storyStatus);
 					lionClick=true;
 				}
@@ -269,27 +270,33 @@ public class LevelThree : MonoBehaviour {
 		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
 
 	}
+
+
 	private void ShowMouse()
 	{
 		if (mouse ==null) 
 		{
-
-			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-			//			mouse=Manager._instance.mouseGo;
+//			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+			mouse=Manager._instance.mouseGo;
 			if (mouse==null) 
 			{
 				Debug.Log("老鼠为空");
 			}
-			//			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
-			mouse.transform.localPosition=originMousePos;
+			else
+			{
+				mouse.transform.position=originMousePos;
 
-			mouse.name="Mouse";
+				mouse.name="Mouse";
+				mouseAnimator=mouse.GetComponent<Animator>();
+				if (mouse.GetComponent<Rigidbody2D>()!=null)
+				{
+					mouse.GetComponent<Rigidbody2D>().simulated=false;
+				}
+			}
 
-			mouseAnimator=mouse.GetComponent<Animator>();
-
-			GameObject.DontDestroyOnLoad(mouse);
-
+	
 		}
+
 
 
 	}
@@ -303,10 +310,17 @@ public class LevelThree : MonoBehaviour {
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.localPosition=originBallPos;
+			ball.transform.position=originBallPos;
 			ball.name="Ball";
+			if (ball.GetComponent<Rigidbody2D>()!=null) 
+			{
+				Debug.Log("qiu  you gang ti ");
+				ball.GetComponent<Rigidbody2D>().simulated=false;
+				Debug.Log("ball.GetComponent<Rigidbody2D>().simulated--"+ball.GetComponent<Rigidbody2D>().simulated);
+			}
 
 		}
+
 
 	}
 }

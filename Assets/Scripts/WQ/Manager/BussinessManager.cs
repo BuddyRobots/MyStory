@@ -60,6 +60,7 @@ public class BussinessManager : MonoBehaviour
 			LevelOne._instance.PauseStory();
 			break;
 		case 2:
+			LevelTwo_new._instance.PauseStory();
 			break;
 		case 3:
 			break;
@@ -124,6 +125,7 @@ public class BussinessManager : MonoBehaviour
 			LevelOne._instance.ResumeStory();
 			break;
 		case 2:
+			LevelTwo_new._instance.ResumeStory();
 			break;
 		case 3:
 			break;
@@ -233,9 +235,9 @@ public class BussinessManager : MonoBehaviour
 	/// </summary>
 	public void PlayAudioAside()
 	{
-		Debug.Log("PlayAudioAside--Manager.storyStatus--"+Manager.storyStatus);
+//		Debug.Log("PlayAudioAside--Manager.storyStatus--"+Manager.storyStatus);
 
-		Debug.Log("播放旁白  关卡是--"+LevelManager.currentLevelData.LevelID);
+//		Debug.Log("播放旁白  关卡是--"+LevelManager.currentLevelData.LevelID);
 		audioSource.clip=Manager._instance.audioAside[LevelManager.currentLevelData.LevelID-1];
 		audioSource.Play();
 		Debug.Log("音频的名字----"+audioSource.clip.name);

@@ -369,6 +369,33 @@ public class FormalScene : MonoBehaviour
 	}
 
 
+	public void ChangeSceneAutomatically()
+	{
+		//切换到下一个场景界面  
+		if (currentLevelID==9) 
+		{
+			mask.SetActive(true);
+			winFrame.SetActive(true);
+
+		}
+		else
+		{
+			if (currentLevelID==1) 
+			{
+
+				Manager._instance.levelOneOver=true;
+				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
+
+			}
+			else
+			{
+				UpgradeLevel();
+				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
+			}	
+		}
+
+	}
+
 	public void UpgradeLevel()
 	{
 		currentLevelID++;
@@ -426,7 +453,7 @@ public class FormalScene : MonoBehaviour
 
 	private void OnStartRecordBtnClick(GameObject btn)
 	{
-		Manager.storyStatus=StoryStatus.UnNormal;
+		Manager.storyStatus=StoryStatus.Recording;
 
 		mask.SetActive(false);
 		noticeToRecordFrame.SetActive(false);
@@ -466,6 +493,8 @@ public class FormalScene : MonoBehaviour
 
 	private void OnRecordAgainBtnClick(GameObject btn)
 	{
+
+		Manager.storyStatus=StoryStatus.Recording;
 		Debug.Log("---------------record  Again--");
 		mask.SetActive(false);
 		recordDoneFrame.SetActive(false);
@@ -487,6 +516,7 @@ public class FormalScene : MonoBehaviour
 
 	void OnPlayBtnClick(GameObject btn)
 	{
+		Manager.storyStatus =StoryStatus.PlayRecord;
 		recordDoneFrame.SetActive(false);
 		mask.SetActive(false);
 		music.SetActive(false);

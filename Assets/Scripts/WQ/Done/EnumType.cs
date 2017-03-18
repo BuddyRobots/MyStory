@@ -38,7 +38,9 @@ public enum LevelProgress
 public enum StoryStatus
 {
 	Normal,
-	UnNormal
+	Recording,
+	PlayRecord
+
 
 }
 	

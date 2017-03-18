@@ -305,7 +305,8 @@ public class LevelOne : MonoBehaviour
 		//如果在播放旁白，就暂停旁白；
 		//如果有字幕，且在切换字幕，就暂停切换
 		PauseAnimation();
-		PauseNarratage();
+//		PauseNarratage();
+		BussinessManager._instance.PauseAudioAside();
 //		SubtitleCtrl._instance.pauseChangeSubtitle=true;
 		SubtitleShow._instance.pause=true;
 		StopAllCoroutines();
@@ -314,6 +315,7 @@ public class LevelOne : MonoBehaviour
 
 	public void ResumeStory()
 	{
+		BussinessManager._instance.ResumeAudioAside();
 		ResumeNarratage();
 		ResumeAnimation();
 //		SubtitleCtrl._instance.pauseChangeSubtitle=false;
