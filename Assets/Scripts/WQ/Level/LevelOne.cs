@@ -23,6 +23,7 @@ public class LevelOne : MonoBehaviour
 	public bool showFingerOnMouse;//是否出现小手提示点击老鼠
 	bool grassClicked;//是否点击了草
 
+
 	string grassAniName="Grass_2";
 
 	//第一关的场景中有老鼠和球
@@ -31,7 +32,7 @@ public class LevelOne : MonoBehaviour
 
 
 	Vector3 originMousePos=new Vector3(4.7f,-2.9f,0);
-	Vector3 originBallPos=new Vector3(0.39f,-2.9f,0);
+	Vector3 originBallPos=new Vector3(1.02f,-2.93f,0);
 
 	[HideInInspector]
 	public bool secondSceneShow=false;
@@ -112,7 +113,7 @@ public class LevelOne : MonoBehaviour
 				if (!showFingerOnMouse)
 				{
 					
-					ShowBall();
+//					ShowBall();
 					ShowFinger(mouse.transform.position);
 
 					if (mouse.GetComponent<MousePlayBall>()==null) 
@@ -178,6 +179,7 @@ public class LevelOne : MonoBehaviour
 	void StartStoryNormally()
 	{
 		ShowMouse();
+		ShowBall();
 		FormalScene._instance.ShowSubtitle();
 		BussinessManager._instance.PlayAudioAside();
 //		SubtitleCtrl._instance.Init();
@@ -232,10 +234,6 @@ public class LevelOne : MonoBehaviour
 		//重新开始故事----只不过录音被替换
 		PlayAnimation();
 		ShowMouse();
-
-
-
-
 
 	}
 

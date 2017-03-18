@@ -13,6 +13,8 @@ public class LevelThree : MonoBehaviour {
 	public static LevelThree _instance;
 
 	private Animator mouseAnimator;
+	private Animator ballAnimator;
+	private Animator lionAnimator;
 
 	GameObject mouse;
 	GameObject ball;
@@ -25,12 +27,17 @@ public class LevelThree : MonoBehaviour {
 	private Vector3 destCamPos;
 	Vector3 originCamPos;
 
-	bool storyBegin;//故事是否开始的标志
 	bool showFingerOnLion;//是否出现小手提示点击狮子
-	bool startStoryNormally;//该变量用来保证故事只进行一次
 	bool lionClick;
+	bool shakeTofall;
+	bool canShowFinger;
+	[HideInInspector]
+	public bool mouseFall;
+	[HideInInspector]
+	public	bool ballFall;
+	public bool pause;
 
-	float speed;
+	float camMovespeed;
 
 	void Awake()
 	{
@@ -40,39 +47,67 @@ public class LevelThree : MonoBehaviour {
 	void Start ()
 	{
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
-		speed=3f;
+		camMovespeed=3f;
 		originCamPos=new Vector3(0,0,-10);
 		destCamPos=new Vector3 (-9.07f,0,-10);
 		cam=GameObject.Find("Main Camera");
+		lionAnimator=lion.GetComponent<Animator>();
 
 		Init();
 	}
 
 	void Init()
 	{
+		pause=false;
+		mouseFall=false;
+		ballFall=false;
+		shakeTofall=false;
+		canShowFinger=false;
 		originMousePos=new Vector3(-4.4f,2.06f,0);
 		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
+
+		if (Manager.storyStatus ==StoryStatus.Normal) 
+		{
+			showFingerOnLion=false;
+		}
+		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+		{
+
+			showFingerOnLion=true;
+		}
+
+
 		ShowMouse();
 		ShowBall();
 
-	}
-	bool canShowFinger;
-	// Update is called once per frame
-	void Update () 
-	{
 
-		if (storyBegin !=FormalScene._instance.storyBegin ) 
+		//保证初始化的时候动画状态机不是暂停的
+		if (mouseAnimator!=null) 
 		{
-			storyBegin =FormalScene._instance.storyBegin ;
+			mouseAnimator.speed=1;
+		}
+		if (lionAnimator!=null) 
+		{
+			lionAnimator.speed=1;
+		}
+		if (ballAnimator!=null) 
+		{
+			ballAnimator.speed=1;
 		}
 
-		if (storyBegin )
+
+	}
+
+
+	void Update () 
+	{
+		if (FormalScene._instance.storyBegin )
 		{
 			#region 移动摄像机
 			if (cam.transform.position.x>destCamPos.x) 
 			{
-				cam.transform.Translate(Vector3.left*speed*Time.deltaTime);
+				cam.transform.Translate(Vector3.left*camMovespeed*Time.deltaTime);
 				
 			}
 			else
@@ -87,7 +122,6 @@ public class LevelThree : MonoBehaviour {
 				Debug.Log("Manager.storyStatus-------"+Manager.storyStatus);
 				if (Manager.storyStatus==StoryStatus.Normal) 
 				{
-					Debug.Log("zheng chagn ");
 					//出现小手
 					if (!showFingerOnLion) 
 					{
@@ -121,43 +155,48 @@ public class LevelThree : MonoBehaviour {
 				//如果是正常状态下就播放旁白
 				if (Manager.storyStatus==StoryStatus.Normal)
 				{
-
-
-					//播放旁白  。。。。。to do 
-
-
+					//播放旁白 ，显示字幕
 					BussinessManager._instance.PlayAudioAside();
 					FormalScene._instance.ShowSubtitle();
 				}
 				else
 				{
 
-
 				}
 
-				//播放动画，显示字幕
+				//播放动画
+				if (!shakeTofall) 
+				{
+					PlayAnimation();
 
-
-
-
-
+					shakeTofall=true;
+				}
 			}
 
 
+			if (mouseFall && !pause) {
+				
+				mouse.transform.Translate(Vector3.down*Time.deltaTime);
 
+			}
+
+			if (ballFall && !pause) {
+				ball.transform.Translate(Vector3.down*Time.deltaTime);
+			}
 
 		}
 		
 	}
 
+
+
+
 	void ClickLion()
 	{
-
 		if (Input.GetMouseButtonDown(0))
 		{
 			if (EventSystem.current.IsPointerOverGameObject())
 			{
-				Debug.Log("当前点击是在UI 上");
 				return ;
 			}
 			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), lion.transform.position); 
@@ -165,19 +204,11 @@ public class LevelThree : MonoBehaviour {
 			{
 				if (hit.collider.tag=="Lion") 
 				{
-					Debug.Log("点了lion-------");
-
 					//如果没有销毁小手，则销毁小手，同时播放草的动画
 					if (BussinessManager._instance.finger!=null) 
 					{
 
 						Destroy(BussinessManager._instance.finger);
-
-						Debug.Log("销毁了小手");
-
-
-//						PlayAnimation();
-
 					}
 
 					lionClick=true;
@@ -186,30 +217,14 @@ public class LevelThree : MonoBehaviour {
 		}
 
 	}
-	/// <summary>
-	/// 正常开始故事（有旁白，字幕，或者动画等）
-	/// </summary>
-	void StartStoryNormally()
-	{
-		FormalScene._instance.ShowSubtitle();
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().clip=LevelManager.currentLevelData.AudioAside;//Resources.Load<AudioClip>("Audio/Seagulls");
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().Play();
-	
-	}
+
 
 	/// <summary>
 	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
 	/// </summary>
 	public void PlayStoryWithAudioRecording()
 	{
-
-		//重新开始故事----只不过录音被替换
-	
-
-
-
-
-
+		Init();
 	}
 	public void StartStoryToRecordAudioAndVideo()
 	{
@@ -221,12 +236,12 @@ public class LevelThree : MonoBehaviour {
 
 		}
 
-
-
+		lionAnimator.SetBool("lionShaking",false);
+		lionAnimator.SetBool("idle",true);
+		Init();
 
 	}
-
-
+		
 	public void PauseStory()
 	{
 		Debug.Log("---levelOne--PauseStory()");
@@ -236,30 +251,45 @@ public class LevelThree : MonoBehaviour {
 		PauseAnimation();
 		BussinessManager._instance.PauseAudioAside();
 		SubtitleShow._instance.pause=true;
+		pause=true;
 
 	}
-
-
 	public void ResumeStory()
 	{
+		pause=false;
 		BussinessManager._instance.ResumeAudioAside();
 		ResumeAnimation();
 		SubtitleShow._instance.pause=false;
 	}
 
+
+
 	void PlayAnimation()
 	{
-		
+		if (lionAnimator.GetBool("idle")) 
+		{
+			lionAnimator.SetBool("idle",false);
+		}
+
+		lionAnimator.SetBool("lionShaking",true);
+		ballAnimator.SetTrigger("ShakeToFall");
+		mouseAnimator.SetTrigger("fall");
+
 	}
 
 	void PauseAnimation()
 	{
-		
+		mouseAnimator.speed=0;
+		ballAnimator.speed=0;
+		lionAnimator.speed=0;
 
 	}
+
 	void ResumeAnimation()
 	{
-		
+		mouseAnimator.speed=1;
+		ballAnimator.speed=1;
+		lionAnimator.speed=1;
 
 	}
 
@@ -293,6 +323,10 @@ public class LevelThree : MonoBehaviour {
 					mouse.GetComponent<Rigidbody2D>().simulated=false;
 				}
 			}
+			if (mouse.GetComponent<MouseFall>()==null) 
+			{
+				mouse.AddComponent<MouseFall>();
+			}
 
 	
 		}
@@ -318,9 +352,32 @@ public class LevelThree : MonoBehaviour {
 				ball.GetComponent<Rigidbody2D>().simulated=false;
 				Debug.Log("ball.GetComponent<Rigidbody2D>().simulated--"+ball.GetComponent<Rigidbody2D>().simulated);
 			}
+			ballAnimator=ball.GetComponent<Animator>();
+			if (ball.GetComponent<BallFall>()==null) 
+			{
+				ball.AddComponent<BallFall>();
+			}
 
 		}
 
 
 	}
+
+
+
+	public void MouseFall()
+	{
+
+
+	}
+
+	public void BallFall()
+	{
+
+
+	}
+
+
+
+
 }

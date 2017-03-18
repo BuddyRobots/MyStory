@@ -100,14 +100,15 @@ public class LevelTwo_new : MonoBehaviour
 
 		ShowMouse();
 		ShowBall();
-		Debug.Log(" showMouse后 后老鼠的位置是--"+mouse.transform.position);
 
+
+		//保证初始化的时候动画状态机不是暂停的
 		if (mouseAnimator!=null) {
 			mouseAnimator.speed=1;
 		}
 
-		mouseAnimator.SetBool("stop",true);
-		mouseAnimator.SetBool("stop",false);
+//		mouseAnimator.SetBool("stop",true);
+//		mouseAnimator.SetBool("stop",false);
 
 
 
@@ -368,7 +369,11 @@ public class LevelTwo_new : MonoBehaviour
 
 	public void StartStoryToRecordAudioAndVideo()
 	{
+		if (BussinessManager._instance.finger!=null) 
+		{
+			Destroy(BussinessManager._instance.finger);
 
+		}
 		Init();
 
 	}
