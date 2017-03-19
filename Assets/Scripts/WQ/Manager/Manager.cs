@@ -152,6 +152,18 @@ public class Manager :MonoBehaviour
 
 
 
+	public void ChangeSceneToSetBgAudioVolumeNormal()
+	{
+
+		bgAudio.volume=1;
+	}
+
+	public void RecordingToSetBgAudioVolumeZero()
+	{
+
+		bgAudio.volume=0;
+		Debug.Log("背景音乐音量"+bgAudio.volume);
+	}
 
 
 }

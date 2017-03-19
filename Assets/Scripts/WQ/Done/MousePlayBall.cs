@@ -69,7 +69,7 @@ public class MousePlayBall : MonoBehaviour
 					{
 						Destroy(BussinessManager._instance.finger);
 						FormalScene._instance.nextBtn.gameObject.SetActive(true);
-						FormalScene._instance.recordBtn.gameObject.SetActive(false);
+//						FormalScene._instance.recordBtn.gameObject.SetActive(false);
 					}
 					Manager._instance.move=true;
 					mouseAnimator.SetTrigger("standToRun");
@@ -97,12 +97,7 @@ public class MousePlayBall : MonoBehaviour
 	/// <param name="coll">Coll.</param>
 	void OnCollisionEnter2D(Collision2D coll)
 	{
-//		Debug.Log("OnCollisionEnter2D");
-//		if (coll.gameObject.tag!=null) 
-//		{
-//
-//			Debug.Log("coll.gameObject.tag!=null----name is: "+coll.gameObject.name);
-//		}
+
 		if (coll.gameObject.tag=="Ball") 
 		{
 			Manager._instance.move=false;

@@ -31,6 +31,7 @@ public class LevelTwo_new : MonoBehaviour
 	bool showFingerOnBall;
 	bool ballClicked;
 	bool storyGoOn;
+	bool audioAsidePlayed;
 
 	bool mouseAniDone;//动画是否结束的标志
 	bool changeScene;
@@ -84,6 +85,7 @@ public class LevelTwo_new : MonoBehaviour
 		mouseAniDone=false;
 		pause=false;
 		changeScene=false;
+		audioAsidePlayed=false;
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
@@ -193,8 +195,14 @@ public class LevelTwo_new : MonoBehaviour
 				if ( Manager.storyStatus==StoryStatus.Normal) 
 				{
 					Debug.Log("在正常状态下");
-					//播放旁白(只有正常状态下才需要播放旁白)
-					BussinessManager._instance.PlayAudioAside();
+					if (!audioAsidePlayed) 
+					{
+						//播放旁白(只有正常状态下才需要播放旁白)
+						BussinessManager._instance.PlayAudioAside();
+						audioAsidePlayed=true;
+					}
+
+
 					// 显示字幕
 					FormalScene._instance.ShowSubtitle();
 				}
@@ -415,6 +423,11 @@ public class LevelTwo_new : MonoBehaviour
 		pause=false;
 	}
 
+	void OnDestroy()
+	{
 
+
+		mouse.transform.position=Manager._instance.outsideScreenPos;
+	}
 
 }

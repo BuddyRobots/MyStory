@@ -243,9 +243,10 @@ public class BussinessManager : MonoBehaviour
 	/// </summary>
 	public void PlayAudioAside()
 	{
-//		Debug.Log("PlayAudioAside--Manager.storyStatus--"+Manager.storyStatus);
+		//背景音乐淡出
+		Manager._instance.bgMusicFadeOut=true;
 
-//		Debug.Log("播放旁白  关卡是--"+LevelManager.currentLevelData.LevelID);
+
 		audioSource.clip=Manager._instance.audioAside[LevelManager.currentLevelData.LevelID-1];
 		audioSource.Play();
 		Debug.Log("音频的名字----"+audioSource.clip.name);

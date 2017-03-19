@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// 屏幕变亮后，移动摄像机到狮子的位置，点击狮子，播放动画（眼睛跳出外面看小老鼠），怒吼，狮子抖动，老鼠抖动，球抖动，老鼠和球一起滑落掉出屏幕
 /// </summary>
-public class LevelThree : MonoBehaviour {
+public class LevelThree : MonoBehaviour 
+{
 
 
 	public static LevelThree _instance;
@@ -31,6 +32,9 @@ public class LevelThree : MonoBehaviour {
 	bool lionClick;
 	bool shakeTofall;
 	bool canShowFinger;
+	bool audioAsidePlayed;
+	bool changeScene;
+
 	[HideInInspector]
 	public bool mouseFall;
 	[HideInInspector]
@@ -46,6 +50,7 @@ public class LevelThree : MonoBehaviour {
 
 	void Start ()
 	{
+		Manager.storyStatus =StoryStatus.Normal;
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		camMovespeed=3f;
 		originCamPos=new Vector3(0,0,-10);
@@ -63,16 +68,20 @@ public class LevelThree : MonoBehaviour {
 		ballFall=false;
 		shakeTofall=false;
 		canShowFinger=false;
+		audioAsidePlayed=false;
+		changeScene=false;
 		originMousePos=new Vector3(-4.4f,2.06f,0);
 		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
+			Debug.Log("正常状态，要出现小手");
 			showFingerOnLion=false;
 		}
 		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
 		{
+			Debug.Log("非正常状态，不要出现小手");
 
 			showFingerOnLion=true;
 		}
@@ -100,21 +109,26 @@ public class LevelThree : MonoBehaviour {
 	}
 
 
+
 	void Update () 
 	{
 		if (FormalScene._instance.storyBegin )
 		{
 			#region 移动摄像机
-			if (cam.transform.position.x>destCamPos.x) 
+			if (!pause) 
 			{
-				cam.transform.Translate(Vector3.left*camMovespeed*Time.deltaTime);
-				
+				if (cam.transform.position.x>destCamPos.x) 
+				{
+					cam.transform.Translate(Vector3.left*camMovespeed*Time.deltaTime);
+
+				}
+				else
+				{
+					cam.transform.position=destCamPos;
+					canShowFinger=true;
+				}
 			}
-			else
-			{
-				cam.transform.position=destCamPos;
-				canShowFinger=true;
-			}
+
 			#endregion
 
 			if (canShowFinger) 
@@ -155,8 +169,12 @@ public class LevelThree : MonoBehaviour {
 				//如果是正常状态下就播放旁白
 				if (Manager.storyStatus==StoryStatus.Normal)
 				{
-					//播放旁白 ，显示字幕
-					BussinessManager._instance.PlayAudioAside();
+					if (!audioAsidePlayed) {
+						//播放旁白 ，显示字幕
+						BussinessManager._instance.PlayAudioAside();
+						audioAsidePlayed=true;
+					}
+
 					FormalScene._instance.ShowSubtitle();
 				}
 				else
@@ -174,15 +192,31 @@ public class LevelThree : MonoBehaviour {
 			}
 
 
-			if (mouseFall && !pause) {
+			if (mouseFall && !pause) 
+			{
 				
 				mouse.transform.Translate(Vector3.down*Time.deltaTime);
 
+				if (mouse.transform.position.y<-6f) 
+				{
+
+					if (!changeScene) 
+					{
+
+						FormalScene._instance.ChangeSceneAutomatically();
+						changeScene=true;
+					}
+					
+				}
+
 			}
 
-			if (ballFall && !pause) {
+			if (ballFall && !pause) 
+			{
 				ball.transform.Translate(Vector3.down*Time.deltaTime);
 			}
+
+
 
 		}
 		

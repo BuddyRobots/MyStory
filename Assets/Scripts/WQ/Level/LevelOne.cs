@@ -13,7 +13,7 @@ public class LevelOne : MonoBehaviour
 
 	private Animation grassAni;
 	private Animator mouseAnimator;
-	bool startStoryStraight=false;//是否可以直接开始故事
+
 	bool startStoryNormally;//该变量用来保证故事只进行一次
 
 
@@ -36,8 +36,8 @@ public class LevelOne : MonoBehaviour
 
 	[HideInInspector]
 	public bool secondSceneShow=false;
-
-
+	[HideInInspector]
+	public bool recordBtnHide;
 
 
 	void Awake()
@@ -48,7 +48,12 @@ public class LevelOne : MonoBehaviour
 	void Start () 
 	{
 		grassAni=grassL.GetComponent<Animation>();
-		startStoryStraight=false;
+
+		Init();
+	}
+	void Init()
+	{
+		
 		showFingerOnGrass=false;
 
 	}
@@ -108,13 +113,16 @@ public class LevelOne : MonoBehaviour
 			//如果进入了第二部分
 			if (secondSceneShow) 
 			{
+
 //				Debug.Log("进入第二部分---出现小球");
 				//进入第二部分，出现小手提示点击老鼠，出现球，给老鼠添加脚本
 				if (!showFingerOnMouse)
 				{
-					
+					Manager._instance.bgMusicFadeIn=true;
 //					ShowBall();
 					ShowFinger(mouse.transform.position);
+
+
 
 					if (mouse.GetComponent<MousePlayBall>()==null) 
 					{
@@ -126,9 +134,16 @@ public class LevelOne : MonoBehaviour
 
 			}
 
+			if (recordBtnHide) 
+			{
+				FormalScene._instance.recordBtn.gameObject.SetActive(false);
+
+			}
+
 		}
 
 	}
+
 
 
 
@@ -182,15 +197,12 @@ public class LevelOne : MonoBehaviour
 		ShowBall();
 		FormalScene._instance.ShowSubtitle();
 		BussinessManager._instance.PlayAudioAside();
-//		SubtitleCtrl._instance.Init();
 	}
 
 	private void ShowMouse()
 	{
 		if (mouse ==null) 
 		{
-			
-//			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
 			mouse=Manager._instance.mouseGo;
 			if (mouse==null) 
 			{
@@ -203,7 +215,6 @@ public class LevelOne : MonoBehaviour
 
 			mouseAnimator=mouse.GetComponent<Animator>();
 		
-//			GameObject.DontDestroyOnLoad(mouse);
 
 		}
 	    
@@ -234,6 +245,7 @@ public class LevelOne : MonoBehaviour
 		//重新开始故事----只不过录音被替换
 		PlayAnimation();
 		ShowMouse();
+		ShowBall();
 
 	}
 
@@ -271,11 +283,12 @@ public class LevelOne : MonoBehaviour
 		}
 		PlayAnimation();
 		ShowMouse();
+		ShowBall();
 
-		//如果有球的话，球要隐藏
-		if (ball !=null) {
-			ball.SetActive(false);
-		}
+//		//如果有球的话，球要隐藏
+//		if (ball !=null) {
+//			ball.SetActive(false);
+//		}
 	}
 
 
@@ -322,7 +335,10 @@ public class LevelOne : MonoBehaviour
 
 
 
-
+	void OnDestroy()
+	{
+//		mouse.transform.position=Manager._instance.outsideScreenPos;
+	}
 
 
 }

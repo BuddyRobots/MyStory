@@ -131,9 +131,9 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		PlayerPrefs.SetInt ("LevelID",5);
 		PlayerPrefs.SetInt ("LevelProgress",0);
 
-		ReadSubtitleText();
+//		ReadSubtitleText();
 		ParseLevelItemInfo();
-		SetSubtitleForLevel();
+//		SetSubtitleForLevel();
 		SetAudioclipForLevel();
 		LoadLocalLevelProgressData ();
 	}
