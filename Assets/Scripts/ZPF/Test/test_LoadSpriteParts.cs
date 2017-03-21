@@ -76,7 +76,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		mouseSpriteMeshRootGO.transform.parent = newMouseAnimated.transform;
 		newMouseBoneRootGO.transform.parent = newMouseAnimated.transform;
 		Rigidbody2D rigidBody = newMouseAnimated.AddComponent<Rigidbody2D>();
-		rigidBody.simulated = false;
+		rigidBody.gravityScale = 0;
 
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimated.AddComponent<Animator>();
