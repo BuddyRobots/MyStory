@@ -41,19 +41,12 @@ public class LevelFour : MonoBehaviour
 		if (mouse ==null) 
 		{
 			
-			mouse=Instantiate(Resources.Load("Prefab/Mouse_UpsideDown")) as GameObject;//code for test
+//			mouse=Instantiate(Resources.Load("Prefab/Mouse_UpsideDown")) as GameObject;//code for test
 
 
 
 
-//			mouse=Manager._instance.mouseGo;// real code 
-			//拿到老鼠后，得手动给老鼠添加碰撞体，Animator组件
-			// to do....
-			//
-			//
-			//
-			//
-
+			mouse=Manager._instance.mouseGo;// real code 
 
 
 
@@ -66,7 +59,7 @@ public class LevelFour : MonoBehaviour
 			mouse.transform.position=originMousePos;
 			mouse.name="Mouse";
 			mouseAnimator=mouse.GetComponent<Animator>();
-
+			mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StruggleAnimations/MouseStruggleController") as RuntimeAnimatorController;
 			GameObject.DontDestroyOnLoad(mouse);
 
 		}
