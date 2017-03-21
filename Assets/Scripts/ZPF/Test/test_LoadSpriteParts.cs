@@ -502,18 +502,18 @@ public class test_LoadSpriteParts : MonoBehaviour
 		GameObject lFootBoneGO = FindBoneGOInChild(boneRootGO, "L foot");
 		GameObject rHandBoneGO = FindBoneGOInChild(boneRootGO, "R hand");
 
-		Vector3 tr = new Vector2(			
+		Vector2 tr = new Vector2(			
 			rEarBoneGO.transform.position.y + rEarBoneGO.GetComponent<Bone2D>().length,
 			rHandBoneGO.transform.position.x + rHandBoneGO.GetComponent<Bone2D>().length
 		);
-		Vector3 bl = new Vector2(
+		Vector2 bl = new Vector2(
 			lFootBoneGO.transform.position.y,
 			lHandBoneGO.transform.position.x - lHandBoneGO.GetComponent<Bone2D>().length
 		);
 
-		BoxCollider boxCollider = hipBoneGO.AddComponent<BoxCollider>();
-		boxCollider.center = (tr + bl)/2;
-		boxCollider.center -= new Vector3(hipBoneGO.transform.position.y, 0.0f, 0.0f);
+		BoxCollider2D boxCollider = hipBoneGO.AddComponent<BoxCollider2D>();
+		boxCollider.offset = (tr + bl)/2;
+		boxCollider.offset -= new Vector2(hipBoneGO.transform.position.y, 0.0f);
 		boxCollider.size = tr - bl;
 	}
 }
