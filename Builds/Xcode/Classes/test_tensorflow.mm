@@ -13,8 +13,8 @@ static NSString* model_file_name = @"opt_MouseModel";
 static NSString* model_file_type = @"pb";
 static NSString* model_file_subfolder = @"Models";
 
-static const std::string inputLayerName  = "NETWORK_INPUT";
-static const std::string outputLayerName = "NETWORK_OUTPUT";
+static const std::string inputLayerName  = "placeholder";
+static const std::string outputLayerName = "transpose_31";
 
 //--------------------- Function Definition ---------------------------------
 class IfstreamInputStream : public ::google::protobuf::io::CopyingInputStream
@@ -143,6 +143,17 @@ extern "C"
                 for (int k = 0; k < channel; k++)
                     inputTensorMapped(0, i, j, k) = *(sourceData + i*width*channel + j*channel + k);
         
+        
+        
+        ///
+        for(int i = 0; i < 30; i++)
+        {
+            LOG(INFO) << "test_tensorflow.mm : sourceData[" << i << "] = " << sourceData[i];
+        }
+        ///
+        
+        
+        
         // Load Model
         std::unique_ptr<tensorflow::Session> tensorFlowSession;
         tensorflow::Status loadStatus =
@@ -157,7 +168,7 @@ extern "C"
         if (tensorFlowSession.get())
         {
             std::vector<tensorflow::Tensor> outputTensor;
-            LOG(INFO) << "flag 1";
+            LOG(INFO) << "flag 1: before Run()";
             tensorflow::Status run_status = tensorFlowSession->Run(
                 {{inputLayerName, inputTensor}}, {outputLayerName}, {}, &outputTensor);
             LOG(INFO) << "flag 2, outputTensor.size() = " << outputTensor.size();

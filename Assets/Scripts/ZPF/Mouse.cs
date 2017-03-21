@@ -26,8 +26,6 @@ namespace MyStory
 
 		private const float pixelsPerUnit = 100.0f;
 
-		private GameObject spriteMeshRootGO;
-
 
 		// TODO Need to complete this. It's for test now.
 		public Mouse(Mat inputMat/*, GameObject oriSpriteRootGO*/)

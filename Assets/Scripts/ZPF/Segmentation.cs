@@ -92,24 +92,24 @@ namespace MyStory
 			if (croppedWidth > croppedHeight)
 			{
 				int topMargin = (croppedWidth - croppedHeight)/2;
-				int botMargin = topMargin;
+				int bottomMargin = topMargin;
 
 				// Needed due to percision loss when /2
 				if ((croppedHeight + topMargin*2) != croppedWidth)
-					botMargin = croppedWidth - croppedHeight - topMargin;
+					bottomMargin = croppedWidth - croppedHeight - topMargin;
 
-				Core.copyMakeBorder(croppedImage, croppedImage, topMargin, botMargin, 0, 0, Core.BORDER_REPLICATE);
+				Core.copyMakeBorder(croppedImage, croppedImage, topMargin, bottomMargin, 0, 0, Core.BORDER_REPLICATE);
 			}
 			else if (croppedWidth < croppedHeight)
 			{
-				int lefMargin = (croppedHeight - croppedWidth)/2;
-				int rigMargin = lefMargin;
+				int leftMargin = (croppedHeight - croppedWidth)/2;
+				int rightMargin = leftMargin;
 
 				// Needed due to percision loss when /2
-				if ((croppedWidth + lefMargin*2) != croppedHeight)
-					rigMargin = croppedHeight - croppedWidth - lefMargin;
+				if ((croppedWidth + leftMargin*2) != croppedHeight)
+					rightMargin = croppedHeight - croppedWidth - leftMargin;
 
-				Core.copyMakeBorder(croppedImage, croppedImage, 0, 0, lefMargin, rigMargin, Core.BORDER_REPLICATE);
+				Core.copyMakeBorder(croppedImage, croppedImage, 0, 0, leftMargin, rightMargin, Core.BORDER_REPLICATE);
 			}
 
 			Mat scaleImage = new Mat();
@@ -120,15 +120,16 @@ namespace MyStory
 		}
 	
 		// TODO need to simplify this
+		// float 1 - (0.0f~1.0f)
 		private static float[] MatToTensorArray(Mat image)
 		{
 			byte [] byteArray  = new byte [image.rows()*image.cols()*image.channels()];
 			float[] floatArray = new float[image.rows()*image.cols()*image.channels()];
 
-			image.get(0, 0, byteArray); 
+			image.get(0, 0, byteArray);
 
 			for (var i = 0; i < byteArray.Length; i++)
-				floatArray[i] = (float)byteArray[i];
+				floatArray[i] = (float)(1 - (float)byteArray[i]/255.0f);
 
 			return floatArray;
 		}
