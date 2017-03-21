@@ -498,13 +498,23 @@ public class test_LoadSpriteParts : MonoBehaviour
 	private void AddCollider(GameObject boneRootGO)
 	{
 		GameObject hipBoneGO = FindBoneGOInChild(boneRootGO, "Hip");
-		GameObject lFootBoneGO = FindBoneGOInChild(boneRootGO, "L foot");
+		GameObject rEarBoneGO = FindBoneGOInChild(boneRootGO, "R ear");
 		GameObject lHandBoneGO = FindBoneGOInChild(boneRootGO, "L hand");
+		GameObject lFootBoneGO = FindBoneGOInChild(boneRootGO, "L foot");
+		GameObject rHandBoneGO = FindBoneGOInChild(boneRootGO, "R hand");
 
-		float colliderWidth = (hipBoneGO.transform.position.x - lHandBoneGO.transform.position.x + lHandBoneGO.GetComponent<Bone2D>().length)*2;
-		float colliderHeight = (hipBoneGO.transform.position.y - lFootBoneGO.transform.position.y)*2;
+		Vector3 tr = new Vector2(			
+			rEarBoneGO.transform.position.y + rEarBoneGO.GetComponent<Bone2D>().length,
+			rHandBoneGO.transform.position.x + rHandBoneGO.GetComponent<Bone2D>().length
+		);
+		Vector3 bl = new Vector2(
+			lFootBoneGO.transform.position.y,
+			lHandBoneGO.transform.position.x - lHandBoneGO.GetComponent<Bone2D>().length
+		);
 
 		BoxCollider boxCollider = hipBoneGO.AddComponent<BoxCollider>();
-		boxCollider.size = new Vector3(colliderHeight, colliderWidth, 0.0f);
+		boxCollider.center = (tr + bl)/2;
+		boxCollider.center -= new Vector3(hipBoneGO.transform.position.y, 0.0f, 0.0f);
+		boxCollider.size = tr - bl;
 	}
 }
