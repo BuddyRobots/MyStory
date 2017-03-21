@@ -34,6 +34,7 @@ public class LevelThree : MonoBehaviour
 	bool canShowFinger;
 	bool audioAsidePlayed;
 	bool changeScene;
+	bool lionChange;
 
 	[HideInInspector]
 	public bool mouseFall;
@@ -42,6 +43,10 @@ public class LevelThree : MonoBehaviour
 	public bool pause;
 
 	float camMovespeed;
+
+	Sprite lionSprite;
+	float fallSpeed=4;
+
 
 	void Awake()
 	{
@@ -57,6 +62,8 @@ public class LevelThree : MonoBehaviour
 		destCamPos=new Vector3 (-9.07f,0,-10);
 		cam=GameObject.Find("Main Camera");
 		lionAnimator=lion.GetComponent<Animator>();
+//		lionSprite=lion.GetComponent<SpriteRenderer>().sprite;
+		fallSpeed=4;
 
 		Init();
 	}
@@ -70,6 +77,8 @@ public class LevelThree : MonoBehaviour
 		canShowFinger=false;
 		audioAsidePlayed=false;
 		changeScene=false;
+		lionChange=false;
+
 		originMousePos=new Vector3(-4.4f,2.06f,0);
 		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
@@ -106,7 +115,10 @@ public class LevelThree : MonoBehaviour
 		}
 
 
+
+
 	}
+
 
 
 
@@ -125,6 +137,12 @@ public class LevelThree : MonoBehaviour
 				else
 				{
 					cam.transform.position=destCamPos;
+					if (!lionChange) 
+					{
+						lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionEyeMove") as Sprite;
+
+						lionChange=true;
+					}
 					canShowFinger=true;
 				}
 			}
@@ -133,7 +151,7 @@ public class LevelThree : MonoBehaviour
 
 			if (canShowFinger) 
 			{
-				Debug.Log("Manager.storyStatus-------"+Manager.storyStatus);
+				Debug.Log(" 摄像机到达位置了---Manager.storyStatus-------"+Manager.storyStatus);
 				if (Manager.storyStatus==StoryStatus.Normal) 
 				{
 					//出现小手
@@ -199,7 +217,7 @@ public class LevelThree : MonoBehaviour
 				if (mouse.transform.position.y<-6f) 
 				{
 
-					if (!changeScene) 
+					if (!changeScene && Manager.storyStatus!=StoryStatus.Recording) 
 					{
 
 						FormalScene._instance.ChangeSceneAutomatically();
@@ -223,7 +241,7 @@ public class LevelThree : MonoBehaviour
 	}
 
 
-	float fallSpeed=3;
+
 
 	void ClickLion()
 	{
@@ -244,7 +262,7 @@ public class LevelThree : MonoBehaviour
 
 						Destroy(BussinessManager._instance.finger);
 					}
-
+					lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionMouthOpen_1") as Sprite;
 					lionClick=true;
 				}
 			}
@@ -272,10 +290,17 @@ public class LevelThree : MonoBehaviour
 
 		lionAnimator.SetBool("lionShaking",false);
 		lionAnimator.SetBool("idle",true);
+//		Destroy(mouse.GetComponent<Animator>());
+//		mouseAnimator.Stop();
+		mouseAnimator.SetBool("idle",true);
+
 		Init();
 
+
+
 	}
-		
+		//我有两个动画，一个是idle，一个是fall，idle到fall我用的条件是trigger，名字是fall，fall到idle我用的条件是bool idle=true，我要怎么控制他们之间的转换？
+
 	public void PauseStory()
 	{
 		Debug.Log("---levelOne--PauseStory()");
@@ -308,6 +333,16 @@ public class LevelThree : MonoBehaviour
 		lionAnimator.SetBool("lionShaking",true);
 		ballAnimator.SetTrigger("ShakeToFall");
 		mouseAnimator.SetTrigger("fall");
+
+		mouseAnimator.SetBool("stop",false);
+		mouseAnimator.SetBool("idle",false);
+		Debug.Log("播放动画");
+
+//		ballAnimator.Play("BallAnimation",-1,0f);
+//		mouseAnimator.Play("Fall",-1,0f);
+//		lionAnimator.Play("LionAnimation",-1,0);
+
+
 
 	}
 
@@ -351,21 +386,34 @@ public class LevelThree : MonoBehaviour
 				mouse.transform.position=originMousePos;
 
 				mouse.name="Mouse";
+				if (mouse.GetComponent<Animator>()==null)
+				{
+					Debug.Log("没有动画控制器");
+					mouse.AddComponent<Animator>();
+//					mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
+
+				}
+				else
+				{
+
+				}
 				mouseAnimator=mouse.GetComponent<Animator>();
+
+				mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
+
 				if (mouse.GetComponent<Rigidbody2D>()!=null)
 				{
 					mouse.GetComponent<Rigidbody2D>().simulated=false;
 				}
+				if (mouse.GetComponent<MouseFall>()==null) 
+				{
+					mouse.AddComponent<MouseFall>();
+				}
 			}
-			if (mouse.GetComponent<MouseFall>()==null) 
-			{
-				mouse.AddComponent<MouseFall>();
-			}
+
 
 	
 		}
-
-
 
 	}
 
