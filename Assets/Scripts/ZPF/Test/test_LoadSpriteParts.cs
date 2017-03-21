@@ -72,6 +72,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		GameObject newMouseAnimated = new GameObject("newMouseAnimated");
 		mouseSpriteMeshRootGO.transform.parent = newMouseAnimated.transform;
 		newMouseBoneRootGO.transform.parent = newMouseAnimated.transform;
+		newMouseAnimated.AddComponent<Rigidbody2D>();
 
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimated.AddComponent<Animator>();
@@ -107,6 +108,16 @@ public class test_LoadSpriteParts : MonoBehaviour
 		for (var i = 0; i < values.Count; i++)
 			bbList.Add(new OpenCVForUnity.Rect(values[i][0], values[i][1], values[i][2], values[i][3]));
 	}		
+
+	private void AddCollider(GameObject boneRootGO, Mouse mouse)
+	{
+
+
+
+
+
+
+	}
 
 	// TODO Setup BoneList, can we simplify this routine?
 	// TODO We have not considered the length of the bone yet. Maybe something with bone's child.
