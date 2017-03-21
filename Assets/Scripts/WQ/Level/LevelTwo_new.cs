@@ -41,6 +41,8 @@ public class LevelTwo_new : MonoBehaviour
 	int destFlag;//值为1，2，3，1代表到达目标点1，2代表叨叨目标点2；。。。
 
 	StoryStatus storyStatus;
+	[HideInInspector]
+	public float mouseSpeed;
 
 
 	void Awake()
@@ -59,8 +61,8 @@ public class LevelTwo_new : MonoBehaviour
 		dest_Final=tar_3.position;
 
 
-		originMousePos=new Vector3(8.15f,-3.29f,0);//mouse.transform.position;
-		originBallPos=new Vector3(-6f,2.2f,0);
+		originMousePos=new Vector3(7.6f,-3.3f,0);//mouse.transform.position;
+		originBallPos=new Vector3(-6f,2.3f,0);
 		dest_0=new Vector3(tar_0.position.x,originMousePos.y,originMousePos.z);
 
 		Manager._instance.ballPosForLevelThree=originBallPos;
@@ -75,7 +77,7 @@ public class LevelTwo_new : MonoBehaviour
 	/// </summary>
 	public void Init()
 	{
-		
+		mouseSpeed=2;
 		destFlag=0;
 		arrivedFirstDest=false;
 		arrivedSecondDest=false;
@@ -185,6 +187,7 @@ public class LevelTwo_new : MonoBehaviour
 			if (ballClicked ) 
 			{
 				
+				
 
 				//（播放跑的动画）   to do....
 
@@ -213,6 +216,7 @@ public class LevelTwo_new : MonoBehaviour
 				{
 					mouseAnimator.SetTrigger("walkToLion");
 					dest=dest_1;
+					mouseSpeed=1.9f;
 					destFlag++;
 					isOver=false;
 					arrivedSecondDest=true;
@@ -281,8 +285,9 @@ public class LevelTwo_new : MonoBehaviour
 			{
 				//			Debug.Log("isover---false");
 				Vector3 offSet = tar - mouse.transform.position;
-				mouse.transform.position += offSet.normalized * 1f * Time.deltaTime;
-				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
+				mouse.transform.position += offSet.normalized * mouseSpeed * Time.deltaTime;
+				Debug.Log("Vector3.Distance(tar, mouse.transform.position)---"+Vector3.Distance(tar, mouse.transform.position));
+				if(Vector3.Distance(tar, mouse.transform.position)<=0.4f)
 				{
 					Debug.Log("到达了终点");
 					isOver = true;
@@ -342,7 +347,9 @@ public class LevelTwo_new : MonoBehaviour
 			mouse.name="Mouse";
 
 			mouseAnimator=mouse.GetComponent<Animator>();
-
+			if (mouse.GetComponent<MouseEnterScene>()==null) {
+				mouse.AddComponent<MouseEnterScene>();
+			}
 
 			GameObject.DontDestroyOnLoad(mouse);
 		}
@@ -356,7 +363,7 @@ public class LevelTwo_new : MonoBehaviour
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.position=originBallPos;
+			ball.transform.localPosition=originBallPos;
 			ball.name="Ball";
 
 		}
@@ -370,6 +377,9 @@ public class LevelTwo_new : MonoBehaviour
 		{
 			ball.GetComponent<Rigidbody2D>().gravityScale=0;
 
+		}
+		if (ball.GetComponent<Animator>()!=null) {
+			ball.GetComponent<Animator>().enabled=false;
 		}
 
 	}

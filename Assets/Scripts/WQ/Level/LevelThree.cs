@@ -195,8 +195,7 @@ public class LevelThree : MonoBehaviour
 			if (mouseFall && !pause) 
 			{
 				
-				mouse.transform.Translate(Vector3.down*Time.deltaTime);
-
+				mouse.transform.Translate(Vector3.down*fallSpeed*Time.deltaTime);
 				if (mouse.transform.position.y<-6f) 
 				{
 
@@ -213,7 +212,8 @@ public class LevelThree : MonoBehaviour
 
 			if (ballFall && !pause) 
 			{
-				ball.transform.Translate(Vector3.down*Time.deltaTime);
+				ball.transform.parent.Translate(Vector3.down*fallSpeed*Time.deltaTime);
+
 			}
 
 
@@ -223,7 +223,7 @@ public class LevelThree : MonoBehaviour
 	}
 
 
-
+	float fallSpeed=3;
 
 	void ClickLion()
 	{
@@ -378,7 +378,9 @@ public class LevelThree : MonoBehaviour
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.position=originBallPos;
+//			ball.transform.position=originBallPos;
+			ball.transform.parent=GameObject.Find("Manager").transform;
+			ball.transform.localPosition=Vector3.zero;
 			ball.name="Ball";
 			if (ball.GetComponent<Rigidbody2D>()!=null) 
 			{
