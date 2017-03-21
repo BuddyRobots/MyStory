@@ -75,7 +75,7 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 			return;  
 		}  
 		GetComponent<AudioSource>().loop = false;  
-		GetComponent<AudioSource>().mute = false;  //   ？？？？？？？？-----这里为false的时候能检测到音量大小，但是录音不正常，能同时听到录的声音，如果为true，就不能检测音量大小，但是录音的时候正常
+		GetComponent<AudioSource>().mute = true;  //   ？？？？？？？？-----这里为false的时候能检测到音量大小，但是录音不正常，能同时听到录的声音，如果为true，就不能检测音量大小，但是录音的时候正常
 		GetComponent<AudioSource>().clip = Microphone.Start(null, false, RECORD_TIME, 44100);  
 		clip = GetComponent<AudioSource>().clip;  
 		while (!(Microphone.GetPosition(null)>0)) {  

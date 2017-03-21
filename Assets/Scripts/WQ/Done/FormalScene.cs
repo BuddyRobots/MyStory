@@ -197,6 +197,9 @@ public class FormalScene : MonoBehaviour
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
 		SceneManager.LoadSceneAsync("6_FormalScene_0");
 
+		Manager._instance.ChangeSceneToSetBgAudioVolumeNormal();
+
+
 	}
 
 
@@ -207,6 +210,8 @@ public class FormalScene : MonoBehaviour
 		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
 		SceneManager.LoadSceneAsync("5_SelectLevel");
+		Manager._instance.ChangeSceneToSetBgAudioVolumeNormal();
+
 	}
 
 
@@ -216,6 +221,12 @@ public class FormalScene : MonoBehaviour
 		blackMask.transform.localPosition=blackMask_screenInsidePos;
 		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+
+
+		//告诉第一关该隐藏录音按钮了
+
+		LevelOne._instance.recordBtnHide=true;
+
 		blackMask.GetComponent<Image>().CrossFadeAlpha(0,Constant.SCREEN_FADINGTIME,true);
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
 		blackMask.transform.localPosition=blackMask_screenOutsidePos;
@@ -339,6 +350,10 @@ public class FormalScene : MonoBehaviour
 			LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
 			ScreenDarkenThenReloadFormalScene();
 		}
+
+
+
+
 	}
 
 
@@ -368,6 +383,33 @@ public class FormalScene : MonoBehaviour
 		}
 	}
 
+
+	public void ChangeSceneAutomatically()
+	{
+		//切换到下一个场景界面  
+		if (currentLevelID==9) 
+		{
+			mask.SetActive(true);
+			winFrame.SetActive(true);
+
+		}
+		else
+		{
+			if (currentLevelID==1) 
+			{
+
+				Manager._instance.levelOneOver=true;
+				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
+
+			}
+			else
+			{
+				UpgradeLevel();
+				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
+			}	
+		}
+
+	}
 
 	public void UpgradeLevel()
 	{
@@ -426,7 +468,8 @@ public class FormalScene : MonoBehaviour
 
 	private void OnStartRecordBtnClick(GameObject btn)
 	{
-		Manager.storyStatus=StoryStatus.UnNormal;
+//		Manager._instance.bgMusicFadeOut=true;
+		Manager.storyStatus=StoryStatus.Recording;
 
 		mask.SetActive(false);
 		noticeToRecordFrame.SetActive(false);
@@ -447,6 +490,8 @@ public class FormalScene : MonoBehaviour
 
 
 		Manager ._instance.fingerMove=true;
+
+		Manager._instance.RecordingToSetBgAudioVolumeZero();
 	
 	}
 		
@@ -466,6 +511,8 @@ public class FormalScene : MonoBehaviour
 
 	private void OnRecordAgainBtnClick(GameObject btn)
 	{
+
+		Manager.storyStatus=StoryStatus.Recording;
 		Debug.Log("---------------record  Again--");
 		mask.SetActive(false);
 		recordDoneFrame.SetActive(false);
@@ -487,6 +534,7 @@ public class FormalScene : MonoBehaviour
 
 	void OnPlayBtnClick(GameObject btn)
 	{
+		Manager.storyStatus =StoryStatus.PlayRecord;
 		recordDoneFrame.SetActive(false);
 		mask.SetActive(false);
 		music.SetActive(false);

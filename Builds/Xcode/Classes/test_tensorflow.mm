@@ -13,7 +13,7 @@ static NSString* model_file_name = @"opt_MouseModel";
 static NSString* model_file_type = @"pb";
 static NSString* model_file_subfolder = @"Models";
 
-static const std::string inputLayerName  = "filter";
+static const std::string inputLayerName  = "placeholder";
 static const std::string outputLayerName = "transpose_31";
 
 //--------------------- Function Definition ---------------------------------

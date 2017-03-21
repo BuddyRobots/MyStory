@@ -109,6 +109,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 			bbList.Add(new OpenCVForUnity.Rect(values[i][0], values[i][1], values[i][2], values[i][3]));
 	}		
 
+	// TODO need to finish this.
 	private void AddCollider(GameObject boneRootGO, Mouse mouse)
 	{
 

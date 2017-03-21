@@ -21,6 +21,9 @@ public class Manager :MonoBehaviour
 	public bool bgMusicFadeOut;
 	public bool bgMusicFadeIn;
 
+	public Vector3 ballPosForLevelThree;
+	public Vector3 mousePosForLevelThree;
+
 	[HideInInspector]
 	public AudioSource bgAudio;
 
@@ -37,6 +40,8 @@ public class Manager :MonoBehaviour
 	/// </summary>
 	[HideInInspector]
 	public bool fingerMove=true;
+	[HideInInspector]
+	public bool isSubtitleShowOver;//场景中字幕是否显示完的标志----有的关卡得根据这个标志来判读场景故事是不是结束了该跳到下一关了
 
 	public List<AudioClip> audioAside;
 
@@ -147,6 +152,18 @@ public class Manager :MonoBehaviour
 
 
 
+	public void ChangeSceneToSetBgAudioVolumeNormal()
+	{
+
+		bgAudio.volume=1;
+	}
+
+	public void RecordingToSetBgAudioVolumeZero()
+	{
+
+		bgAudio.volume=0;
+		Debug.Log("背景音乐音量"+bgAudio.volume);
+	}
 
 
 }
