@@ -34,6 +34,7 @@ public class LevelThree : MonoBehaviour
 	bool canShowFinger;
 	bool audioAsidePlayed;
 	bool changeScene;
+	bool lionChange;
 
 	[HideInInspector]
 	public bool mouseFall;
@@ -42,6 +43,10 @@ public class LevelThree : MonoBehaviour
 	public bool pause;
 
 	float camMovespeed;
+
+	Sprite lionSprite;
+
+
 
 	void Awake()
 	{
@@ -57,6 +62,7 @@ public class LevelThree : MonoBehaviour
 		destCamPos=new Vector3 (-9.07f,0,-10);
 		cam=GameObject.Find("Main Camera");
 		lionAnimator=lion.GetComponent<Animator>();
+//		lionSprite=lion.GetComponent<SpriteRenderer>().sprite;
 
 		Init();
 	}
@@ -70,6 +76,8 @@ public class LevelThree : MonoBehaviour
 		canShowFinger=false;
 		audioAsidePlayed=false;
 		changeScene=false;
+		lionChange=false;
+
 		originMousePos=new Vector3(-4.4f,2.06f,0);
 		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
@@ -110,6 +118,7 @@ public class LevelThree : MonoBehaviour
 
 
 
+
 	void Update () 
 	{
 		if (FormalScene._instance.storyBegin )
@@ -125,6 +134,12 @@ public class LevelThree : MonoBehaviour
 				else
 				{
 					cam.transform.position=destCamPos;
+					if (!lionChange) 
+					{
+						lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionEyeMove") as Sprite;
+
+						lionChange=true;
+					}
 					canShowFinger=true;
 				}
 			}
@@ -244,7 +259,7 @@ public class LevelThree : MonoBehaviour
 
 						Destroy(BussinessManager._instance.finger);
 					}
-
+					lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionMouthOpen_1") as Sprite;
 					lionClick=true;
 				}
 			}
@@ -300,15 +315,20 @@ public class LevelThree : MonoBehaviour
 
 	void PlayAnimation()
 	{
-		if (lionAnimator.GetBool("idle")) 
-		{
-			lionAnimator.SetBool("idle",false);
-		}
+//		if (lionAnimator.GetBool("idle")) 
+//		{
+//			lionAnimator.SetBool("idle",false);
+//		}
+//
+//		lionAnimator.SetBool("lionShaking",true);
+//		ballAnimator.SetTrigger("ShakeToFall");
+//		mouseAnimator.SetTrigger("fall");
 
-		lionAnimator.SetBool("lionShaking",true);
-		ballAnimator.SetTrigger("ShakeToFall");
-		mouseAnimator.SetTrigger("fall");
 
+
+		ballAnimator.Play("BallAnimation",-1,0f);
+		mouseAnimator.Play("Fall",-1,0f);
+		lionAnimator.Play("LionAnimation",-1,0);
 	}
 
 	void PauseAnimation()

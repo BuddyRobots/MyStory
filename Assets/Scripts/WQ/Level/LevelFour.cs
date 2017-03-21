@@ -111,16 +111,33 @@ public class LevelFour : MonoBehaviour
 				Debug.Log("当前点击是在UI 上");
 				return ;
 			}
-			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
-			if (hit.collider!=null) 
+//			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), mouse.transform.position);//Vector2.zero); 
+//			if (hit.collider!=null) 
+//			{
+//				if (hit.collider.tag=="Player") 
+//				{
+//					
+//					CheckIfItIsNecessaryToDestroyFinger();
+//					MouseStruggle();
+//				}
+//			}
+
+
+
+			//用这种方法来判断是否点击了对象比较准确些
+			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			if (col.Length>0) 
 			{
-				if (hit.collider.tag=="Player") 
+				foreach (Collider2D c in col) 
 				{
-					
-					CheckIfItIsNecessaryToDestroyFinger();
-					MouseStruggle();
+					if (c.tag=="Player") {
+						CheckIfItIsNecessaryToDestroyFinger();
+						MouseStruggle();
+					}
 				}
 			}
+
+
 		}
 	}
 

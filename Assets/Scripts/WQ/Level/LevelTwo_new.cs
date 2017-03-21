@@ -310,15 +310,30 @@ public class LevelTwo_new : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 
-			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), ball.transform.position);
+//			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), ball.transform.position);
+//
+//			if (hit.collider!=null) 
+//			{
+//				if (hit.collider.tag=="Ball") 
+//				{
+//					Debug.Log("点击了球");
+//					BussinessManager._instance.DestroyFinger();
+//					ballClicked=true;
+//				}
+//			}
 
-			if (hit.collider!=null) 
+
+			//用这种方法来判断是否点击了对象比较准确些
+			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			if (col.Length>0) 
 			{
-				if (hit.collider.tag=="Ball") 
+				foreach (Collider2D c in col) 
 				{
-					Debug.Log("点击了球");
-					BussinessManager._instance.DestroyFinger();
-					ballClicked=true;
+					if (c.tag=="Ball") {
+						Debug.Log("点击了球");
+						BussinessManager._instance.DestroyFinger();
+						ballClicked=true;
+					}
 				}
 			}
 
