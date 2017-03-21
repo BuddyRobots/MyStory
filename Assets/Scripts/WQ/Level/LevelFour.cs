@@ -62,6 +62,10 @@ public class LevelFour : MonoBehaviour
 			mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StruggleAnimations/MouseStruggleController") as RuntimeAnimatorController;
 			GameObject.DontDestroyOnLoad(mouse);
 
+			if (mouse.GetComponent<Rigidbody2D>()!=null) {
+				mouse.GetComponent<Rigidbody2D>().simulated=true;
+			}
+
 		}
 	}
 
