@@ -49,12 +49,9 @@ public class MousePlayBall : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			
-//			RaycastHit2D[] hit =Physics2D.RaycastAll(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
+//			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
 			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
 		
-//			for (int i = 0; i < hit.Length; i++) {
-//				Debug.Log("hit["+i+"] name=="+hit[i].collider.name);
-//			}
 			if (hit.collider!=null) 
 			{
 				Debug.Log("hit.collider!=null");

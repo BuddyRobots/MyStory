@@ -52,7 +52,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		mouseSpriteMeshRootGO.transform.position = new Vector3(0, 0, -1);
 
 		// Create Bone Root
-		GameObject oriMouseBoneRootGO = GameObject.Find("Hip");
+		GameObject oriMouseBoneRootGO = GameObject.Find("Mouse Stand Pose Animated/Hip");
 		GameObject newMouseBoneRootGO = BoneUtils.CreateFromAnima2DBone2D(oriMouseBoneRootGO);
 
 		SetupBone_Body(mouseSpriteMeshRootGO, newMouseBoneRootGO);
@@ -72,7 +72,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		AddCollider(newMouseBoneRootGO);
 
 		// Add to a parent GameObject
-		GameObject newMouseAnimated = new GameObject("newMouseAnimated");
+		GameObject newMouseAnimated = new GameObject("Mouse");
 		mouseSpriteMeshRootGO.transform.parent = newMouseAnimated.transform;
 		newMouseBoneRootGO.transform.parent = newMouseAnimated.transform;
 		Rigidbody2D rigidBody = newMouseAnimated.AddComponent<Rigidbody2D>();
@@ -84,6 +84,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		animator.runtimeAnimatorController = animationController;
 
 		// Save to Manager
+		Destroy(Manager._instance.mouseGo);
 		Manager._instance.mouseGo = newMouseAnimated;
 		GameObject.DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
@@ -497,13 +498,23 @@ public class test_LoadSpriteParts : MonoBehaviour
 	private void AddCollider(GameObject boneRootGO)
 	{
 		GameObject hipBoneGO = FindBoneGOInChild(boneRootGO, "Hip");
-		GameObject lFootBoneGO = FindBoneGOInChild(boneRootGO, "L foot");
+		GameObject rEarBoneGO = FindBoneGOInChild(boneRootGO, "R ear");
 		GameObject lHandBoneGO = FindBoneGOInChild(boneRootGO, "L hand");
+		GameObject lFootBoneGO = FindBoneGOInChild(boneRootGO, "L foot");
+		GameObject rHandBoneGO = FindBoneGOInChild(boneRootGO, "R hand");
 
-		float colliderWidth = (hipBoneGO.transform.position.x - lHandBoneGO.transform.position.x + lHandBoneGO.GetComponent<Bone2D>().length)*2;
-		float colliderHeight = (hipBoneGO.transform.position.y - lFootBoneGO.transform.position.y)*2;
+		Vector3 tr = new Vector2(			
+			rEarBoneGO.transform.position.y + rEarBoneGO.GetComponent<Bone2D>().length,
+			rHandBoneGO.transform.position.x + rHandBoneGO.GetComponent<Bone2D>().length
+		);
+		Vector3 bl = new Vector2(
+			lFootBoneGO.transform.position.y,
+			lHandBoneGO.transform.position.x - lHandBoneGO.GetComponent<Bone2D>().length
+		);
 
 		BoxCollider boxCollider = hipBoneGO.AddComponent<BoxCollider>();
-		boxCollider.size = new Vector3(colliderHeight, colliderWidth, 0.0f);
+		boxCollider.center = (tr + bl)/2;
+		boxCollider.center -= new Vector3(hipBoneGO.transform.position.y, 0.0f, 0.0f);
+		boxCollider.size = tr - bl;
 	}
 }
