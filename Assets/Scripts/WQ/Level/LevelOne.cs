@@ -210,6 +210,7 @@ public class LevelOne : MonoBehaviour
 			}
 //			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
 			mouse.transform.localPosition=originMousePos;
+			Debug.Log("mouse.transform.localPosition--"+mouse.transform.localPosition);
 
 			mouse.name="Mouse";
 

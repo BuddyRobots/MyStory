@@ -52,7 +52,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		mouseSpriteMeshRootGO.transform.position = new Vector3(0, 0, -1);
 
 		// Create Bone Root
-		GameObject oriMouseBoneRootGO = GameObject.Find("Hip");
+		GameObject oriMouseBoneRootGO = GameObject.Find("Mouse Stand Pose Animated/Hip");
 		GameObject newMouseBoneRootGO = BoneUtils.CreateFromAnima2DBone2D(oriMouseBoneRootGO);
 
 		SetupBone_Body(mouseSpriteMeshRootGO, newMouseBoneRootGO);
@@ -72,7 +72,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		AddCollider(newMouseBoneRootGO);
 
 		// Add to a parent GameObject
-		GameObject newMouseAnimated = new GameObject("newMouseAnimated");
+		GameObject newMouseAnimated = new GameObject("Mouse");
 		mouseSpriteMeshRootGO.transform.parent = newMouseAnimated.transform;
 		newMouseBoneRootGO.transform.parent = newMouseAnimated.transform;
 		Rigidbody2D rigidBody = newMouseAnimated.AddComponent<Rigidbody2D>();
@@ -84,6 +84,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		animator.runtimeAnimatorController = animationController;
 
 		// Save to Manager
+		Destroy(Manager._instance.mouseGo);
 		Manager._instance.mouseGo = newMouseAnimated;
 		GameObject.DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
