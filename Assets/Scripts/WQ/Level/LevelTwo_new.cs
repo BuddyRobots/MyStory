@@ -214,9 +214,9 @@ public class LevelTwo_new : MonoBehaviour
 				//小老鼠移动到第二个点（播放跑的动画）
 				if (!arrivedSecondDest)
 				{
-					mouseAnimator.SetTrigger("walkToLion");
+					mouseAnimator.SetTrigger("walk");
 					dest=dest_1;
-					mouseSpeed=1.9f;
+					mouseSpeed=1.8f;
 					destFlag++;
 					isOver=false;
 					arrivedSecondDest=true;
@@ -287,7 +287,7 @@ public class LevelTwo_new : MonoBehaviour
 				Vector3 offSet = tar - mouse.transform.position;
 				mouse.transform.position += offSet.normalized * mouseSpeed * Time.deltaTime;
 				Debug.Log("Vector3.Distance(tar, mouse.transform.position)---"+Vector3.Distance(tar, mouse.transform.position));
-				if(Vector3.Distance(tar, mouse.transform.position)<=0.4f)
+				if(Vector3.Distance(tar, mouse.transform.position)<=0.5f)
 				{
 					Debug.Log("到达了终点");
 					isOver = true;
