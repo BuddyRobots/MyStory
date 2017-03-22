@@ -49,6 +49,7 @@ public class LevelOne : MonoBehaviour
 	{
 		grassAni=grassL.GetComponent<Animation>();
 
+
 		Init();
 	}
 	void Init()
@@ -113,7 +114,7 @@ public class LevelOne : MonoBehaviour
 			//如果进入了第二部分
 			if (secondSceneShow) 
 			{
-
+				mouse.GetComponent<BoxCollider2D>().enabled=true;
 //				Debug.Log("进入第二部分---出现小球");
 				//进入第二部分，出现小手提示点击老鼠，出现球，给老鼠添加脚本
 				if (!showFingerOnMouse)
@@ -210,14 +211,18 @@ public class LevelOne : MonoBehaviour
 			}
 //			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
 			mouse.transform.localPosition=originMousePos;
-			Debug.Log("mouse.transform.localPosition--"+mouse.transform.localPosition);
-
 			mouse.name="Mouse";
-
 			mouseAnimator=mouse.GetComponent<Animator>();
-		
+		}
+		else
+		{
+			mouse.transform.localPosition=originMousePos;
+			mouse.name="Mouse";
+			mouseAnimator=mouse.GetComponent<Animator>();
 
 		}
+
+		mouse.GetComponent<BoxCollider2D>().enabled=false;
 	    
 
 	}
@@ -286,10 +291,6 @@ public class LevelOne : MonoBehaviour
 		ShowMouse();
 		ShowBall();
 
-//		//如果有球的话，球要隐藏
-//		if (ball !=null) {
-//			ball.SetActive(false);
-//		}
 	}
 
 

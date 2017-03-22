@@ -24,8 +24,7 @@ public class LevelThree : MonoBehaviour
 
 	Vector3 originMousePos;
 	Vector3 originBallPos;
-	Vector3 lionHeadPos;
-	private Vector3 destCamPos;
+	Vector3 destCamPos;
 	Vector3 originCamPos;
 
 	bool showFingerOnLion;//是否出现小手提示点击狮子
@@ -114,8 +113,8 @@ public class LevelThree : MonoBehaviour
 			ballAnimator.speed=1;
 		}
 
-
-
+//		mouseAnimator.Play("idle");
+//		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
 
 	}
 
@@ -175,7 +174,15 @@ public class LevelThree : MonoBehaviour
 				else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
 				{
 					Debug.Log("Manager.storyStatus--"+Manager.storyStatus);
-					lionClick=true;
+//					lionClick=true;
+					//播放动画
+					if (!shakeTofall) 
+					{
+						Debug.Log("开始播放动画");
+						PlayAnimation();
+
+						shakeTofall=true;
+					}
 				}
 
 			}
@@ -194,19 +201,19 @@ public class LevelThree : MonoBehaviour
 					}
 
 					FormalScene._instance.ShowSubtitle();
-				}
-				else
-				{
 
+					//播放动画
+					if (!shakeTofall) 
+					{
+						Debug.Log("开始播放动画");
+						PlayAnimation();
+
+						shakeTofall=true;
+					}
 				}
 
-				//播放动画
-				if (!shakeTofall) 
-				{
-					PlayAnimation();
 
-					shakeTofall=true;
-				}
+
 			}
 
 
@@ -277,6 +284,23 @@ public class LevelThree : MonoBehaviour
 	public void PlayStoryWithAudioRecording()
 	{
 		Init();
+
+//		mouseAnimator.Play("idle");
+//		lionAnimator.Play("LionIdle");
+//		ballAnimator.CrossFade("",0);
+		mouseAnimator.CrossFade("",0);
+		mouseAnimator.CrossFade("idle",0);
+
+		lionAnimator.CrossFade("",0);
+		lionAnimator.CrossFade("LionIdle",0);
+
+		ballAnimator.CrossFade("",0);
+		ballAnimator.CrossFade("BallIdle",0);
+
+		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
+		ball.transform.parent.position=originBallPos;
+		mouse.transform.position=originMousePos;
+
 	}
 	public void StartStoryToRecordAudioAndVideo()
 	{
@@ -288,18 +312,31 @@ public class LevelThree : MonoBehaviour
 
 		}
 
-		lionAnimator.SetBool("lionShaking",false);
-		lionAnimator.SetBool("idle",true);
-//		Destroy(mouse.GetComponent<Animator>());
-//		mouseAnimator.Stop();
-		mouseAnimator.SetBool("idle",true);
 
 		Init();
+//		mouseAnimator.Play("idle");
+//		lionAnimator.Play("LionIdle");
+
+//		ballAnimator.CrossFade("",0);
+//		mouseAnimator.CrossFade("",0);
+//		lionAnimator.CrossFade("",0);
+//
+		mouseAnimator.CrossFade("",0);
+		mouseAnimator.CrossFade("idle",0);
+
+		lionAnimator.CrossFade("",0);
+		lionAnimator.CrossFade("LionIdle",0);
+
+		ballAnimator.CrossFade("",0);
+		ballAnimator.CrossFade("BallIdle",0);
 
 
+		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
+		ball.transform.position=originBallPos;
+		mouse.transform.position=originMousePos;
 
 	}
-		//我有两个动画，一个是idle，一个是fall，idle到fall我用的条件是trigger，名字是fall，fall到idle我用的条件是bool idle=true，我要怎么控制他们之间的转换？
+
 
 	public void PauseStory()
 	{
@@ -325,25 +362,10 @@ public class LevelThree : MonoBehaviour
 
 	void PlayAnimation()
 	{
-		if (lionAnimator.GetBool("idle")) 
-		{
-			lionAnimator.SetBool("idle",false);
-		}
-
-		lionAnimator.SetBool("lionShaking",true);
-		ballAnimator.SetTrigger("ShakeToFall");
-		mouseAnimator.SetTrigger("fall");
-
-		mouseAnimator.SetBool("stop",false);
-		mouseAnimator.SetBool("idle",false);
-		Debug.Log("播放动画");
-
-//		ballAnimator.Play("BallAnimation",-1,0f);
-//		mouseAnimator.Play("Fall",-1,0f);
-//		lionAnimator.Play("LionAnimation",-1,0);
-
-
-
+		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionMouthOpen_1") as Sprite;
+		ballAnimator.CrossFade("BallAnimation",0);
+		mouseAnimator.CrossFade("Fall",0);
+		lionAnimator.CrossFade("LionAnimation",0);
 	}
 
 	void PauseAnimation()
@@ -351,7 +373,6 @@ public class LevelThree : MonoBehaviour
 		mouseAnimator.speed=0;
 		ballAnimator.speed=0;
 		lionAnimator.speed=0;
-
 	}
 
 	void ResumeAnimation()
@@ -359,7 +380,6 @@ public class LevelThree : MonoBehaviour
 		mouseAnimator.speed=1;
 		ballAnimator.speed=1;
 		lionAnimator.speed=1;
-
 	}
 
 
@@ -375,7 +395,6 @@ public class LevelThree : MonoBehaviour
 	{
 		if (mouse ==null) 
 		{
-//			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
 			mouse=Manager._instance.mouseGo;
 			if (mouse==null) 
 			{
@@ -426,7 +445,6 @@ public class LevelThree : MonoBehaviour
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-//			ball.transform.position=originBallPos;
 			ball.transform.parent=GameObject.Find("Manager").transform;
 			ball.transform.localPosition=Vector3.zero;
 			ball.name="Ball";
@@ -437,6 +455,7 @@ public class LevelThree : MonoBehaviour
 				Debug.Log("ball.GetComponent<Rigidbody2D>().simulated--"+ball.GetComponent<Rigidbody2D>().simulated);
 			}
 			ballAnimator=ball.GetComponent<Animator>();
+			ballAnimator.enabled=true;
 			if (ball.GetComponent<BallFall>()==null) 
 			{
 				ball.AddComponent<BallFall>();
@@ -446,21 +465,6 @@ public class LevelThree : MonoBehaviour
 
 
 	}
-
-
-
-	public void MouseFall()
-	{
-
-
-	}
-
-	public void BallFall()
-	{
-
-
-	}
-
 
 
 
