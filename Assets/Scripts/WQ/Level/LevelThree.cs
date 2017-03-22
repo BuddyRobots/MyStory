@@ -44,7 +44,7 @@ public class LevelThree : MonoBehaviour
 	float camMovespeed;
 
 	Sprite lionSprite;
-	float fallSpeed=4;
+	float fallSpeed=10;
 
 
 	void Awake()
@@ -447,9 +447,9 @@ public class LevelThree : MonoBehaviour
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.parent=GameObject.Find("Manager").transform;
-			ball.transform.localPosition=Vector3.zero;
 			ball.name="Ball";
+			ball.transform.parent=GameObject.Find("Manager").transform;
+			ball.transform.position=Vector3.zero;
 			if (ball.GetComponent<Rigidbody2D>()!=null) 
 			{
 				ball.GetComponent<Rigidbody2D>().simulated=false;
@@ -465,6 +465,8 @@ public class LevelThree : MonoBehaviour
 
 
 	}
+
+
 
 
 

@@ -15,6 +15,9 @@ public class SelectLevel : MonoBehaviour
 
 	void Start () 
 	{
+		Manager._instance.bgMusicFadeOut=false;
+//		Manager._instance.bgAudio.volume=1;
+
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 
@@ -26,6 +29,12 @@ public class SelectLevel : MonoBehaviour
 
 		LevelManager.Instance.LoadLocalLevelProgressData();
 		RefreshLevelUI();
+
+
+
+		if (Manager._instance.mouseGo!=null) {
+			Manager._instance.mouseGo.transform.position=Manager._instance.outsideScreenPos;
+		}
 	}
 
 

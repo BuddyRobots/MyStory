@@ -219,6 +219,7 @@ public class LevelOne : MonoBehaviour
 			mouse.transform.localPosition=originMousePos;
 			mouse.name="Mouse";
 			mouseAnimator=mouse.GetComponent<Animator>();
+			mouseAnimator.CrossFade("idle",0);
 
 		}
 
@@ -335,6 +336,19 @@ public class LevelOne : MonoBehaviour
 		SubtitleShow._instance.pause=false;
 	}
 
+
+
+	void OnDisable()
+	{
+		if (ball!=null) 
+		{
+			if (ball.GetComponent<BallMoveWithBg>()!=null) 
+			{
+				Destroy(ball.GetComponent<BallMoveWithBg>());
+			}
+		}
+
+	}
 
 
 	void OnDestroy()

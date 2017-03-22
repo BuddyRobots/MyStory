@@ -166,11 +166,6 @@ public class LevelFour : MonoBehaviour
 	}
 
 
-	void OnDestroy()
-	{
-
-		mouse.transform.localPosition=outsidePos;
-	}
 
 
 }
