@@ -7,17 +7,15 @@ public class LevelTwo_new : MonoBehaviour
 	public static LevelTwo_new _instance;
 
 	private Animator mouseAnimator;
-	[HideInInspector]
-	public GameObject mouse;
-	[HideInInspector]
-	public GameObject ball;
 
+	public GameObject mouse;
+	public GameObject ball;
 	public Transform tar_0;
 	public Transform tar_1;
 	public Transform tar_2;
 	//三个目标点
 	private Vector3 dest_0;
-	private Vector3 dest_1;
+	private  Vector3 dest_1;
 	private Vector3 dest_2;//球的边缘的位置（改点的x===球的位置的X+球的图形的一半,y和z的值与球一样）
 
 	private Vector3 dest;
@@ -25,7 +23,7 @@ public class LevelTwo_new : MonoBehaviour
 	Vector3 originMousePos;
 	Vector3 originBallPos;
 
-	public bool startToWalk;//第一个动画结束帧将值设为true
+	public bool startToWalk;
 
 	bool arrivedFirstDest;
 	bool arrivedSecondDest;
@@ -38,12 +36,8 @@ public class LevelTwo_new : MonoBehaviour
 
 	bool mouseAniDone;//动画是否结束的标志
 	bool changeScene;
-	bool  flag;
-	bool  crawlDone;
 
 	bool pause;
-
-	bool move=false;
 
 	int destFlag;//值为1，2，3，1代表到达目标点1，2代表叨叨目标点2；。。。
 
@@ -60,31 +54,24 @@ public class LevelTwo_new : MonoBehaviour
 	void Start () 
 	{
 		Manager.storyStatus=StoryStatus.Normal;
+
+
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
-		dest_0=tar_0.position;
 		dest_1=tar_1.position;
 		dest_2=tar_2.position;
 
 
 		originMousePos=new Vector3(7.6f,-3.3f,0);//mouse.transform.position;
 		originBallPos=new Vector3(-6f,2.3f,0);
+		dest_0=new Vector3(tar_0.position.x,originMousePos.y,originMousePos.z);
 
+		Manager._instance.ballPosForLevelThree=originBallPos;
+		Manager._instance.mousePosForLevelThree=dest_2;
 		Init();
-
-		ShowMouse();
-		ShowBall();
-
-		//保证初始化的时候动画状态机不是暂停的
-		if (mouseAnimator!=null) 
-		{
-			mouseAnimator.speed=1;
-		} 
+		Debug.Log("init 后老鼠的位置是--"+mouse.transform.position);
 
 	}
-
-
-
 
 	/// <summary>
 	/// 初始化变量，比如老鼠的位置，球的位置，以及一些bool值
@@ -96,17 +83,13 @@ public class LevelTwo_new : MonoBehaviour
 		arrivedFirstDest=false;
 		arrivedSecondDest=false;
 		arrivedThirdDest=false;
-		isOver=true;
+		isOver=false;
 		ballClicked=false;
 		mouseAniDone=false;
 		pause=false;
 		changeScene=false;
 		audioAsidePlayed=false;
 		startToWalk=false;
-		move=false;
-		flag=false;
-		crawlDone=false;
-
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
@@ -119,49 +102,64 @@ public class LevelTwo_new : MonoBehaviour
 
 			showFingerOnBall=true;
 		}
+
+
+		ShowMouse();
+		ShowBall();
+
+
+		//保证初始化的时候动画状态机不是暂停的
+		if (mouseAnimator!=null) 
+		{
+			mouseAnimator.speed=1;
+		} 
 	}
-
-
-
+	bool flag;
 
 	void Update () 
 	{
 
-		if (FormalScene._instance.storyBegin && !pause)
+		if (FormalScene._instance.storyBegin)
 		{
-			if (Manager.storyStatus==StoryStatus.Normal) 
+			//			Debug.Log("故事开始了---老鼠的位置是---"+mouse.transform.position);
+			//小老鼠移动到第一个点（播放跑进场的动画）
+			if (!arrivedFirstDest)
 			{
-				if (!flag) 
-				{
-					move=true;
-					flag=true;
-				}
+				//（播放进场的动画）  
+				//				mouseAnimator.SetTrigger("walkIn");
+				mouseAnimator.CrossFade("01_WalkToBall",0);
+				destFlag++;
+				dest=dest_0;
+				isOver=false;
+				arrivedFirstDest=true;
+			}
 
-				if (mouse.transform.position.x>=tar_0.position.x) 
+			//如果到达了第一个点
+			if (isOver && destFlag==1)//mouse.transform.position==dest_0) 
+			{
+				if (startToWalk) 
 				{
-					mouseAnimator.Play("01_WalkToBall");
-				}
-				else
-				{
-
-
-					if (startToWalk) //第一个动画播放完了
+					//如果是非正常状态下，就不用出现小手提示点击球，跳过这一步
+					if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
 					{
-
-						if (!ballClicked) 
-						{
-							mouseAnimator.CrossFade("idle",0);//播放站立动画
-
+						if (mouse.transform.position.x!=tar_0.position.x) {
+							mouse.transform.position=tar_0.position;
 						}
-						else
+						ballClicked=true;
+						Debug.Log("非正常情况下到达第一个点-------");
+
+
+					}
+					else if (Manager.storyStatus==StoryStatus.Normal) //如果是正常状态下，就要出现小手提示点击球
+					{
+						if (!flag) 
 						{
+							mouseAnimator.CrossFade("idle",0);
 
-
+							flag=true;
 						}
+						Debug.Log("正常情况下到达第一个点，播放站立动画");
 
-
-
-						//出现小手
 						if (!showFingerOnBall) 
 						{
 							ShowFinger(ball.transform.position);
@@ -180,116 +178,85 @@ public class LevelTwo_new : MonoBehaviour
 							}
 						}
 
-						if (ballClicked) //如果点击了球，就要开始播放走的动画
-						{
-							//播放旁白，显示字幕
-							if (!audioAsidePlayed) 
-							{
-								BussinessManager._instance.PlayAudioAside();
-								audioAsidePlayed=true;
-							}
-							FormalScene._instance.ShowSubtitle();
-
-							//老鼠移动，播放动画
-							if (mouse.transform.position.x<=tar_0.position.x && mouse.transform.position.x>=tar_1.position.x) 
-							{
-
-								//mouseAnimator.SetTrigger("walk");
-								mouseAnimator.CrossFade("02_Walk",0);
-								moveSpeed=1.8f;
-							}
-							else if(mouse.transform.position.x<=tar_1.position.x &&  mouse.transform.position.x> tar_2.position.x)//老鼠网上爬
-							{
-								if (!crawlDone) {
-									mouseAnimator.CrossFade("03_CrawlUp",0);
-
-									crawlDone=true;
-								}
-								if(!arrivedThirdDest)
-								{
-									move=false;
-									dest=dest_2;
-									destFlag++;
-									isOver=false;
-									arrivedThirdDest=true;
-								}
-
-								if (isOver && destFlag==1 ) 
-								{
-									Debug.Log("到达第三个点---老鼠动画结束,故事场景2动画结束");
-									mouseAnimator.CrossFade("idle",0);
-									mouseAniDone=true;
-								}
-
-							}
-
-						}
-
 					}
-
+					
 				}
 
 			}
-			else if(Manager.storyStatus ==StoryStatus.PlayRecord || Manager.storyStatus ==StoryStatus.Recording)
+
+
+			//这里是保证录音和播放界面不会有小手出现
+			if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
 			{
-
-				Debug.Log("@@@@@@@@@@@@@@@@@@");
-				//老鼠直接连着播放3个动画
-
-				if (mouse.transform.position.x>=tar_0.position.x) 
-				{
-					Debug.Log("播放走的动画");
-					if (mouseAnimator==null) {
-						Debug.Log("空----");
-					}
-					//					mouseAnimator.CrossFade("01_WalkToBall",0);
-				}
-				else
-				{
-					if (startToWalk) //第一个动画播放完了
-					{
-						Debug.Log("第一个动画播放完了");
-						//老鼠移动，播放动画
-						if (mouse.transform.position.x<=tar_0.position.x && mouse.transform.position.x>=tar_1.position.x) 
-						{
-
-							//mouseAnimator.SetTrigger("walk");
-							mouseAnimator.CrossFade("02_Walk",0);
-							moveSpeed=1.8f;
-						}
-						else if(mouse.transform.position.x<=tar_1.position.x &&  mouse.transform.position.x> tar_2.position.x)//老鼠网上爬
-						{
-							if (!crawlDone) 
-							{
-								Debug.Log("老鼠开始爬-----");
-								mouseAnimator.CrossFade("03_CrawlUp",0);
-
-								crawlDone=true;
-							}
-							if(!arrivedThirdDest)
-							{
-								move=false;
-								dest=dest_2;
-								destFlag++;
-								isOver=false;
-								arrivedThirdDest=true;
-							}
-
-							if (isOver && destFlag==1 ) 
-							{
-								Debug.Log("到达第三个点---老鼠动画结束,故事场景2动画结束");
-								mouseAnimator.CrossFade("idle",0);
-								mouseAniDone=true;
-							}
-
-						}
-
-
-					}
-
-				}
+				BussinessManager._instance.DestroyFinger();
 
 			}
+
+
+			//如果点击了球，且销毁了小手，就要显示字幕，播放旁白，并且小老鼠移动到第二个点并且爬向第三个点
+			if (ballClicked ) 
+			{
+				//刚体禁用
+				mouse.GetComponent<Rigidbody2D>().simulated=false;
+				if ( Manager.storyStatus==StoryStatus.Normal) 
+				{
+					Debug.Log("在正常状态下");
+					if (!audioAsidePlayed) 
+					{
+						//播放旁白(只有正常状态下才需要播放旁白)
+						BussinessManager._instance.PlayAudioAside();
+						audioAsidePlayed=true;
+					}
+					// 显示字幕
+					FormalScene._instance.ShowSubtitle();
+				}
+
+				#region 老鼠运动
+				//小老鼠移向第二个点（播放跑的动画）
+				if (!arrivedSecondDest)
+				{
+					mouseAnimator.CrossFade("02_Walk",0);
+//					
+//					mouseAnimator.SetTrigger("walk");
+					dest=dest_1;
+					moveSpeed=1.8f;
+					destFlag++;
+					isOver=false;
+					arrivedSecondDest=true;
+				}
+				//如果老鼠到了第二个点，就要移动到第三个点（播放爬的动画）
+				if (isOver && destFlag==2)//mouse.transform.position==dest_1)
+				{
+
+					Debug.Log("到达第二个点");
+					//（播放爬的动画）   to do....
+
+					//					mouse.GetComponent<Rigidbody2D>().simulated=false;     //这句代码放到这里老鼠还是有刚体模拟，不起作用   ？？？？？
+
+
+					if (!arrivedThirdDest)
+					{
+						dest=dest_2;
+						destFlag++;
+						isOver=false;
+						arrivedThirdDest=true;
+					}
+				}
+				if (isOver && destFlag==3) 
+				{
+					Debug.Log("到达第三个点---老鼠动画结束,故事场景2动画结束");
+					mouseAnimator.CrossFade("idle",0);
+					mouseAniDone=true;
+
+				}
+
+
+
+				#endregion
+
+			}
+
+			MoveTo(dest);
 
 		}
 
@@ -308,16 +275,8 @@ public class LevelTwo_new : MonoBehaviour
 			}
 
 		}
-
-		if (move && pause==false) 
-		{
-			mouse.transform.Translate(Vector3.left*moveSpeed*Time.deltaTime);
-		}
-
-		MoveTo(dest);
-
-
 	}
+
 
 
 	private void MoveTo(Vector3 tar)
@@ -329,29 +288,20 @@ public class LevelTwo_new : MonoBehaviour
 				Vector3 offSet = tar - mouse.transform.position;
 				mouse.transform.position += offSet.normalized * moveSpeed * Time.deltaTime;
 				Debug.Log("Vector3.Distance(tar, mouse.transform.position)---"+Vector3.Distance(tar, mouse.transform.position));
-				//
-				//				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
-				//				{
-				//					Debug.Log("到达了终点");
-				//					isOver = true;
-				//					mouse.transform.position = tar;
-				//				}
-				if (mouse.transform.position.x<tar.x) 
+				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
 				{
+					Debug.Log("到达了终点");
 					isOver = true;
 					mouse.transform.position = tar;
 				}
 			}
-
 		}
 		else
 		{
-
+			Debug.Log("暂停------------");
 		}
 
 	}
-
-
 
 	void ShowFinger(Vector3 pos)
 	{
@@ -369,17 +319,14 @@ public class LevelTwo_new : MonoBehaviour
 			{
 				foreach (Collider2D c in col) 
 				{
-					if (c.tag=="Ball") {
-						Debug.Log("点击了球");
+					if (c.tag=="Ball") 
+					{
 						BussinessManager._instance.DestroyFinger();
 						ballClicked=true;
 					}
 				}
 			}
-
-
 		}
-
 	}
 
 
@@ -400,11 +347,8 @@ public class LevelTwo_new : MonoBehaviour
 			{
 				mouse.AddComponent<MouseEnterScene>();
 			}
-
 			GameObject.DontDestroyOnLoad(mouse);
 		}
-
-
 	}
 
 	private void ShowBall()
@@ -415,11 +359,9 @@ public class LevelTwo_new : MonoBehaviour
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
 			ball.transform.localPosition=originBallPos;
 			ball.name="Ball";
-
 		}
 		else
 		{
-
 			ball.transform.position=originBallPos;
 		}
 
@@ -428,7 +370,8 @@ public class LevelTwo_new : MonoBehaviour
 			ball.GetComponent<Rigidbody2D>().gravityScale=0;
 
 		}
-		if (ball.GetComponent<Animator>()!=null) {
+		if (ball.GetComponent<Animator>()!=null)
+		{
 			ball.GetComponent<Animator>().enabled=false;
 		}
 
@@ -442,28 +385,15 @@ public class LevelTwo_new : MonoBehaviour
 			Destroy(BussinessManager._instance.finger);
 
 		}
+		//		mouseAnimator.CrossFade("",0);
+		//		mouseAnimator.CrossFade("01_WalkToBall",0);
+		Init();
 
-//		Init();
-		startToWalk=false;
-		crawlDone=false;
-		arrivedThirdDest=false;
-		isOver=true;
-		mouseAniDone=false;
-		move=true;
-		pause=false;
-		FormalScene._instance.storyBegin=false;
+		//		mouseAnimator.Play("01_WalkToBall");
 
-		mouseAnimator.CrossFade("",0);
-		mouseAnimator.CrossFade("01_WalkToBall",0);
-		mouse.transform.position=originMousePos;
-		moveSpeed=2;
-		move=true;
-		startToWalk=false;
 
 
 	}
-
-
 	public void PlayStoryWithAudioRecording()
 	{
 		Init();
@@ -509,7 +439,7 @@ public class LevelTwo_new : MonoBehaviour
 	{
 
 
-		//		mouse.transform.position=Manager._instance.outsideScreenPos;
+		mouse.transform.position=Manager._instance.outsideScreenPos;
 	}
 
 }

@@ -56,15 +56,23 @@ public class LevelThree : MonoBehaviour
 	{
 		Manager.storyStatus =StoryStatus.Normal;
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+
 		camMovespeed=3f;
-		originCamPos=new Vector3(0,0,-10);
-		destCamPos=new Vector3 (-9.07f,0,-10);
-		cam=GameObject.Find("Main Camera");
-		lionAnimator=lion.GetComponent<Animator>();
-//		lionSprite=lion.GetComponent<SpriteRenderer>().sprite;
 		fallSpeed=4;
 
+		originCamPos=new Vector3(0,0,-10);
+		destCamPos=new Vector3 (-9.07f,0,-10);
+
+		cam=GameObject.Find("Main Camera");
+		lionAnimator=lion.GetComponent<Animator>();
+
+
+
 		Init();
+
+		ShowMouse();
+		ShowBall();
+
 	}
 
 	void Init()
@@ -95,9 +103,6 @@ public class LevelThree : MonoBehaviour
 		}
 
 
-		ShowMouse();
-		ShowBall();
-
 
 		//保证初始化的时候动画状态机不是暂停的
 		if (mouseAnimator!=null) 
@@ -112,9 +117,7 @@ public class LevelThree : MonoBehaviour
 		{
 			ballAnimator.speed=1;
 		}
-
-//		mouseAnimator.Play("idle");
-//		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
+			
 
 	}
 
@@ -241,6 +244,16 @@ public class LevelThree : MonoBehaviour
 
 			}
 
+			if (ball.transform.position.y<=-9f) {
+				ballFall=false;
+				mouseFall=false;
+
+
+				mouseAnimator.CrossFade("idle",0);
+				lionAnimator.CrossFade("LionIdle",0);
+				ballAnimator.CrossFade("BallIdle",0);
+			}
+
 
 
 		}
@@ -283,25 +296,11 @@ public class LevelThree : MonoBehaviour
 	/// </summary>
 	public void PlayStoryWithAudioRecording()
 	{
-		Init();
 
-//		mouseAnimator.Play("idle");
-//		lionAnimator.Play("LionIdle");
-//		ballAnimator.CrossFade("",0);
-		mouseAnimator.CrossFade("",0);
-		mouseAnimator.CrossFade("idle",0);
-
-		lionAnimator.CrossFade("",0);
-		lionAnimator.CrossFade("LionIdle",0);
-
-		ballAnimator.CrossFade("",0);
-		ballAnimator.CrossFade("BallIdle",0);
-
-		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
-		ball.transform.parent.position=originBallPos;
-		mouse.transform.position=originMousePos;
+		Reset();
 
 	}
+
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		//如果有小手提示点击，就销毁小手，点击失效 
@@ -312,15 +311,15 @@ public class LevelThree : MonoBehaviour
 
 		}
 
+		Reset();
 
+	}
+
+
+	void Reset()
+	{
 		Init();
-//		mouseAnimator.Play("idle");
-//		lionAnimator.Play("LionIdle");
 
-//		ballAnimator.CrossFade("",0);
-//		mouseAnimator.CrossFade("",0);
-//		lionAnimator.CrossFade("",0);
-//
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("idle",0);
 
@@ -332,10 +331,13 @@ public class LevelThree : MonoBehaviour
 
 
 		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
-		ball.transform.position=originBallPos;
+		ball.transform.parent.position=originBallPos;
 		mouse.transform.position=originMousePos;
 
 	}
+
+
+
 
 
 	public void PauseStory()
@@ -450,9 +452,7 @@ public class LevelThree : MonoBehaviour
 			ball.name="Ball";
 			if (ball.GetComponent<Rigidbody2D>()!=null) 
 			{
-				Debug.Log("qiu  you gang ti ");
 				ball.GetComponent<Rigidbody2D>().simulated=false;
-				Debug.Log("ball.GetComponent<Rigidbody2D>().simulated--"+ball.GetComponent<Rigidbody2D>().simulated);
 			}
 			ballAnimator=ball.GetComponent<Animator>();
 			ballAnimator.enabled=true;
