@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-/// <summary>
-/// 老鼠去狮子头上捡球（点击球，播放老鼠动画，并移动老鼠到狮子旁边，然后爬到老鼠头上）
-/// </summary>
+
 public class LevelTwo : MonoBehaviour 
 {
 	public static LevelTwo _instance;
@@ -12,196 +10,236 @@ public class LevelTwo : MonoBehaviour
 
 	public GameObject mouse;
 	public GameObject ball;
+	public Transform tar_0;
+	public Transform tar_1;
+	public Transform tar_2;
+	//三个目标点
+	private Vector3 dest_0;
+	private Vector3 dest_1;
+	private Vector3 dest_2;//球的边缘的位置（改点的x===球的位置的X+球的图形的一半,y和z的值与球一样）
 
-	bool storyBegin;//故事是否开始的标志
-	bool showFingerOnBall;
-	bool ballClicked;
-	bool  mouseMoveToSecondPos;
+	private Vector3 dest;
 
 	Vector3 originMousePos;
 	Vector3 originBallPos;
 
+	public bool startToWalk;//第一个动画结束帧将值设为true
 
-	public Transform dest_0;
-	public Transform dest_1;
-	public Transform targetPos;
+	bool arrivedFirstDest;
+	bool arrivedSecondDest;
+	bool arrivedThirdDest;
+	bool isOver;
+	bool showFingerOnBall;
+	bool ballClicked;
+	bool storyGoOn;
+	bool audioAsidePlayed;
 
+	bool mouseAniDone;//动画是否结束的标志
+	bool changeScene;
 
-	Vector3 offsetToBall;
+	bool pause;
 
+	bool move=false;
+
+	int destFlag;//值为1，2，3，1代表到达目标点1，2代表叨叨目标点2；。。。
+
+	StoryStatus storyStatus;
 	[HideInInspector]
-	public bool mouseMove;//is mouse need to move or not
+	public float moveSpeed;
 
 
 	void Awake()
 	{
 		_instance=this;
 	}
-		
-	void Start ()
+
+	void Start () 
 	{
-//		ShowBall();
-//		ShowMouse();
-		offsetToBall=dest_1.localPosition-ball.transform.localPosition;
-		Debug.Log("0000---"+mouse.transform.position);
-		Debug.Log("1111---"+dest_0.position);
+		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+
+		dest_0=tar_0.position;
+		dest_1=tar_1.position;
+		dest_2=tar_2.position;
+
+
+		originMousePos=new Vector3(7.6f,-3.3f,0);//mouse.transform.position;
+		originBallPos=new Vector3(-6f,2.3f,0);
+//		dest_0=new Vector3(tar_0.position.x,originMousePos.y,originMousePos.z);
+
+		Init();
 
 	}
-	
-	bool arrivedFirstDest;
-	bool arrivedSecondDest;
 
-	void Update()
+	/// <summary>
+	/// 初始化变量，比如老鼠的位置，球的位置，以及一些bool值
+	/// </summary>
+	public void Init()
+	{
+		moveSpeed=2;
+		destFlag=0;
+		arrivedFirstDest=false;
+		arrivedSecondDest=false;
+		arrivedThirdDest=false;
+		isOver=false;
+		ballClicked=false;
+		mouseAniDone=false;
+		pause=false;
+		changeScene=false;
+		audioAsidePlayed=false;
+		startToWalk=false;
+		move=false;
+
+		if (Manager.storyStatus ==StoryStatus.Normal) 
+		{
+			Debug.Log("正常状态");
+			showFingerOnBall=false;
+		}
+		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+		{
+			Debug.Log("非正常状态");
+
+			showFingerOnBall=true;
+		}
+
+		ShowMouse();
+		ShowBall();
+
+		//保证初始化的时候动画状态机不是暂停的
+		if (mouseAnimator!=null) 
+		{
+			mouseAnimator.speed=1;
+		} 
+
+	}
+
+
+
+
+
+	void Update () 
 	{
 
-		////如果屏幕亮了，老鼠就走进来
-		if (FormalScene._instance.storyBegin) 
+		if (FormalScene._instance.storyBegin)
 		{
-			isOver=false;
+			
+
+		}
+
+		if (mouseAniDone && Manager._instance.isSubtitleShowOver)//如果老鼠动画播放结束了，字幕也结束了，就跳转界面
+		{
+			//在正常状态或者播放状态下
+			if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
+			{
+				if (!changeScene) 
+				{
+
+					FormalScene._instance.ChangeSceneAutomatically();
+
+					changeScene=true;
+				}
+			}
+
 		}
 
 
 
+
+		if (move) 
+		{
+			mouse.transform.Translate(Vector3.left*moveSpeed*Time.deltaTime);
+		}
+
+
+
+
 	}
-//	void Update ()
-//	{
-//		//如果屏幕亮了，老鼠就走进来
-////		if (FormalScene._instance.storyBegin) {
-////			MouseMoving._instance.moveToLeft=true;
-////		}
-//		//如果老鼠到达了第一个目的地
-//
-//
-//		if (true) {
-//			
-//		}
-//
-//		if (mouse.transform.localPosition.x<=dest_0.position.x) 
-//		{
-//
-//
-//			MouseMoving._instance.moveToLeft=false;
-//
-//			if (!showFingerOnBall) 
-//			{
-//
-//
-////				ShowFinger(ball.transform.localPosition);
-//
-//				Debug.Log("出现了小手，点击球吧");
-//
-//				showFingerOnBall=true;
-//			}
-//
-//			if (showFingerOnBall)
-//			{
-//
-//				if (!ballClicked)
-//				{
-//					ClickBall();
-//				}
-//
-//
-//			}
-//
-//
-//
-//			if (ballClicked)
-//			{
-//
-//
-//				MouseMoving._instance.moveToLeft=true;
-//				if (mouse.transform.localPosition.x<=dest_1.position.x) //老鼠走到第二个点
-//				{
-//					MouseMoving._instance.moveToLeft=false;
-//					if (!mouseMoveToSecondPos)
-//					{
-//						isOver=false;
-//						mouseMoveToSecondPos=true;
-//					}
-//					//老鼠往狮子头上爬。。。。。
-//
-//					//				mouse.transform.position = new Vector3(
-//					//					Mathf.Lerp(posStop_1.localPosition.x,ball.transform.localPosition.x,Time.deltaTime),
-//					//					Mathf.Lerp(posStop_1.localPosition.y,ball.transform.localPosition.y,Time.deltaTime),
-//					//					0);
-//
-//
-//
-//
-//
-//				}
-//
-//			}
-//
-//
-//
-//			MoveTo(targetPos.localPosition);
-//
-//
-//		}
-//
-//
-//
-//
-//	}
 
-	private void ClickBall()
+
+
+	private void MoveTo(Vector3 tar)
 	{
+		//		Debug.Log("move to");
+		if (!pause) 
+		{
+			Debug.Log("非暂停状态");
+			if(!isOver)
+			{
+				//			Debug.Log("isover---false");
+				Vector3 offSet = tar - mouse.transform.position;
+				mouse.transform.position += offSet.normalized * moveSpeed * Time.deltaTime;
+				Debug.Log("Vector3.Distance(tar, mouse.transform.position)---"+Vector3.Distance(tar, mouse.transform.position));
+				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
+				{
+					Debug.Log("到达了终点");
+					isOver = true;
+					mouse.transform.position = tar;
+					Debug.Log("****************************************");
+				}
+			}
 
+		}
+		else
+		{
+			Debug.Log("暂停------------");
+		}
+
+	}
+
+	void ShowFinger(Vector3 pos)
+	{
+		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
+
+	}
+
+	void ClickBall()
+	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			
-			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), ball.transform.position);//Vector2.zero); 
-//			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), );//(ball.transform.localPosition-Camera.main.ScreenToWorldPoint(Input.mousePosition))); 
-			if (hit.collider!=null) 
+			//用这种方法来判断是否点击了对象比较准确些
+			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			if (col.Length>0) 
 			{
-				if (hit.collider.tag=="Ball") 
+				foreach (Collider2D c in col) 
 				{
-					Debug.Log("点击了球");
-					//如果没有销毁小手，则销毁小手，同时播放草的动画
-//					if (BussinessManager._instance.finger!=null) 
-//					{
-//
-//						Destroy(BussinessManager._instance.finger);
-//
-//						Debug.Log("销毁了小手");
-//
-//					}
-
-					ballClicked=true;
+					if (c.tag=="Ball") {
+						Debug.Log("点击了球");
+						BussinessManager._instance.DestroyFinger();
+						ballClicked=true;
+					}
 				}
 			}
 
 
-
-
-			Collider2D[] col=Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
 		}
 
-
 	}
+
+
 	private void ShowMouse()
 	{
 		if (mouse ==null) 
 		{
+			//			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+			mouse=Manager._instance.mouseGo;
 
-			mouse=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-			//			mouse=Manager._instance.mouseGo;
-			if (mouse==null) 
-			{
-				Debug.Log("老鼠为空");
-			}
-			//			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
-			mouse.transform.localPosition=originMousePos;
+		}
+
+		if (mouse!=null) 
+		{
+			mouse.transform.position=originMousePos;
+			Debug.Log("老鼠的位置是---"+mouse.transform.localPosition);
+			Debug.Log("老鼠应该出现的位置为---"+originMousePos);
+
 
 			mouse.name="Mouse";
 
 			mouseAnimator=mouse.GetComponent<Animator>();
+			if (mouse.GetComponent<MouseEnterScene>()==null) {
+				mouse.AddComponent<MouseEnterScene>();
+			}
 
 			GameObject.DontDestroyOnLoad(mouse);
-
 		}
 
 
@@ -217,42 +255,92 @@ public class LevelTwo : MonoBehaviour
 			ball.name="Ball";
 
 		}
-
-	}
-
-
-
-	
-	void ShowFinger(Vector3 pos)
-	{
-		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
-
-	}
-
-
-
-	bool isOver=true;
-
-	private void MoveTo(Vector3 tar)
-	{
-		if(!isOver)
+		else
 		{
-			Vector3 offSet = tar - mouse.transform.localPosition;
-			mouse.transform.localPosition += offSet.normalized * 3f * Time.deltaTime;
-			if(Vector3.Distance(tar, transform.localPosition)<=2f)
-			{
-				Debug.Log("到达了终点");
-				isOver = true;
-				transform.localPosition = tar;
-			}
+
+			ball.transform.position=originBallPos;
+		}
+
+		if (ball.GetComponent<Rigidbody2D>()!=null) 
+		{
+			ball.GetComponent<Rigidbody2D>().gravityScale=0;
+
+		}
+		if (ball.GetComponent<Animator>()!=null) {
+			ball.GetComponent<Animator>().enabled=false;
 		}
 
 	}
 
 
+	public void StartStoryToRecordAudioAndVideo()
+	{
+		if (BussinessManager._instance.finger!=null) 
+		{
+			Destroy(BussinessManager._instance.finger);
+
+		}
+
+		Init();
+
+
+		mouseAnimator.CrossFade("",0);
+		mouseAnimator.CrossFade("01_WalkToBall",0);
+
+		mouse.transform.position=originMousePos;
+		moveSpeed=2;
+		move=true;
+	
+
+	}
+
+
+	public void PlayStoryWithAudioRecording()
+	{
+		Init();
+		mouseAnimator.CrossFade("",0);
+		mouseAnimator.CrossFade("01_WalkToBall",0);
+	}
 
 
 
+	public void PauseStory()
+	{
 
+		PauseAnimation();
+		BussinessManager._instance.PauseAudioAside();
+		SubtitleShow._instance.pause=true;
+
+	}
+
+	public void ResumeStory()
+	{
+		ResumeAnimation();
+		BussinessManager._instance.ResumeAudioAside();
+		SubtitleShow._instance.pause=false;
+	}
+
+
+	void PauseAnimation()
+	{
+
+		mouseAnimator.speed=0;
+		pause=true;
+		Debug.Log("停止动画");
+	}
+
+	void ResumeAnimation()
+	{
+
+		mouseAnimator.speed=1;
+		pause=false;
+	}
+
+	void OnDestroy()
+	{
+
+
+		mouse.transform.position=Manager._instance.outsideScreenPos;
+	}
 
 }

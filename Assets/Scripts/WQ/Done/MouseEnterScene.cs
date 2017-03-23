@@ -9,20 +9,12 @@ public class MouseEnterScene : MonoBehaviour {
 	float speed_walkSlow=0.42f;
 	float speed_stop;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 
 	public void SetWalkSpeed()
 	{
 
-		LevelTwo_new._instance.mouseSpeed=speed_walk;
+		LevelTwo_new._instance.moveSpeed=speed_walk;
 
 
 	}
@@ -30,18 +22,24 @@ public class MouseEnterScene : MonoBehaviour {
 	{
 
 
-		LevelTwo_new._instance.mouseSpeed=speed_walkSlow;
+		LevelTwo_new._instance.moveSpeed=speed_walkSlow;
 
 
 	}
 	public void SetStopSpeed()
 	{
 
-		LevelTwo_new._instance.mouseSpeed=0;
+		LevelTwo_new._instance.moveSpeed=0;
 
 
 	}
 
+
+	public void StartToWalk()
+	{
+		LevelTwo_new._instance.startToWalk=true;
+
+	}
 
 
 }

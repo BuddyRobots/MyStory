@@ -38,7 +38,9 @@ public class MousePlayBall : MonoBehaviour
 
 	void Update () 
 	{
-		
+		if (ball==null) {
+			ball=GameObject.Find("Ball");
+		}
 		ClickTheMouse();
 	
 	}
@@ -49,28 +51,52 @@ public class MousePlayBall : MonoBehaviour
 		if (Input.GetMouseButtonDown(0))
 		{
 			
+////			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
 //			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
-			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
-		
-			if (hit.collider!=null) 
+//		
+//			if (hit.collider!=null) 
+//			{
+//				Debug.Log("hit.collider!=null");
+//				Debug.Log("hit.collider.gameObject.name------"+hit.collider.gameObject.name);
+//
+//				if (hit.collider.tag=="Player") 
+//				{
+//					Debug.Log("点了老鼠-------");
+//
+//					//如果没有销毁小手，就销毁小手，同时录音按钮隐藏，下一步按钮出现，老鼠开始播放动画
+//					if (BussinessManager._instance.finger!=null) 
+//					{
+//						Destroy(BussinessManager._instance.finger);
+//						FormalScene._instance.nextBtn.gameObject.SetActive(true);
+////						FormalScene._instance.recordBtn.gameObject.SetActive(false);
+//					}
+//					Manager._instance.move=true;
+//					mouseAnimator.SetTrigger("standToRun");
+//		
+//				}
+//			}
+
+
+
+			//用这种方法来判断是否点击了对象比较准确些
+			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			if (col.Length>0) 
 			{
-				Debug.Log("hit.collider!=null");
-				Debug.Log("hit.collider.gameObject.name------"+hit.collider.gameObject.name);
-
-				if (hit.collider.tag=="Player") 
+				foreach (Collider2D c in col) 
 				{
-					Debug.Log("点了老鼠-------");
+					if (c.tag=="Player") {
+						Debug.Log("点了老鼠-------");
 
-					//如果没有销毁小手，就销毁小手，同时录音按钮隐藏，下一步按钮出现，老鼠开始播放动画
-					if (BussinessManager._instance.finger!=null) 
-					{
-						Destroy(BussinessManager._instance.finger);
-						FormalScene._instance.nextBtn.gameObject.SetActive(true);
-//						FormalScene._instance.recordBtn.gameObject.SetActive(false);
+						//如果没有销毁小手，就销毁小手，同时录音按钮隐藏，下一步按钮出现，老鼠开始播放动画
+						if (BussinessManager._instance.finger!=null) 
+						{
+							Destroy(BussinessManager._instance.finger);
+							FormalScene._instance.nextBtn.gameObject.SetActive(true);
+							//						FormalScene._instance.recordBtn.gameObject.SetActive(false);
+						}
+						Manager._instance.move=true;
+						mouseAnimator.SetTrigger("standToRun");
 					}
-					Manager._instance.move=true;
-					mouseAnimator.SetTrigger("standToRun");
-		
 				}
 			}
 		}

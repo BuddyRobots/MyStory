@@ -13,11 +13,13 @@ public class LevelFour : MonoBehaviour
 	[HideInInspector]
     public 	GameObject mouse;
 
+	public Transform center;
+
 	bool storyBegin;//故事是否开始的标志
 
 	Animator mouseAnimator;
 
-	Vector3 originMousePos=new Vector3(1.5f,2.7f,0);
+	Vector3 originMousePos=new Vector3(1.5f,1.7f,0);
 	Vector3 outsidePos=new Vector3(50f,50f,0);
 
 	[HideInInspector]
@@ -32,6 +34,7 @@ public class LevelFour : MonoBehaviour
 
 	void Start () 
 	{
+		
 		FormalScene._instance.recordBtn.gameObject.SetActive(false);
 		ShowMouse();
 	}
@@ -40,18 +43,7 @@ public class LevelFour : MonoBehaviour
 	{
 		if (mouse ==null) 
 		{
-			
-//			mouse=Instantiate(Resources.Load("Prefab/Mouse_UpsideDown")) as GameObject;//code for test
-
-
-
-
 			mouse=Manager._instance.mouseGo;// real code 
-
-
-
-
-
 			if (mouse==null) 
 			{
 				Debug.Log("老鼠为空");
@@ -64,6 +56,10 @@ public class LevelFour : MonoBehaviour
 
 			if (mouse.GetComponent<Rigidbody2D>()!=null) {
 				mouse.GetComponent<Rigidbody2D>().simulated=true;
+			}
+
+			if (mouse.GetComponent<Pendulum2D>()==null) {
+				mouse.AddComponent<Pendulum2D>();
 			}
 
 		}
@@ -115,19 +111,7 @@ public class LevelFour : MonoBehaviour
 				Debug.Log("当前点击是在UI 上");
 				return ;
 			}
-//			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), mouse.transform.position);//Vector2.zero); 
-//			if (hit.collider!=null) 
-//			{
-//				if (hit.collider.tag=="Player") 
-//				{
-//					
-//					CheckIfItIsNecessaryToDestroyFinger();
-//					MouseStruggle();
-//				}
-//			}
-
-
-
+				
 			//用这种方法来判断是否点击了对象比较准确些
 			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 			if (col.Length>0) 
@@ -182,11 +166,6 @@ public class LevelFour : MonoBehaviour
 	}
 
 
-	void OnDestroy()
-	{
-
-		mouse.transform.localPosition=outsidePos;
-	}
 
 
 }
