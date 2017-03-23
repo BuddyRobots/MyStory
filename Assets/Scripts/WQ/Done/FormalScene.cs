@@ -150,7 +150,7 @@ public class FormalScene : MonoBehaviour
 
 		Manager._instance.levelOneOver=false;
 
-
+		Init();
 
 		//需要根据当前关卡信息来显示对应的关卡的故事情景
 		currentLevelID=LevelManager.currentLevelData.LevelID;
@@ -163,6 +163,21 @@ public class FormalScene : MonoBehaviour
 		StartCoroutine(ScreenLighten());
 
 	
+
+	}
+
+
+	/// <summary>
+	/// 初始化一些信息
+	/// </summary>
+	void Init()
+	{
+		Manager._instance.move=false;
+
+		if (LevelManager.currentLevelData.LevelID==4) 
+		{
+			
+		}
 
 	}
 

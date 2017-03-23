@@ -18,12 +18,16 @@ public class Pendulum2D : MonoBehaviour {
 	[Header("点击变化的角度")]
 	public float strength = 20;
 
+	Vector3 centerPos=new Vector3(1.53f,2.73f,0);
+
 	void Start()
 	{
 		recordPoints = new List<float>();
 		expectantAngle = -90;
 
-		center=GameObject.Find("SceneParent/SceneLevel_4(Clone)/Center").transform;
+		center=GameObject.Find("Manager").transform;
+		//manager对象作为老鼠旋转的中心点
+		center.transform.position=centerPos;
 		radius = Vector3.Distance(transform.position, center.position);
 	}
 

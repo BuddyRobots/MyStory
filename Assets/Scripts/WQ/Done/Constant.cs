@@ -12,5 +12,5 @@ public static class Constant
 
 
 	public const float moveSpeed=5f;//球的移动速度
-	public  const float SCREEN_FADINGTIME=2f;//屏幕变暗或变亮的时间
+	public  const float SCREEN_FADINGTIME=1f;//屏幕变暗或变亮的时间
 }

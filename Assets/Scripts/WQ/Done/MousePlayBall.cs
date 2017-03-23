@@ -165,6 +165,7 @@ public class MousePlayBall : MonoBehaviour
 
 	void BallMove()
 	{
+		Debug.Log("球应该移动");
 		Vector2 moveOffset=new Vector2(Random.Range(-3f,-6f),Random.Range(3f,6f));
 		ball.GetComponent<Rigidbody2D>().velocity=moveOffset*ballMoveSpeed;
 	

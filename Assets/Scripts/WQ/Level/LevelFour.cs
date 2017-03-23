@@ -13,7 +13,7 @@ public class LevelFour : MonoBehaviour
 	[HideInInspector]
     public 	GameObject mouse;
 
-	public Transform center;
+	GameObject center;
 
 	bool storyBegin;//故事是否开始的标志
 
@@ -21,6 +21,7 @@ public class LevelFour : MonoBehaviour
 
 	Vector3 originMousePos=new Vector3(1.5f,1.7f,0);
 	Vector3 outsidePos=new Vector3(50f,50f,0);
+
 
 	[HideInInspector]
 	public bool showFingerOnMouse;//是否出现小手提示点击老鼠
@@ -35,8 +36,22 @@ public class LevelFour : MonoBehaviour
 	void Start () 
 	{
 		
+		center=GameObject.Find("Manager");
+		if (center) 
+		{
+			center.transform.position=new Vector3(1.53f,2.73f,0);
+			if (center.transform.FindChild("Ball")) 
+			{
+				center.transform.FindChild("Ball").gameObject.SetActive(false);
+
+			}
+		}
+		
+		
 		FormalScene._instance.recordBtn.gameObject.SetActive(false);
+		Manager._instance.mouseGo.transform.position=originMousePos;
 		ShowMouse();
+
 	}
 
 	void ShowMouse()
@@ -48,21 +63,32 @@ public class LevelFour : MonoBehaviour
 			{
 				Debug.Log("老鼠为空");
 			}
-			mouse.transform.position=originMousePos;
+//			mouse.transform.position=originMousePos;
 			mouse.name="Mouse";
 			mouseAnimator=mouse.GetComponent<Animator>();
 			mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StruggleAnimations/MouseStruggleController") as RuntimeAnimatorController;
 			GameObject.DontDestroyOnLoad(mouse);
 
+			mouseAnimator.CrossFade("idle",0);
+
 			if (mouse.GetComponent<Rigidbody2D>()!=null) {
 				mouse.GetComponent<Rigidbody2D>().simulated=true;
 			}
 
-			if (mouse.GetComponent<Pendulum2D>()==null) {
+			if (mouse.GetComponent<Pendulum2D>()==null) 
+			{
 				mouse.AddComponent<Pendulum2D>();
 			}
+			else
+			{
+				mouse.GetComponent<Pendulum2D>().enabled=true;
+
+			}
+
 
 		}
+
+
 	}
 
 
@@ -165,7 +191,14 @@ public class LevelFour : MonoBehaviour
 		}
 	}
 
+	void OnDisable()
+	{
+		if (mouse.GetComponent<Pendulum2D>()!=null) 
+		{
+			mouse.GetComponent<Pendulum2D>().enabled=false;
 
+		}
+	}
 
 
 }

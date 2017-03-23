@@ -51,6 +51,8 @@ public class LevelOne : MonoBehaviour
 
 
 		Init();
+
+		Manager._instance.mouseGo.GetComponent<Animator>().CrossFade("idle",0);
 	}
 	void Init()
 	{
@@ -114,7 +116,8 @@ public class LevelOne : MonoBehaviour
 			//如果进入了第二部分
 			if (secondSceneShow) 
 			{
-				mouse.GetComponent<BoxCollider2D>().enabled=true;
+//				mouse.GetComponent<BoxCollider2D>().enabled=true;
+				mouse.GetComponentInChildren<BoxCollider2D>().enabled=true;
 //				Debug.Log("进入第二部分---出现小球");
 				//进入第二部分，出现小手提示点击老鼠，出现球，给老鼠添加脚本
 				if (!showFingerOnMouse)
@@ -222,8 +225,9 @@ public class LevelOne : MonoBehaviour
 			mouseAnimator.CrossFade("idle",0);
 
 		}
-
-		mouse.GetComponent<BoxCollider2D>().enabled=false;
+			
+		mouse.GetComponentInChildren<BoxCollider2D>().enabled=false;
+		mouse.GetComponent<Rigidbody2D>().simulated=true;
 	    
 
 	}
@@ -239,7 +243,13 @@ public class LevelOne : MonoBehaviour
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
 			ball.transform.localPosition=originBallPos;
 			ball.name="Ball";
+//			ball.GetComponent<Rigidbody2D>().simulated=true;
 		
+		}
+
+		if (ball !=null) {
+			ball.GetComponent<Rigidbody2D>().simulated=true;
+
 		}
 
 	}

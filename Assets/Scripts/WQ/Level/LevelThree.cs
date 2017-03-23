@@ -77,6 +77,8 @@ public class LevelThree : MonoBehaviour
 
 	void Init()
 	{
+
+
 		pause=false;
 		mouseFall=false;
 		ballFall=false;
@@ -89,6 +91,8 @@ public class LevelThree : MonoBehaviour
 		originMousePos=new Vector3(-4.4f,2.06f,0);
 		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
+		GameObject.Find("Manager").transform.position=originBallPos;
+
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
@@ -118,6 +122,7 @@ public class LevelThree : MonoBehaviour
 			ballAnimator.speed=1;
 		}
 			
+
 
 	}
 
@@ -252,6 +257,8 @@ public class LevelThree : MonoBehaviour
 				mouseAnimator.CrossFade("idle",0);
 				lionAnimator.CrossFade("LionIdle",0);
 				ballAnimator.CrossFade("BallIdle",0);
+
+				ball.SetActive(false);
 			}
 
 
@@ -405,6 +412,7 @@ public class LevelThree : MonoBehaviour
 			else
 			{
 				mouse.transform.position=originMousePos;
+				mouse.transform.rotation=Quaternion.Euler(0, 0, 0);
 
 				mouse.name="Mouse";
 				if (mouse.GetComponent<Animator>()==null)
