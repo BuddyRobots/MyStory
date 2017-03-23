@@ -31,14 +31,7 @@ public class ModelChoose : MonoBehaviour {
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
 
-		if (!Manager._instance.mouseGo) 
-		{
-			Manager._instance.mouseGo=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-			Manager._instance.mouseGo.name="Mouse";
-			Manager._instance.mouseGo.transform.position=Manager._instance.outsideScreenPos;
-		}
 
-		DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
 	
 

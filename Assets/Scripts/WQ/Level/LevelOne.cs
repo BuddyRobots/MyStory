@@ -54,11 +54,10 @@ public class LevelOne : MonoBehaviour
 
 		Manager._instance.mouseGo.GetComponent<Animator>().CrossFade("idle",0);
 	}
+
 	void Init()
 	{
-		
 		showFingerOnGrass=false;
-
 	}
 
 	void ShowFinger(Vector3 pos)
@@ -66,9 +65,6 @@ public class LevelOne : MonoBehaviour
 		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
 
 	}
-		
-
-
 
 	void Update () 
 	{
@@ -76,29 +72,19 @@ public class LevelOne : MonoBehaviour
 		//屏幕亮完以后故事才开始
 		if (storyBegin) 
 		{
-			//如果没有出现小手提示点击草，就出现小手提示点击草
+			//出现小手提示点击草,只出现一次
 			if (!showFingerOnGrass) 
 			{
-				Debug.Log("小手出现提示点击小草");
 				ShowFinger(grassL.transform.localPosition);
-
 				showFingerOnGrass=true;
 			}
-
-
-
-
-			//出现小手提示点击草以后，点击草
+			//点击草
 			if (showFingerOnGrass) 
 			{
-				//如果没有点击草
 				if (!grassClicked) 
 				{
 					ClickGrass();
-
 				}
-
-				
 			}
 
 			//如果点击了草，并且草播放完了动画
@@ -160,7 +146,9 @@ public class LevelOne : MonoBehaviour
 				Debug.Log("当前点击是在UI 上");
 				return ;
 			}
-			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
+//			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
+			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), grassL.transform.position); 
+
 			if (hit.collider!=null) 
 			{
 				if (hit.collider.tag=="ClickObj") 
@@ -172,20 +160,13 @@ public class LevelOne : MonoBehaviour
 					{
 						
 						Destroy(BussinessManager._instance.finger);
-
-						Debug.Log("销毁了小手");
-
-
 						PlayAnimation();
-
 					}
 
 					grassL.GetComponent<BoxCollider2D>().enabled=false;
 					grassR.GetComponent<BoxCollider2D>().enabled=false;
 
 					grassClicked=true;
-
-
 				}
 			}
 		}
@@ -205,35 +186,15 @@ public class LevelOne : MonoBehaviour
 
 	private void ShowMouse()
 	{
-		if (mouse ==null) 
-		{
-			mouse=Manager._instance.mouseGo;
-			if (mouse==null) 
-			{
-				Debug.Log("老鼠为空");
-			}
-//			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
-			mouse.transform.localPosition=originMousePos;
-			mouse.name="Mouse";
-			mouseAnimator=mouse.GetComponent<Animator>();
-		}
-		else
-		{
-			mouse.transform.localPosition=originMousePos;
-			mouse.name="Mouse";
-			mouseAnimator=mouse.GetComponent<Animator>();
-			mouseAnimator.CrossFade("idle",0);
+		mouse=Manager._instance.mouseGo;
+		mouse.transform.position=originMousePos;
+		mouse.name="Mouse";
+		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.CrossFade("idle",0);
 
-		}
-			
 		mouse.GetComponentInChildren<BoxCollider2D>().enabled=false;
 		mouse.GetComponent<Rigidbody2D>().simulated=true;
-	    
-
 	}
-
-
-
 
 	private void ShowBall()
 	{
@@ -258,12 +219,10 @@ public class LevelOne : MonoBehaviour
 	/// </summary>
 	public void PlayStoryWithAudioRecording()
 	{
-		
 		//重新开始故事----只不过录音被替换
 		PlayAnimation();
 		ShowMouse();
 		ShowBall();
-
 	}
 
 
@@ -292,61 +251,29 @@ public class LevelOne : MonoBehaviour
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		//如果有小手提示点击，就销毁小手，点击失效 
-
 		if (BussinessManager._instance.finger!=null) 
 		{
 			Destroy(BussinessManager._instance.finger);
-		
 		}
 		PlayAnimation();
 		ShowMouse();
 		ShowBall();
-
-	}
-
-
-
-	/// <summary>
-	/// 暂停旁白播放
-	/// </summary>
-	void PauseNarratage()
-	{
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().Pause();
-	}
-	/// <summary>
-	/// 恢复旁白播放
-	/// </summary>
-	void ResumeNarratage()
-	{
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().UnPause();
-
 	}
 		
 	public void PauseStory()
 	{
-		Debug.Log("---levelOne--PauseStory()");
-		//如果在播放动画，就暂停动画；
-		//如果在播放旁白，就暂停旁白；
-		//如果有字幕，且在切换字幕，就暂停切换
 		PauseAnimation();
-//		PauseNarratage();
 		BussinessManager._instance.PauseAudioAside();
-//		SubtitleCtrl._instance.pauseChangeSubtitle=true;
 		SubtitleShow._instance.pause=true;
 		StopAllCoroutines();
 	}
-
-
+		
 	public void ResumeStory()
 	{
-		BussinessManager._instance.ResumeAudioAside();
-		ResumeNarratage();
 		ResumeAnimation();
-//		SubtitleCtrl._instance.pauseChangeSubtitle=false;
+		BussinessManager._instance.ResumeAudioAside();
 		SubtitleShow._instance.pause=false;
 	}
-
-
 
 	void OnDisable()
 	{
@@ -359,12 +286,5 @@ public class LevelOne : MonoBehaviour
 		}
 
 	}
-
-
-	void OnDestroy()
-	{
-//		mouse.transform.position=Manager._instance.outsideScreenPos;
-	}
-
 
 }

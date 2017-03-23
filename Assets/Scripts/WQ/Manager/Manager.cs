@@ -66,15 +66,11 @@ public class Manager :MonoBehaviour
 		if (_instance!=null) 
 		{
 			Destroy (gameObject);
-
 		}
 		else
 		{
 		    _instance=this;
 			GameObject.DontDestroyOnLoad(gameObject);
-
-
-
 		}
 
 	}
@@ -87,6 +83,27 @@ public class Manager :MonoBehaviour
 		recordingDone=false;
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
+
+		if (ball==null) 
+		{
+			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
+			ball.name="Ball";
+			ball.transform.position=outsideScreenPos;//球在屏幕外面
+			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
+		}
+		if (mouseGo) 
+		{
+			mouseGo=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+			mouseGo.name="Mouse";
+			mouseGo.transform.position=Manager._instance.outsideScreenPos;
+		}
+
+
+		DontDestroyOnLoad(ball);
+		DontDestroyOnLoad(mouseGo);
+
+
+
 
 	
 	}
