@@ -84,6 +84,11 @@ public class FormalScene : MonoBehaviour
 
 	void Start () 
 	{
+		//一进来都是右背景音乐的
+		Manager._instance.bgMusicFadeOut=false;
+
+
+
 //		Debug.Log("fomalScene --初始化");
 		backBtn=transform.Find("Back").GetComponent<Button>();
 		nextBtn=transform.Find("Next").GetComponent<Button>();
