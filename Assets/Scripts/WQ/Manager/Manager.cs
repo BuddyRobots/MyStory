@@ -57,7 +57,7 @@ public class Manager :MonoBehaviour
 
 	public bool levelOneOver;
 	/// <summary>
-	/// 老鼠在屏幕外的位置
+	/// position outside screen
 	/// </summary>
 	public Vector3 outsideScreenPos=new Vector3(0,20f,0);
 
@@ -84,6 +84,13 @@ public class Manager :MonoBehaviour
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
+
+		if (mouseGo==null) 
+		{
+			mouseGo=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+			mouseGo.name="Mouse";
+			mouseGo.transform.position=Manager._instance.outsideScreenPos;
+		}
 		if (ball==null) 
 		{
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
@@ -91,20 +98,16 @@ public class Manager :MonoBehaviour
 			ball.transform.position=outsideScreenPos;//球在屏幕外面
 			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
 		}
-		if (mouseGo) 
+		if (garland==null)
 		{
-			mouseGo=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-			mouseGo.name="Mouse";
-			mouseGo.transform.position=Manager._instance.outsideScreenPos;
+			garland=Instantiate(Resources.Load("Prefab/Garland")) as GameObject;
+			garland.name="Garland";
+			garland.transform.position=outsideScreenPos;
 		}
 
-
-		DontDestroyOnLoad(ball);
 		DontDestroyOnLoad(mouseGo);
-
-
-
-
+		DontDestroyOnLoad(ball);
+		DontDestroyOnLoad(garland);
 	
 	}
 		
@@ -115,7 +118,6 @@ public class Manager :MonoBehaviour
 		#region 控制背景音乐的开和关（点击音乐按钮时）
 		if (Manager.musicOn)
 		{
-
 			if (!bgAudio.isPlaying) 
 			{
 				bgAudio.Play ();
@@ -164,22 +166,16 @@ public class Manager :MonoBehaviour
 			
 		}
 		#endregion
-	
 	}
-
-
-
+		
 	public void ChangeSceneToSetBgAudioVolumeNormal()
 	{
-
 		bgAudio.volume=1;
 	}
 
 	public void RecordingToSetBgAudioVolumeZero()
 	{
-
 		bgAudio.volume=0;
-		Debug.Log("背景音乐音量"+bgAudio.volume);
 	}
 
 
