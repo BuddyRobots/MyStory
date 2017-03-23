@@ -27,15 +27,9 @@ public class BussinessManager : MonoBehaviour
 		audioSource=GameObject.Find("Main Camera").GetComponent<AudioSource>();
 	}
 
-	void Start () 
-	{
-
-	}
-	
 
 	public void ShowFinger(Vector3 pos)
 	{
-//		Debug.Log("----出现小手");
 		if (finger) 
 		{
 			Destroy (finger);
@@ -48,12 +42,9 @@ public class BussinessManager : MonoBehaviour
 		finger.GetComponent<FingerCtrl> ().FingerShow (pos + offSet);
 	}
 
-	/// <summary>
-	/// 
-	/// </summary>
+
 	public void PauseStory()
 	{
-
 		switch (LevelManager.currentLevelData.LevelID)
 		{
 		case 1:
@@ -231,9 +222,7 @@ public class BussinessManager : MonoBehaviour
 
 		if (finger!=null) 
 		{
-
 			Destroy(finger);
-
 		}
 	}
 
@@ -245,11 +234,8 @@ public class BussinessManager : MonoBehaviour
 	{
 		//背景音乐淡出
 		Manager._instance.bgMusicFadeOut=true;
-
-
 		audioSource.clip=Manager._instance.audioAside[LevelManager.currentLevelData.LevelID-1];
 		audioSource.Play();
-		Debug.Log("音频的名字----"+audioSource.clip.name);
 	}
 
 

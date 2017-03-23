@@ -54,49 +54,7 @@ public class LevelFour : MonoBehaviour
 
 	}
 
-	void ShowMouse()
-	{
-		if (mouse ==null) 
-		{
-			mouse=Manager._instance.mouseGo;// real code 
-			if (mouse==null) 
-			{
-				Debug.Log("老鼠为空");
-			}
-//			mouse.transform.position=originMousePos;
-			mouse.name="Mouse";
-			mouseAnimator=mouse.GetComponent<Animator>();
-			mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StruggleAnimations/MouseStruggleController") as RuntimeAnimatorController;
-			GameObject.DontDestroyOnLoad(mouse);
 
-			mouseAnimator.CrossFade("idle",0);
-
-			if (mouse.GetComponent<Rigidbody2D>()!=null) {
-				mouse.GetComponent<Rigidbody2D>().simulated=true;
-			}
-
-			if (mouse.GetComponent<Pendulum2D>()==null) 
-			{
-				mouse.AddComponent<Pendulum2D>();
-			}
-			else
-			{
-				mouse.GetComponent<Pendulum2D>().enabled=true;
-
-			}
-
-
-		}
-
-
-	}
-
-
-	void ShowFinger(Vector3 pos)
-	{
-		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
-
-	}
 
 
 	void Update () 
@@ -126,7 +84,41 @@ public class LevelFour : MonoBehaviour
 
 
 	}
+	void ShowMouse()
+	{
+		if (mouse ==null) 
+		{
+			mouse=Manager._instance.mouseGo;
+		}
+		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StruggleAnimations/MouseStruggleController") as RuntimeAnimatorController;
+		mouseAnimator.CrossFade("idle",0);
 
+		if (mouse.GetComponent<Rigidbody2D>()!=null) 
+		{
+			mouse.GetComponent<Rigidbody2D>().simulated=true;
+		}
+
+		if (mouse.GetComponent<Pendulum2D>()==null) 
+		{
+			mouse.AddComponent<Pendulum2D>();
+		}
+		else
+		{
+			mouse.GetComponent<Pendulum2D>().enabled=true;
+		}
+
+
+	}
+
+
+
+
+	void ShowFinger(Vector3 pos)
+	{
+		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
+
+	}
 
 	void ClickMouseToStruggle()
 	{
@@ -138,13 +130,14 @@ public class LevelFour : MonoBehaviour
 				return ;
 			}
 				
-			//用这种方法来判断是否点击了对象比较准确些
+
 			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 			if (col.Length>0) 
 			{
 				foreach (Collider2D c in col) 
 				{
-					if (c.tag=="Player") {
+					if (c.tag=="Player") 
+					{
 						CheckIfItIsNecessaryToDestroyFinger();
 						MouseStruggle();
 					}
@@ -191,13 +184,23 @@ public class LevelFour : MonoBehaviour
 		}
 	}
 
+
+
 	void OnDisable()
 	{
-		if (mouse.GetComponent<Pendulum2D>()!=null) 
-		{
-			mouse.GetComponent<Pendulum2D>().enabled=false;
+		Manager._instance.Reset();
 
+		if (mouse.GetComponent<Pendulum2D>()) 
+		{
+			Destroy(mouse.GetComponent<Pendulum2D>());
 		}
+
+//		if (GameObject.Find("Ball")) 
+//		{
+//			GameObject.Find("Ball").SetActive(true);
+//		}
+			
+		
 	}
 
 

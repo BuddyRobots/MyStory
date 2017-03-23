@@ -148,7 +148,7 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 
 
-		Manager._instance.levelOneOver=false;
+//		Manager._instance.levelOneOver=false;
 
 		Init();
 
@@ -244,8 +244,7 @@ public class FormalScene : MonoBehaviour
 
 
 		//告诉第一关该隐藏录音按钮了
-
-		LevelOne._instance.recordBtnHide=true;
+		Manager._instance.recordBtnHide=true;
 
 		blackMask.GetComponent<Image>().CrossFadeAlpha(0,Constant.SCREEN_FADINGTIME,true);
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
@@ -390,9 +389,12 @@ public class FormalScene : MonoBehaviour
 		{
 			if (currentLevelID==1) 
 			{
+				if (!Manager._instance.levelOneOver) 
+				{
+					Manager._instance.levelOneOver=true;
+					MousePlayBall._instance.OrderMouseToKickBallOutSide();	
+				}
 
-				Manager._instance.levelOneOver=true;
-				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
 	
 			}
 			else
@@ -415,18 +417,20 @@ public class FormalScene : MonoBehaviour
 		}
 		else
 		{
-			if (currentLevelID==1) 
-			{
-
-				Manager._instance.levelOneOver=true;
-				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
-
-			}
-			else
-			{
-				UpgradeLevel();
-				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
-			}	
+//			if (currentLevelID==1) 
+//			{
+//
+//				Manager._instance.levelOneOver=false;
+//				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
+//
+//			}
+//			else
+//			{
+//				UpgradeLevel();
+//				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
+//			}	
+			UpgradeLevel();
+			StartCoroutine(ScreenDarkenThenLoadSceneAsync());
 		}
 
 	}

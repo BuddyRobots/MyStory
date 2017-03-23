@@ -36,8 +36,8 @@ public class LevelOne : MonoBehaviour
 
 	[HideInInspector]
 	public bool secondSceneShow=false;
-	[HideInInspector]
-	public bool recordBtnHide;
+//	[HideInInspector]
+//	public bool recordBtnHide;
 
 
 	void Awake()
@@ -48,23 +48,17 @@ public class LevelOne : MonoBehaviour
 	void Start () 
 	{
 		grassAni=grassL.GetComponent<Animation>();
-
-
 		Init();
-
 		Manager._instance.mouseGo.GetComponent<Animator>().CrossFade("idle",0);
 	}
 
 	void Init()
 	{
 		showFingerOnGrass=false;
+		Manager._instance.recordBtnHide=false;
+		Manager._instance.levelOneOver=false;
 	}
 
-	void ShowFinger(Vector3 pos)
-	{
-		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
-
-	}
 
 	void Update () 
 	{
@@ -124,7 +118,7 @@ public class LevelOne : MonoBehaviour
 
 			}
 
-			if (recordBtnHide) 
+			if (Manager._instance.recordBtnHide) 
 			{
 				FormalScene._instance.recordBtn.gameObject.SetActive(false);
 
@@ -134,8 +128,11 @@ public class LevelOne : MonoBehaviour
 
 	}
 
+	void ShowFinger(Vector3 pos)
+	{
+		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
 
-
+	}
 
 	void ClickGrass()
 	{
@@ -188,32 +185,33 @@ public class LevelOne : MonoBehaviour
 	{
 		mouse=Manager._instance.mouseGo;
 		mouse.transform.position=originMousePos;
-		mouse.name="Mouse";
 		mouseAnimator=mouse.GetComponent<Animator>();
 		mouseAnimator.CrossFade("idle",0);
 
 		mouse.GetComponentInChildren<BoxCollider2D>().enabled=false;
 		mouse.GetComponent<Rigidbody2D>().simulated=true;
+
+
 	}
 
 	private void ShowBall()
 	{
-
-		if (ball==null) 
+		ball=Manager._instance.ball;
+		ball.transform.position=originBallPos;
+		if (ball.GetComponent<Rigidbody2D>()==null)
 		{
-			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.localPosition=originBallPos;
-			ball.name="Ball";
-//			ball.GetComponent<Rigidbody2D>().simulated=true;
-		
+			ball.AddComponent<Rigidbody2D>();
 		}
+		ball.GetComponent<Rigidbody2D>().simulated=true;
+		ball.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
+		ball.GetComponent<Rigidbody2D>().angularDrag=2f;
 
-		if (ball !=null) {
-			ball.GetComponent<Rigidbody2D>().simulated=true;
-
+		if (ball.GetComponent<BallMoveWithBg>()==null) 
+		{
+			ball.AddComponent<BallMoveWithBg>();
 		}
-
 	}
+
 	/// <summary>
 	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
 	/// </summary>
@@ -244,10 +242,7 @@ public class LevelOne : MonoBehaviour
 		grassAni[grassAniName].speed=1;
 
 	}
-
-
-
-
+		
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		//如果有小手提示点击，就销毁小手，点击失效 
@@ -277,13 +272,32 @@ public class LevelOne : MonoBehaviour
 
 	void OnDisable()
 	{
-		if (ball!=null) 
+		Manager._instance.Reset();
+		if (mouse) 
+		{
+			if (mouse.GetComponent<MousePlayBall>()!=null) 
+			{
+				Destroy(mouse.GetComponent<MousePlayBall>());
+			}
+		}
+
+
+		if (ball) 
 		{
 			if (ball.GetComponent<BallMoveWithBg>()!=null) 
 			{
 				Destroy(ball.GetComponent<BallMoveWithBg>());
 			}
+			ball.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
+			ball.transform.rotation=Quaternion.Euler(0, 0, 0);
+
+
+			if (ball.GetComponent<Rigidbody2D>())
+			{
+				Destroy(ball.GetComponent<Rigidbody2D>());
+			}
 		}
+
 
 	}
 

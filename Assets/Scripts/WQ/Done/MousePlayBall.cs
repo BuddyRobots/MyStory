@@ -8,11 +8,12 @@ public class MousePlayBall : MonoBehaviour
 
 	public static MousePlayBall _instance;
 
-	public float ballMoveSpeed=1f;
+	public float ballMoveSpeed;
 	private Animator mouseAnimator;
 
 
 	public GameObject ball;
+	bool mouseIsMoving;
 
 	void Awake()
 	{
@@ -22,13 +23,13 @@ public class MousePlayBall : MonoBehaviour
 
 	void Start () 
 	{
-		mouseAnimator=GetComponent<Animator>();
-		//这里应该获得球   
-		//to do...
 
+		ballMoveSpeed=1f;
+		mouseIsMoving=false;
+		mouseAnimator=GetComponent<Animator>();
+	
 		if (ball==null) 
 		{
-//			ball=transform.parent.Find("Ball").gameObject;
 			ball=GameObject.Find("Ball");
 		}
 
@@ -38,68 +39,52 @@ public class MousePlayBall : MonoBehaviour
 
 	void Update () 
 	{
-		if (ball==null) {
+		if (ball==null) 
+		{
 			ball=GameObject.Find("Ball");
 		}
-		ClickTheMouse();
+		ClickMouse();
 	
 	}
 
-
-	void ClickTheMouse()
+	void ClickMouse()
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			
-////			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
-//			RaycastHit2D hit=Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), transform.position); 
-//		
-//			if (hit.collider!=null) 
-//			{
-//				Debug.Log("hit.collider!=null");
-//				Debug.Log("hit.collider.gameObject.name------"+hit.collider.gameObject.name);
-//
-//				if (hit.collider.tag=="Player") 
-//				{
-//					Debug.Log("点了老鼠-------");
-//
-//					//如果没有销毁小手，就销毁小手，同时录音按钮隐藏，下一步按钮出现，老鼠开始播放动画
-//					if (BussinessManager._instance.finger!=null) 
-//					{
-//						Destroy(BussinessManager._instance.finger);
-//						FormalScene._instance.nextBtn.gameObject.SetActive(true);
-////						FormalScene._instance.recordBtn.gameObject.SetActive(false);
-//					}
-//					Manager._instance.move=true;
-//					mouseAnimator.SetTrigger("standToRun");
-//		
-//				}
-//			}
-
-
-
 			//用这种方法来判断是否点击了对象比较准确些
 			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 			if (col.Length>0) 
 			{
 				foreach (Collider2D c in col) 
 				{
-					if (c.tag=="Player") {
-						Debug.Log("点了老鼠-------");
-
+					if (c.tag=="Player") 
+					{
 						//如果没有销毁小手，就销毁小手，同时录音按钮隐藏，下一步按钮出现，老鼠开始播放动画
 						if (BussinessManager._instance.finger!=null) 
 						{
 							Destroy(BussinessManager._instance.finger);
 							FormalScene._instance.nextBtn.gameObject.SetActive(true);
-							//						FormalScene._instance.recordBtn.gameObject.SetActive(false);
 						}
+
+					if (!mouseIsMoving) 
+					{
+						mouseIsMoving=true;
 						Manager._instance.move=true;
 						mouseAnimator.SetTrigger("standToRun");
+					}
+						
 					}
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// 老鼠完成了一次运动
+	/// </summary>
+	public void MouseFinishedKickingBallOnce()
+	{
+		mouseIsMoving=false;
 
 	}
 
@@ -107,11 +92,15 @@ public class MousePlayBall : MonoBehaviour
 
 	public void OrderMouseToKickBallOutSide()
 	{
-		Debug.Log("----KickTheBallOutSide()");
-		Manager._instance.move=true;
-		mouseAnimator.SetTrigger("standToRun");
 		ballMoveSpeed=5f;
+		Manager._instance.move=true;
 
+		if (!mouseIsMoving) 
+		{
+			mouseIsMoving=true;
+			Manager._instance.move=true;
+			mouseAnimator.SetTrigger("standToRun");
+		}
 	}
 
 	/// <summary>
@@ -124,24 +113,17 @@ public class MousePlayBall : MonoBehaviour
 		if (coll.gameObject.tag=="Ball") 
 		{
 			Manager._instance.move=false;
+
 			Debug.Log("碰到了球");
 
 			//碰到了球就切换动画
-			mouseAnimator.SetTrigger("kickToStand");
+			mouseAnimator.CrossFade("KickingToStand",0);
 			if (Manager._instance.levelOneOver) 
 			{
-
-				Debug.Log("切换关卡到第二关");
-
 				StartCoroutine(waitMouseClickBall());
-
 			}
-
 		}
-
 	}
-
-
 
 
 	IEnumerator  waitMouseClickBall()
@@ -165,7 +147,6 @@ public class MousePlayBall : MonoBehaviour
 
 	void BallMove()
 	{
-		Debug.Log("球应该移动");
 		Vector2 moveOffset=new Vector2(Random.Range(-3f,-6f),Random.Range(3f,6f));
 		ball.GetComponent<Rigidbody2D>().velocity=moveOffset*ballMoveSpeed;
 	

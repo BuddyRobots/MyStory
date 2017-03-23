@@ -96,7 +96,7 @@ public class Manager :MonoBehaviour
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
 			ball.name="Ball";
 			ball.transform.position=outsideScreenPos;//球在屏幕外面
-			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
+//			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
 		}
 		if (garland==null)
 		{
@@ -178,5 +178,34 @@ public class Manager :MonoBehaviour
 		bgAudio.volume=0;
 	}
 
+
+
+	/// <summary>
+	/// 每一关结束时重新初始化对象信息
+	/// </summary>
+	public void Reset()
+	{
+		mouseGo.transform.position=outsideScreenPos;
+
+
+		ball.transform.position=outsideScreenPos;
+		if (GetComponent<Rigidbody2D>()==null) 
+		{
+			ball.AddComponent<Rigidbody2D>();
+		}
+
+		ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
+
+
+
+//		if (ball.GetComponent<BallMoveWithBg>()!=null) 
+//		{
+//			Destroy(ball.GetComponent<BallMoveWithBg>());
+//		}
+
+
+		garland.transform.position=outsideScreenPos;
+
+	}
 
 }
