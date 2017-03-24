@@ -51,7 +51,7 @@ public class BussinessManager : MonoBehaviour
 			LevelOne._instance.PauseStory();
 			break;
 		case 2:
-			LevelTwo_new._instance.PauseStory();
+			LevelTwo._instance.PauseStory();
 			break;
 		case 3:
 			LevelThree._instance.PauseStory();
@@ -60,8 +60,10 @@ public class BussinessManager : MonoBehaviour
 		case 4:
 			break;
 		case 5:
+			LevelFive._instance.PauseStory();
 			break;
 		case 6:
+			LevelSix._instance.PauseStory();
 			break;
 		case 7:
 			break;
@@ -87,7 +89,7 @@ public class BussinessManager : MonoBehaviour
 
 			break;
 		case 2:
-			LevelTwo_new._instance.StartStoryToRecordAudioAndVideo();
+			LevelTwo._instance.StartStoryToRecordAudioAndVideo();
 			break;
 		case 3:
 			LevelThree._instance.StartStoryToRecordAudioAndVideo();
@@ -96,8 +98,10 @@ public class BussinessManager : MonoBehaviour
 		case 4:
 			break;
 		case 5:
+			LevelFive._instance.StartStoryToRecordAudioAndVideo();
 			break;
 		case 6:
+			LevelSix._instance.StartStoryToRecordAudioAndVideo();
 			break;
 		case 7:
 			break;
@@ -120,7 +124,7 @@ public class BussinessManager : MonoBehaviour
 			LevelOne._instance.ResumeStory();
 			break;
 		case 2:
-			LevelTwo_new._instance.ResumeStory();
+			LevelTwo._instance.ResumeStory();
 			break;
 		case 3:
 			LevelThree._instance.ResumeStory();
@@ -128,8 +132,10 @@ public class BussinessManager : MonoBehaviour
 		case 4:
 			break;
 		case 5:
+			LevelFive._instance.ResumeStory();
 			break;
 		case 6:
+			LevelSix._instance.ResumeStory();
 			break;
 		case 7:
 			break;
@@ -157,7 +163,7 @@ public class BussinessManager : MonoBehaviour
 
 			break;
 		case 2:
-			LevelTwo_new._instance.PlayStoryWithAudioRecording();
+			LevelTwo._instance.PlayStoryWithAudioRecording();
 			break;
 		case 3:
 			LevelThree._instance.PlayStoryWithAudioRecording();
@@ -166,8 +172,10 @@ public class BussinessManager : MonoBehaviour
 		case 4:
 			break;
 		case 5:
+			LevelFive._instance.PlayStoryWithAudioRecording();
 			break;
 		case 6:
+			LevelSix._instance.PlayStoryWithAudioRecording();
 			break;
 		case 7:
 			break;
@@ -194,7 +202,7 @@ public class BussinessManager : MonoBehaviour
 
 			break;
 		case 2:
-			LevelTwo_new._instance.Init();
+			LevelTwo._instance.Init();
 			break;
 		case 3:
 			break;

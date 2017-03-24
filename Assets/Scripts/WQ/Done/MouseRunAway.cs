@@ -2,15 +2,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseRunAway : MonoBehaviour {
+public class MouseRunAway : MonoBehaviour 
+{
 
-	// Use this for initialization
-	void Start () {
+	public static MouseRunAway _instance;
+
+	float speed;
+
+	[HideInInspector]
+	public bool move;
+
+	void Awake()
+	{
+
+		_instance=this;
+	}
+
+	void Start () 
+	{
+		ResetSpeed();
+	}
+
+	void Update () 
+	{
+		if (move) 
+		{
+			transform.Translate(Vector3.left*speed*Time.deltaTime);
+		}
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+
+	public void  Run()
+	{
+		speed=1.5f;
+
+	}
+
+	public void BumpedToSlowSpeed()
+	{
+		speed=0f;
+
+	}
+
+	public void RunFaster()
+	{
+		speed=1.7f;
+
+	}
+
+	public void RunAwayEnd()
+	{
+		move=false;
+		speed=1f;
+		LevelFive._instance.aniDone=true;
+
+	}
+
+
+	public void ResetSpeed()
+	{
+
+		speed=1f;
 	}
 }

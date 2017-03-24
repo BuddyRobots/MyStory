@@ -15,7 +15,7 @@ public class MouseEnterScene : MonoBehaviour
 	public void SetWalkSpeed()
 	{
 
-		LevelTwo_new._instance.moveSpeed=speed_walk;
+		LevelTwo._instance.moveSpeed=speed_walk;
 
 
 	}
@@ -23,14 +23,14 @@ public class MouseEnterScene : MonoBehaviour
 	{
 
 
-		LevelTwo_new._instance.moveSpeed=speed_walkSlow;
+		LevelTwo._instance.moveSpeed=speed_walkSlow;
 
 
 	}
 	public void SetStopSpeed()
 	{
 
-		LevelTwo_new._instance.moveSpeed=0;
+		LevelTwo._instance.moveSpeed=0;
 
 
 	}
@@ -38,7 +38,7 @@ public class MouseEnterScene : MonoBehaviour
 
 	public void StartToWalk()
 	{
-		LevelTwo_new._instance.startToWalk=true;
+		LevelTwo._instance.startToWalk=true;
 
 	}
 

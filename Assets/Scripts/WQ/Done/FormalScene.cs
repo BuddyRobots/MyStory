@@ -60,6 +60,14 @@ public class FormalScene : MonoBehaviour
 	public GameObject sceneLevel_2;
 	public GameObject sceneLevel_3;
 	public GameObject sceneLevel_4;
+	public GameObject sceneLevel_5;
+	public GameObject sceneLevel_6;
+	public GameObject sceneLevel_7;
+	public GameObject sceneLevel_8;
+	public GameObject sceneLevel_9;
+
+
+
 
 	[HideInInspector]
 	public  bool screenGrowingDarkAndLight=false;
@@ -87,7 +95,7 @@ public class FormalScene : MonoBehaviour
 		//一进来都是右背景音乐的
 		Manager._instance.bgMusicFadeOut=false;
 
-
+		Camera.main.orthographicSize=5f;
 
 //		Debug.Log("fomalScene --初始化");
 		backBtn=transform.Find("Back").GetComponent<Button>();
@@ -293,6 +301,22 @@ public class FormalScene : MonoBehaviour
 		case 4:
 			tempScene=Instantiate<GameObject>(sceneLevel_4);
 
+			break;
+		case 5:
+			tempScene=Instantiate<GameObject>(sceneLevel_5);
+
+			break;
+		case 6:
+			tempScene=Instantiate<GameObject>(sceneLevel_6);
+			break;
+		case 7:
+			tempScene=Instantiate<GameObject>(sceneLevel_7);
+			break;
+		case 8:
+			tempScene=Instantiate<GameObject>(sceneLevel_8);
+			break;
+		case 9:
+			tempScene=Instantiate<GameObject>(sceneLevel_9);
 			break;
 
 		default:

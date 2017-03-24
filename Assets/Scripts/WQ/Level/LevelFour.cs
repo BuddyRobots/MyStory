@@ -194,6 +194,7 @@ public class LevelFour : MonoBehaviour
 		{
 			Destroy(mouse.GetComponent<Pendulum2D>());
 		}
+		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
 
 //		if (GameObject.Find("Ball")) 
 //		{

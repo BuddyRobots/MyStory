@@ -223,8 +223,8 @@ public class LevelThree : MonoBehaviour
 				mouse.transform.Translate(Vector3.down*fallSpeed*Time.deltaTime);
 				if (mouse.transform.position.y<-6f) 
 				{
-
-					if (!changeScene && Manager.storyStatus!=StoryStatus.Recording) 
+					
+					if (!changeScene && Manager.storyStatus!=StoryStatus.Recording && Manager._instance.isSubtitleShowOver) 
 					{
 
 						FormalScene._instance.ChangeSceneAutomatically();
@@ -443,6 +443,7 @@ public class LevelThree : MonoBehaviour
 
 	void OnDisable()
 	{
+		ball.transform.parent=null;
 
 		Manager._instance.Reset();
 
