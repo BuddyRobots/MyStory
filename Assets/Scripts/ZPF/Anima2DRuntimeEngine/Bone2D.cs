@@ -20,8 +20,8 @@ namespace Anima2DRuntimeEngine
 		[SerializeField]
 		float m_Length = 1f;
 
-		Transform m_ChildTransform;	
-			
+		[SerializeField]
+		Transform m_ChildTransform;				
 		Bone2D m_CachedChild;
 		public Bone2D child
 		{
@@ -45,7 +45,12 @@ namespace Anima2DRuntimeEngine
 			}
 			set {
 				m_CachedChild = value;
-				m_ChildTransform = m_CachedChild.transform;
+				if (m_CachedChild)
+				{
+					m_ChildTransform = m_CachedChild.transform;
+				}
+				else
+					m_ChildTransform = null;
 			}
 		}
 
