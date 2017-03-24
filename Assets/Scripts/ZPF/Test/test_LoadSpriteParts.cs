@@ -526,7 +526,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 	{
 		GameObject headBoneGO = FindBoneGOInChild(boneRootGO, "Head");
 
-		GameObject garlandGO = new GameObject("Garland");
+		GameObject garlandGO = new GameObject("GarlandDest");
 		garlandGO.transform.position = headBoneGO.GetComponent<Bone2D>().endPosition;
 
 		return garlandGO;
