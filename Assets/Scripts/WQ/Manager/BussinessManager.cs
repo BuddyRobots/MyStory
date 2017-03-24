@@ -70,6 +70,8 @@ public class BussinessManager : MonoBehaviour
 		case 8:
 			break;
 		case 9:
+			LevelNine._instance.PauseStory();
+
 			break;
 		default:
 			break;
@@ -108,6 +110,8 @@ public class BussinessManager : MonoBehaviour
 		case 8:
 			break;
 		case 9:
+			LevelNine._instance.StartStoryToRecordAudioAndVideo();
+
 			break;
 		default:
 			break;
@@ -142,6 +146,8 @@ public class BussinessManager : MonoBehaviour
 		case 8:
 			break;
 		case 9:
+			LevelNine._instance.ResumeStory();
+
 			break;
 		default:
 			break;
@@ -182,6 +188,8 @@ public class BussinessManager : MonoBehaviour
 		case 8:
 			break;
 		case 9:
+			LevelNine._instance.PlayStoryWithAudioRecording();
+
 			break;
 		default:
 			break;

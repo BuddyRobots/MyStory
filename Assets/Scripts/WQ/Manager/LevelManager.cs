@@ -128,7 +128,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	{
 //		Debug.Log("levelManager-----awake()");
 //		code for test...
-		PlayerPrefs.SetInt ("LevelID",5);
+		PlayerPrefs.SetInt ("LevelID",9);
 		PlayerPrefs.SetInt ("LevelProgress",0);
 
 //		ReadSubtitleText();

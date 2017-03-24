@@ -27,6 +27,12 @@ public class LevelFive : MonoBehaviour
 
 	void Start () 
 	{
+
+
+		EnlargeCameraSize();
+		ShowMouse();
+		ShowBall();
+
 		Init();
 	}
 
@@ -36,9 +42,10 @@ public class LevelFive : MonoBehaviour
 		storyPlay=false;
 		aniDone=false;
 
-		EnlargeCameraSize();
-		ShowMouse();
-		ShowBall();
+		if (mouseAnimator!=null) 
+		{
+			mouseAnimator.speed=1;
+		}
 
 	}
 
