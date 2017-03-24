@@ -72,20 +72,22 @@ public class test_LoadSpriteParts : MonoBehaviour
 		AddCollider(newMouseBoneRootGO);
 
 		// Add to a parent GameObject
-		GameObject newMouseAnimated = new GameObject("Mouse");
-		mouseSpriteMeshRootGO.transform.parent = newMouseAnimated.transform;
-		newMouseBoneRootGO.transform.parent = newMouseAnimated.transform;
-		Rigidbody2D rigidBody = newMouseAnimated.AddComponent<Rigidbody2D>();
+		GameObject newMouseAnimatedGO = new GameObject("Mouse");
+		mouseSpriteMeshRootGO.transform.parent = newMouseAnimatedGO.transform;
+		newMouseBoneRootGO.transform.parent = newMouseAnimatedGO.transform;
+		Rigidbody2D rigidBody = newMouseAnimatedGO.AddComponent<Rigidbody2D>();
 		rigidBody.gravityScale = 0;
+		GameObject garLandGO = GetPositionOfGarland(newMouseBoneRootGO);
+		garLandGO.transform.parent = newMouseAnimatedGO.transform;
 
 		// Add Animator to Mouse
-		Animator animator = newMouseAnimated.AddComponent<Animator>();
+		Animator animator = newMouseAnimatedGO.AddComponent<Animator>();
 		//animator.runtimeAnimatorController = Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
 		animator.runtimeAnimatorController = animationController;
 
 		// Save to Manager
 		Destroy(Manager._instance.mouseGo);
-		Manager._instance.mouseGo = newMouseAnimated;
+		Manager._instance.mouseGo = newMouseAnimatedGO;
 		GameObject.DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
 
@@ -503,7 +505,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 		GameObject lFootBoneGO = FindBoneGOInChild(boneRootGO, "L foot");
 		GameObject rHandBoneGO = FindBoneGOInChild(boneRootGO, "R hand");
 
-		Vector2 tr = new Vector2(			
+		Vector2 tr = new Vector2(
 			rEarBoneGO.transform.position.y + rEarBoneGO.GetComponent<Bone2D>().length,
 			rHandBoneGO.transform.position.x + rHandBoneGO.GetComponent<Bone2D>().length
 		);
@@ -517,7 +519,16 @@ public class test_LoadSpriteParts : MonoBehaviour
 		boxCollider.offset -= new Vector2(hipBoneGO.transform.position.y, 0.0f);
 		boxCollider.size = tr - bl;
 
-		hipBoneGO.tag="Player";
+		hipBoneGO.tag = "Player";
+	}
 
+	private GameObject GetPositionOfGarland(GameObject boneRootGO)
+	{
+		GameObject headBoneGO = FindBoneGOInChild(boneRootGO, "Head");
+
+		GameObject garlandGO = new GameObject("Garland");
+		garlandGO.transform.position = headBoneGO.GetComponent<Bone2D>().endPosition;
+
+		return garlandGO;
 	}
 }

@@ -7,20 +7,23 @@ namespace Anima2DRuntimeEngine
 {
 	public static class BoneUtils
 	{	
-		public static GameObject CreateFromAnima2DBone2D(GameObject boneRootGO)
+		public static GameObject CreateFromAnima2DBone2D(GameObject oriBoneRootGO)
 		{
-			GameObject newBoneRootGO = new GameObject(boneRootGO.name);
-			newBoneRootGO.transform.position = boneRootGO.transform.position;
-			newBoneRootGO.transform.rotation = boneRootGO.transform.rotation;
+			GameObject newBoneRootGO = new GameObject(oriBoneRootGO.name);
+			newBoneRootGO.transform.position = oriBoneRootGO.transform.position;
+			newBoneRootGO.transform.rotation = oriBoneRootGO.transform.rotation;
 
-			Anima2D.Bone2D boneRoot = boneRootGO.GetComponent<Anima2D.Bone2D>();
+			Anima2D.Bone2D boneRoot = oriBoneRootGO.GetComponent<Anima2D.Bone2D>();
 			if (boneRoot)
 			{				
 				Bone2D newBoneRoot = newBoneRootGO.AddComponent<Bone2D>();
 				InitFromAnima2DBone2D(boneRoot, newBoneRoot);
 
-				PreOrderTraversalCreate(boneRootGO.transform, newBoneRootGO.transform);
+				PreOrderTraversalCreate(oriBoneRootGO.transform, newBoneRootGO.transform);
 			}
+
+			SetChilds(oriBoneRootGO, newBoneRootGO);
+
 			return newBoneRootGO;
 		}
 
@@ -104,5 +107,17 @@ namespace Anima2DRuntimeEngine
 
 			return rootBone;
 		}
-	}
+
+		private static void SetChilds(GameObject oriBoneRootGo, GameObject newBoneRootGo)
+		{
+			Anima2D.Bone2D[] oriBones = oriBoneRootGo.GetComponentsInChildren<Anima2D.Bone2D>();
+			Bone2D[] newBones = newBoneRootGo.GetComponentsInChildren<Bone2D>();
+
+			for (var i = 0; i < oriBones.Length; i++)
+			{
+				if (!oriBones[i].child)
+					newBones[i].child = null;				
+			}
+		}
+	}		
 }
