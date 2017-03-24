@@ -20,6 +20,8 @@ public class Manager :MonoBehaviour
 
 	public bool bgMusicFadeOut;
 	public bool bgMusicFadeIn;
+	[HideInInspector]
+	public bool recordBtnHide;
 
 	public Vector3 ballPosForLevelThree;
 	public Vector3 mousePosForLevelThree;
