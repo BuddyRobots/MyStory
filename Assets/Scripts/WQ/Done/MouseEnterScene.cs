@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MouseEnterScene : MonoBehaviour {
+public class MouseEnterScene : MonoBehaviour 
+{
 
 	float speed_run=2f;
 	float speed_walk=1f;

@@ -34,12 +34,5 @@ public class BallMoveWithBg : MonoBehaviour
 		
 	}
 
-//	public void Move()
-//	{
-//		Vector2 movement=new Vector2(Random.Range(1f,2f),Random.Range(2f,5f));
-//		rig2D.velocity=movement*speed;
-//
-//	}
-		
 
 }

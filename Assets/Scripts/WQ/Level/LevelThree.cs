@@ -77,6 +77,7 @@ public class LevelThree : MonoBehaviour
 
 	void Init()
 	{
+
 		pause=false;
 		mouseFall=false;
 		ballFall=false;
@@ -89,16 +90,15 @@ public class LevelThree : MonoBehaviour
 		originMousePos=new Vector3(-4.4f,2.06f,0);
 		originBallPos=new Vector3(-6f,2.2f,0);
 		cam.transform.position=originCamPos;
+		GameObject.Find("Manager").transform.position=originBallPos;
+
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
-			Debug.Log("正常状态，要出现小手");
 			showFingerOnLion=false;
 		}
 		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
 		{
-			Debug.Log("非正常状态，不要出现小手");
-
 			showFingerOnLion=true;
 		}
 
@@ -118,6 +118,7 @@ public class LevelThree : MonoBehaviour
 			ballAnimator.speed=1;
 		}
 			
+
 
 	}
 
@@ -153,7 +154,7 @@ public class LevelThree : MonoBehaviour
 
 			if (canShowFinger) 
 			{
-				Debug.Log(" 摄像机到达位置了---Manager.storyStatus-------"+Manager.storyStatus);
+				
 				if (Manager.storyStatus==StoryStatus.Normal) 
 				{
 					//出现小手
@@ -166,7 +167,6 @@ public class LevelThree : MonoBehaviour
 
 					if (showFingerOnLion)
 					{
-
 						//点击狮子
 						if (!lionClick) 
 						{
@@ -176,14 +176,11 @@ public class LevelThree : MonoBehaviour
 				}
 				else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
 				{
-					Debug.Log("Manager.storyStatus--"+Manager.storyStatus);
-//					lionClick=true;
+					
 					//播放动画
 					if (!shakeTofall) 
 					{
-						Debug.Log("开始播放动画");
 						PlayAnimation();
-
 						shakeTofall=true;
 					}
 				}
@@ -244,7 +241,8 @@ public class LevelThree : MonoBehaviour
 
 			}
 
-			if (ball.transform.position.y<=-9f) {
+			if (ball.transform.position.y<=-9f) 
+			{
 				ballFall=false;
 				mouseFall=false;
 
@@ -252,6 +250,8 @@ public class LevelThree : MonoBehaviour
 				mouseAnimator.CrossFade("idle",0);
 				lionAnimator.CrossFade("LionIdle",0);
 				ballAnimator.CrossFade("BallIdle",0);
+
+				ball.SetActive(false);
 			}
 
 
@@ -334,6 +334,8 @@ public class LevelThree : MonoBehaviour
 		ball.transform.parent.position=originBallPos;
 		mouse.transform.position=originMousePos;
 
+		ball.SetActive(true);
+
 	}
 
 
@@ -342,7 +344,6 @@ public class LevelThree : MonoBehaviour
 
 	public void PauseStory()
 	{
-		Debug.Log("---levelOne--PauseStory()");
 		//如果在播放动画，就暂停动画；
 		//如果在播放旁白，就暂停旁白；
 		//如果有字幕，且在切换字幕，就暂停切换
@@ -398,71 +399,63 @@ public class LevelThree : MonoBehaviour
 		if (mouse ==null) 
 		{
 			mouse=Manager._instance.mouseGo;
-			if (mouse==null) 
-			{
-				Debug.Log("老鼠为空");
-			}
-			else
-			{
-				mouse.transform.position=originMousePos;
+		}
 
-				mouse.name="Mouse";
-				if (mouse.GetComponent<Animator>()==null)
-				{
-					Debug.Log("没有动画控制器");
-					mouse.AddComponent<Animator>();
-//					mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
-
-				}
-				else
-				{
-
-				}
-				mouseAnimator=mouse.GetComponent<Animator>();
-
-				mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
-
-				if (mouse.GetComponent<Rigidbody2D>()!=null)
-				{
-					mouse.GetComponent<Rigidbody2D>().simulated=false;
-				}
-				if (mouse.GetComponent<MouseFall>()==null) 
-				{
-					mouse.AddComponent<MouseFall>();
-				}
-			}
-
-
-	
+		mouse.transform.position=originMousePos;
+		mouse.transform.rotation=Quaternion.Euler(0, 0, 0);
+		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
+		if (mouse.GetComponent<Rigidbody2D>()!=null)
+		{
+			mouse.GetComponent<Rigidbody2D>().simulated=false;
+		}
+		if (mouse.GetComponent<MouseFall>()==null) 
+		{
+			mouse.AddComponent<MouseFall>();
 		}
 
 	}
 
 
-
-
 	private void ShowBall()
 	{
-
 		if (ball==null) 
 		{
-			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.name="Ball";
-			ball.transform.parent=GameObject.Find("Manager").transform;
-			ball.transform.position=Vector3.zero;
-			if (ball.GetComponent<Rigidbody2D>()!=null) 
-			{
-				ball.GetComponent<Rigidbody2D>().simulated=false;
-			}
-			ballAnimator=ball.GetComponent<Animator>();
-			ballAnimator.enabled=true;
-			if (ball.GetComponent<BallFall>()==null) 
-			{
-				ball.AddComponent<BallFall>();
-			}
+			ball=Manager._instance.ball;
+		}
+		ball.transform.parent=GameObject.Find("Manager").transform;
+		ball.transform.position=Vector3.zero;
+		ball.SetActive(true);
+		ballAnimator=ball.GetComponent<Animator>();
+		ballAnimator.enabled=true;
 
+		if (ball.GetComponent<Rigidbody2D>()!=null) 
+		{
+			ball.GetComponent<Rigidbody2D>().simulated=false;
+		}
+		if (ball.GetComponent<BallFall>()==null) 
+		{
+			ball.AddComponent<BallFall>();
+		}
+	}
+
+
+
+	void OnDisable()
+	{
+
+		Manager._instance.Reset();
+
+		if (mouse.GetComponent<MouseFall>()) 
+		{
+			Destroy(mouse.GetComponent<MouseFall>());
 		}
 
+
+		if (ball.GetComponent<BallFall>())
+		{
+			Destroy(ball.GetComponent<BallFall>());
+		}
 
 	}
 

@@ -516,5 +516,8 @@ public class test_LoadSpriteParts : MonoBehaviour
 		boxCollider.offset = (tr + bl)/2;
 		boxCollider.offset -= new Vector2(hipBoneGO.transform.position.y, 0.0f);
 		boxCollider.size = tr - bl;
+
+		hipBoneGO.tag="Player";
+
 	}
 }

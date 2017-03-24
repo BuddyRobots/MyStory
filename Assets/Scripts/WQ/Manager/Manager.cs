@@ -20,6 +20,8 @@ public class Manager :MonoBehaviour
 
 	public bool bgMusicFadeOut;
 	public bool bgMusicFadeIn;
+	[HideInInspector]
+	public bool recordBtnHide;
 
 	public Vector3 ballPosForLevelThree;
 	public Vector3 mousePosForLevelThree;
@@ -57,7 +59,7 @@ public class Manager :MonoBehaviour
 
 	public bool levelOneOver;
 	/// <summary>
-	/// 老鼠在屏幕外的位置
+	/// position outside screen
 	/// </summary>
 	public Vector3 outsideScreenPos=new Vector3(0,20f,0);
 
@@ -66,15 +68,11 @@ public class Manager :MonoBehaviour
 		if (_instance!=null) 
 		{
 			Destroy (gameObject);
-
 		}
 		else
 		{
 		    _instance=this;
 			GameObject.DontDestroyOnLoad(gameObject);
-
-
-
 		}
 
 	}
@@ -88,6 +86,30 @@ public class Manager :MonoBehaviour
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
+
+		if (mouseGo==null) 
+		{
+			mouseGo=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
+			mouseGo.name="Mouse";
+			mouseGo.transform.position=Manager._instance.outsideScreenPos;
+		}
+		if (ball==null) 
+		{
+			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
+			ball.name="Ball";
+			ball.transform.position=outsideScreenPos;//球在屏幕外面
+//			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
+		}
+		if (garland==null)
+		{
+			garland=Instantiate(Resources.Load("Prefab/Garland")) as GameObject;
+			garland.name="Garland";
+			garland.transform.position=outsideScreenPos;
+		}
+
+		DontDestroyOnLoad(mouseGo);
+		DontDestroyOnLoad(ball);
+		DontDestroyOnLoad(garland);
 	
 	}
 		
@@ -98,7 +120,6 @@ public class Manager :MonoBehaviour
 		#region 控制背景音乐的开和关（点击音乐按钮时）
 		if (Manager.musicOn)
 		{
-
 			if (!bgAudio.isPlaying) 
 			{
 				bgAudio.Play ();
@@ -147,23 +168,46 @@ public class Manager :MonoBehaviour
 			
 		}
 		#endregion
-	
 	}
-
-
-
+		
 	public void ChangeSceneToSetBgAudioVolumeNormal()
 	{
-
 		bgAudio.volume=1;
 	}
 
 	public void RecordingToSetBgAudioVolumeZero()
 	{
-
 		bgAudio.volume=0;
-		Debug.Log("背景音乐音量"+bgAudio.volume);
 	}
 
+
+
+	/// <summary>
+	/// 每一关结束时重新初始化对象信息
+	/// </summary>
+	public void Reset()
+	{
+		mouseGo.transform.position=outsideScreenPos;
+
+
+		ball.transform.position=outsideScreenPos;
+		if (GetComponent<Rigidbody2D>()==null) 
+		{
+			ball.AddComponent<Rigidbody2D>();
+		}
+
+		ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
+
+
+
+//		if (ball.GetComponent<BallMoveWithBg>()!=null) 
+//		{
+//			Destroy(ball.GetComponent<BallMoveWithBg>());
+//		}
+
+
+		garland.transform.position=outsideScreenPos;
+
+	}
 
 }

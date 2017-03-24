@@ -36,8 +36,8 @@ public class LevelOne : MonoBehaviour
 
 	[HideInInspector]
 	public bool secondSceneShow=false;
-	[HideInInspector]
-	public bool recordBtnHide;
+//	[HideInInspector]
+//	public bool recordBtnHide;
 
 
 	void Awake()
@@ -48,24 +48,16 @@ public class LevelOne : MonoBehaviour
 	void Start () 
 	{
 		grassAni=grassL.GetComponent<Animation>();
-
-
 		Init();
+		Manager._instance.mouseGo.GetComponent<Animator>().CrossFade("idle",0);
 	}
+
 	void Init()
 	{
-		
 		showFingerOnGrass=false;
-
+		Manager._instance.recordBtnHide=false;
+		Manager._instance.levelOneOver=false;
 	}
-
-	void ShowFinger(Vector3 pos)
-	{
-		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
-
-	}
-		
-
 
 
 	void Update () 
@@ -74,29 +66,19 @@ public class LevelOne : MonoBehaviour
 		//屏幕亮完以后故事才开始
 		if (storyBegin) 
 		{
-			//如果没有出现小手提示点击草，就出现小手提示点击草
+			//出现小手提示点击草,只出现一次
 			if (!showFingerOnGrass) 
 			{
-				Debug.Log("小手出现提示点击小草");
 				ShowFinger(grassL.transform.localPosition);
-
 				showFingerOnGrass=true;
 			}
-
-
-
-
-			//出现小手提示点击草以后，点击草
+			//点击草
 			if (showFingerOnGrass) 
 			{
-				//如果没有点击草
 				if (!grassClicked) 
 				{
 					ClickGrass();
-
 				}
-
-				
 			}
 
 			//如果点击了草，并且草播放完了动画
@@ -114,7 +96,8 @@ public class LevelOne : MonoBehaviour
 			//如果进入了第二部分
 			if (secondSceneShow) 
 			{
-				mouse.GetComponent<BoxCollider2D>().enabled=true;
+//				mouse.GetComponent<BoxCollider2D>().enabled=true;
+				mouse.GetComponentInChildren<BoxCollider2D>().enabled=true;
 //				Debug.Log("进入第二部分---出现小球");
 				//进入第二部分，出现小手提示点击老鼠，出现球，给老鼠添加脚本
 				if (!showFingerOnMouse)
@@ -135,7 +118,7 @@ public class LevelOne : MonoBehaviour
 
 			}
 
-			if (recordBtnHide) 
+			if (Manager._instance.recordBtnHide) 
 			{
 				FormalScene._instance.recordBtn.gameObject.SetActive(false);
 
@@ -145,8 +128,11 @@ public class LevelOne : MonoBehaviour
 
 	}
 
+	void ShowFinger(Vector3 pos)
+	{
+		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置  ***********
 
-
+	}
 
 	void ClickGrass()
 	{
@@ -157,7 +143,9 @@ public class LevelOne : MonoBehaviour
 				Debug.Log("当前点击是在UI 上");
 				return ;
 			}
-			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
+//			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero); 
+			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), grassL.transform.position); 
+
 			if (hit.collider!=null) 
 			{
 				if (hit.collider.tag=="ClickObj") 
@@ -169,20 +157,13 @@ public class LevelOne : MonoBehaviour
 					{
 						
 						Destroy(BussinessManager._instance.finger);
-
-						Debug.Log("销毁了小手");
-
-
 						PlayAnimation();
-
 					}
 
 					grassL.GetComponent<BoxCollider2D>().enabled=false;
 					grassR.GetComponent<BoxCollider2D>().enabled=false;
 
 					grassClicked=true;
-
-
 				}
 			}
 		}
@@ -202,58 +183,44 @@ public class LevelOne : MonoBehaviour
 
 	private void ShowMouse()
 	{
-		if (mouse ==null) 
-		{
-			mouse=Manager._instance.mouseGo;
-			if (mouse==null) 
-			{
-				Debug.Log("老鼠为空");
-			}
-//			mouse.transform.parent=transform;//这里不能设置父对象，设置了以后老鼠就从DontdestroyOnLoad里出去了
-			mouse.transform.localPosition=originMousePos;
-			mouse.name="Mouse";
-			mouseAnimator=mouse.GetComponent<Animator>();
-		}
-		else
-		{
-			mouse.transform.localPosition=originMousePos;
-			mouse.name="Mouse";
-			mouseAnimator=mouse.GetComponent<Animator>();
-			mouseAnimator.CrossFade("idle",0);
+		mouse=Manager._instance.mouseGo;
+		mouse.transform.position=originMousePos;
+		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.CrossFade("idle",0);
 
-		}
+		mouse.GetComponentInChildren<BoxCollider2D>().enabled=false;
+		mouse.GetComponent<Rigidbody2D>().simulated=true;
 
-		mouse.GetComponent<BoxCollider2D>().enabled=false;
-	    
 
 	}
-
-
-
 
 	private void ShowBall()
 	{
-
-		if (ball==null) 
+		ball=Manager._instance.ball;
+		ball.transform.position=originBallPos;
+		if (ball.GetComponent<Rigidbody2D>()==null)
 		{
-			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
-			ball.transform.localPosition=originBallPos;
-			ball.name="Ball";
-		
+			ball.AddComponent<Rigidbody2D>();
 		}
+		ball.GetComponent<Rigidbody2D>().simulated=true;
+		ball.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
+		ball.GetComponent<Rigidbody2D>().angularDrag=2f;
 
+		if (ball.GetComponent<BallMoveWithBg>()==null) 
+		{
+			ball.AddComponent<BallMoveWithBg>();
+		}
 	}
+
 	/// <summary>
 	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
 	/// </summary>
 	public void PlayStoryWithAudioRecording()
 	{
-		
 		//重新开始故事----只不过录音被替换
 		PlayAnimation();
 		ShowMouse();
 		ShowBall();
-
 	}
 
 
@@ -275,86 +242,63 @@ public class LevelOne : MonoBehaviour
 		grassAni[grassAniName].speed=1;
 
 	}
-
-
-
-
+		
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		//如果有小手提示点击，就销毁小手，点击失效 
-
 		if (BussinessManager._instance.finger!=null) 
 		{
 			Destroy(BussinessManager._instance.finger);
-		
 		}
 		PlayAnimation();
 		ShowMouse();
 		ShowBall();
-
-	}
-
-
-
-	/// <summary>
-	/// 暂停旁白播放
-	/// </summary>
-	void PauseNarratage()
-	{
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().Pause();
-	}
-	/// <summary>
-	/// 恢复旁白播放
-	/// </summary>
-	void ResumeNarratage()
-	{
-		GameObject.Find("Main Camera").GetComponent<AudioSource>().UnPause();
-
 	}
 		
 	public void PauseStory()
 	{
-		Debug.Log("---levelOne--PauseStory()");
-		//如果在播放动画，就暂停动画；
-		//如果在播放旁白，就暂停旁白；
-		//如果有字幕，且在切换字幕，就暂停切换
 		PauseAnimation();
-//		PauseNarratage();
 		BussinessManager._instance.PauseAudioAside();
-//		SubtitleCtrl._instance.pauseChangeSubtitle=true;
 		SubtitleShow._instance.pause=true;
 		StopAllCoroutines();
 	}
-
-
+		
 	public void ResumeStory()
 	{
-		BussinessManager._instance.ResumeAudioAside();
-		ResumeNarratage();
 		ResumeAnimation();
-//		SubtitleCtrl._instance.pauseChangeSubtitle=false;
+		BussinessManager._instance.ResumeAudioAside();
 		SubtitleShow._instance.pause=false;
 	}
 
-
-
 	void OnDisable()
 	{
-		if (ball!=null) 
+		Manager._instance.Reset();
+		if (mouse) 
+		{
+			if (mouse.GetComponent<MousePlayBall>()!=null) 
+			{
+				Destroy(mouse.GetComponent<MousePlayBall>());
+			}
+		}
+
+
+		if (ball) 
 		{
 			if (ball.GetComponent<BallMoveWithBg>()!=null) 
 			{
 				Destroy(ball.GetComponent<BallMoveWithBg>());
 			}
+			ball.GetComponent<Rigidbody2D>().velocity=Vector2.zero;
+			ball.transform.rotation=Quaternion.Euler(0, 0, 0);
+
+
+			if (ball.GetComponent<Rigidbody2D>())
+			{
+				Destroy(ball.GetComponent<Rigidbody2D>());
+			}
 		}
 
+
 	}
-
-
-	void OnDestroy()
-	{
-//		mouse.transform.position=Manager._instance.outsideScreenPos;
-	}
-
 
 }

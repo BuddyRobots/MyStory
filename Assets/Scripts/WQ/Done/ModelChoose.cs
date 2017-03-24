@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class ModelChoose : MonoBehaviour {
+public class ModelChoose : MonoBehaviour 
+{
 	 
 	private Button mouseBtn;
 	private Button ballBtn;
@@ -14,8 +15,6 @@ public class ModelChoose : MonoBehaviour {
 
 	private GameObject manager;
 
-	[HideInInspector]
-	public GameObject mouse;
 
 	void Start () 
 	{
@@ -32,28 +31,12 @@ public class ModelChoose : MonoBehaviour {
 		EventTriggerListener.Get(garlandBtn.gameObject).onClick=OnModelChooseBtnClick;
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
-
-
-
-		if (!Manager._instance.mouseGo) 
-		{
-			Manager._instance.mouseGo=Instantiate(Resources.Load("Prefab/Mouse")) as GameObject;
-			Manager._instance.mouseGo.name="Mouse";
-			Manager._instance.mouseGo.transform.position=Manager._instance.outsideScreenPos;
-		}
-		Destroy(mouse);
-//		mouse=Manager._instance.mouseGo;
-
-		DontDestroyOnLoad(Manager._instance.mouseGo);
 	}
 	
 
 
 	void OnModelChooseBtnClick(GameObject btn)
 	{
-		//根据btn的名字来决定下一个场景中需要显示哪一个模型的展示图片    
-		/// to do ...
-
 		switch (btn.name) 
 		{
 		case "Mouse":
@@ -65,12 +48,10 @@ public class ModelChoose : MonoBehaviour {
 			break;
 		case "Garland":
 			Manager.modelType=ModelType.Garland;
-
 			break;
 		default:
 			break;
 		}
-
 
 		SceneManager.LoadSceneAsync("2_DrawModelShow");
 		GameObject.DontDestroyOnLoad(manager);
