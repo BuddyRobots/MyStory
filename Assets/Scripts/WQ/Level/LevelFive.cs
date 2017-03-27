@@ -129,6 +129,7 @@ public class LevelFive : MonoBehaviour
 		}
 		ball.transform.parent=GameObject.Find("Mouse/Hip/Torso/L arm/L hand").transform;
 		ball.transform.localPosition=originBallPos;
+		ball.SetActive(true);
 
 	}
 
@@ -136,17 +137,21 @@ public class LevelFive : MonoBehaviour
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		Init();
+		mouse.transform.position=originMousePos.position;
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("RunAway",0);
+
 	}
 
 	public void PlayStoryWithAudioRecording()
 	{
-		MouseRunAway._instance.ResetSpeed();
-		MouseRunAway._instance.move=true;
+		Init();
 		mouse.transform.position=originMousePos.position;
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("RunAway",0);
+
+		MouseRunAway._instance.ResetSpeed();
+		MouseRunAway._instance.move=true;
 
 
 	}

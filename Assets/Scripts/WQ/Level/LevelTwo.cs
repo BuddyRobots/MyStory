@@ -41,6 +41,7 @@ public class LevelTwo : MonoBehaviour
 	bool changeScene;
 
 	bool pause;
+	bool flag;
 
 	int destFlag;//值为1，2，3，1代表到达目标点1，2代表叨叨目标点2；。。。
 
@@ -91,6 +92,7 @@ public class LevelTwo : MonoBehaviour
 		changeScene=false;
 		audioAsidePlayed=false;
 		startToWalk=false;
+		flag=false;
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
@@ -112,7 +114,7 @@ public class LevelTwo : MonoBehaviour
 			mouseAnimator.speed=1;
 		} 
 	}
-	bool flag;
+
 
 	void Update () 
 	{

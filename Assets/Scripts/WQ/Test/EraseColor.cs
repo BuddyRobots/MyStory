@@ -48,7 +48,7 @@ public class EraseColor : MonoBehaviour
 		mouseTexWidth=mouseTex2D.width;
 		mouseTexHeight=mouseTex2D.height;
 
-		brushSize =20;
+		brushSize =50;
 
 		colors = netTex2D.GetPixels();
 	}

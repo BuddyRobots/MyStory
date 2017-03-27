@@ -47,7 +47,7 @@ public class MouseRunAway : MonoBehaviour
 
 	public void RunFaster()
 	{
-		speed=1.7f;
+		speed=2f;
 
 	}
 

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pendulum2D : MonoBehaviour {
+public class Pendulum2D : MonoBehaviour 
+{
 	public Transform center;
 	private float radius;
 	[Range(-90,90)]
@@ -10,13 +11,13 @@ public class Pendulum2D : MonoBehaviour {
 	//-----------------------------------------
 	private float expectantAngle; //预期的角度,初始为initialAngle,但是会随着摆动一圈就会减少一点,必须大于0
 	[Header("每圈减少的度数,大于0减少,小于0增加")]
-	public float reducedAngle = 10; //每圈减少的度数,大于0减少,小于0增加
+	public float reducedAngle = 5f; //每圈减少的度数,大于0减少,小于0增加
 	private float currentAngle; //当前角度,用于摆放
 	private List<float> recordPoints; //在上的部分,用插值,在下的时候就按点返回
 	[Range(0,1),Header("速度,值在0-1,用于插值算法,越小变化越慢")]
-	public float speed = 0.1f; //速度,值在0-1,用于插值算法,越小变化越慢
+	public float speed = 0.5f; //速度,值在0-1,用于插值算法,越小变化越慢
 	[Header("点击变化的角度")]
-	public float strength = 20;
+	public float strength = 30;
 
 	Vector3 centerPos=new Vector3(1.53f,2.73f,0);
 
@@ -35,54 +36,74 @@ public class Pendulum2D : MonoBehaviour {
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			//左上点右,右上点左;左下点左,右下点右;都是增加expectantAngle
-			//左上点左,右上点右,左下点右,右下点左;都是减少expectantAngle
-			bool isLeft = IsLeft();
-			bool inLeft = InLeft(temp);
-			if (isLeft && forward && !inLeft || !isLeft && forward && inLeft || isLeft && !forward && inLeft || !isLeft && !forward && !inLeft)
+
+
+			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			if (col.Length>0) 
 			{
-				//此时增加expectantAngle
-				float initialAngle = Mathf.Clamp(Mathf.Abs(currentAngle) + strength, 0, 90);
-				expectantAngle = isLeft ? -initialAngle : initialAngle; //如果是左边为负,右边为正
-				Caculate(expectantAngle, speed, recordPoints);
-				//定位index
-				for (int i = 1; i < recordPoints.Count; i++)
+				foreach (Collider2D c in col) 
 				{
-					if (Mathf.Abs(currentAngle) < Mathf.Abs(recordPoints[i]) && Mathf.Abs(currentAngle) >= Mathf.Abs(recordPoints[i - 1]))
+					if (c.tag=="Player") //只有点击在老鼠身上才有效
 					{
-						index = i + (forward ? 1 : -1);  // 如果是向上,向上一步;向下,向下一步
-						break;
-					}
-				}
-			}
-			else
-			{
-				//此时减少expectantAngle
-				float initialAngle = Mathf.Abs(expectantAngle) - strength;
-				bool isMinus = expectantAngle * -1 <= 0; //算出之前的expectantAngle是否为负数
-				if (initialAngle < 0)
-				{
-					forward = !forward;
-					expectantAngle = !isMinus ? -(Mathf.Abs(initialAngle) + strength) : Mathf.Abs(initialAngle) + strength;
-					Caculate(expectantAngle, speed, recordPoints);
-					//定位index
-					for (int i = 1; i < recordPoints.Count; i++)
-					{
-						if (Mathf.Abs(currentAngle) < Mathf.Abs(recordPoints[i]) && Mathf.Abs(currentAngle) >= Mathf.Abs(recordPoints[i - 1]))
+
+						Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+						//左上点右,右上点左;左下点左,右下点右;都是增加expectantAngle
+						//左上点左,右上点右,左下点右,右下点左;都是减少expectantAngle
+						bool isLeft = IsLeft();
+						bool inLeft = InLeft(temp);
+						if (isLeft && forward && !inLeft || !isLeft && forward && inLeft || isLeft && !forward && inLeft || !isLeft && !forward && !inLeft)
 						{
-							index = i + (forward ? 1 : -1);  // 如果是向上,向上一步;向下,向下一步
-							break;
+							//此时增加expectantAngle
+							float initialAngle = Mathf.Clamp(Mathf.Abs(currentAngle) + strength, 0, 90);
+							expectantAngle = isLeft ? -initialAngle : initialAngle; //如果是左边为负,右边为正
+							Caculate(expectantAngle, speed, recordPoints);
+							//定位index
+							for (int i = 1; i < recordPoints.Count; i++)
+							{
+								if (Mathf.Abs(currentAngle) < Mathf.Abs(recordPoints[i]) && Mathf.Abs(currentAngle) >= Mathf.Abs(recordPoints[i - 1]))
+								{
+									index = i + (forward ? 1 : -1);  // 如果是向上,向上一步;向下,向下一步
+									break;
+								}
+							}
 						}
+						else
+						{
+							//此时减少expectantAngle
+							float initialAngle = Mathf.Abs(expectantAngle) - strength;
+							bool isMinus = expectantAngle * -1 <= 0; //算出之前的expectantAngle是否为负数
+							if (initialAngle < 0)
+							{
+								forward = !forward;
+								expectantAngle = !isMinus ? -(Mathf.Abs(initialAngle) + strength) : Mathf.Abs(initialAngle) + strength;
+								Caculate(expectantAngle, speed, recordPoints);
+								//定位index
+								for (int i = 1; i < recordPoints.Count; i++)
+								{
+									if (Mathf.Abs(currentAngle) < Mathf.Abs(recordPoints[i]) && Mathf.Abs(currentAngle) >= Mathf.Abs(recordPoints[i - 1]))
+									{
+										index = i + (forward ? 1 : -1);  // 如果是向上,向上一步;向下,向下一步
+										break;
+									}
+								}
+							}
+							else
+							{
+								expectantAngle = currentAngle;
+								Caculate(expectantAngle, speed, recordPoints);  //从当前角度算起减缓趋势
+								index = recordPoints.Count - 1;
+							}
+						}
+
+
 					}
 				}
-				else
-				{
-					expectantAngle = currentAngle;
-					Caculate(expectantAngle, speed, recordPoints);  //从当前角度算起减缓趋势
-					index = recordPoints.Count - 1;
-				}
 			}
+
+
+
+
+		
 		}
 	}
 	int index = 0; //用于记录recordPoints的点

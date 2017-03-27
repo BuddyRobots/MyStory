@@ -7,14 +7,14 @@ public class LevelNine : MonoBehaviour
 {
 
 	public static LevelNine _instance;
-	public Transform originMousePos;
-	public Transform originGarlandPos;
-	public Transform originHandPos;
+	public Transform originMouseTrans;
+	public Transform originGarlandTran;
+	public Transform originHandTran;
 
 	GameObject mouse;
 	GameObject garland;
 
-	GameObject hands;
+	public GameObject hand;
 
     Animator mouseAnimator;
 
@@ -23,15 +23,19 @@ public class LevelNine : MonoBehaviour
 	bool move;
 	bool aniPlayed;
 	bool audioAsidePlayed;
-
+	bool pause;
+	bool isOver;
 
 	int garlandFrontLayer;//花环在老鼠头上时的层数
 	int garlandBackLayer;//花环在后面时的层数
 	int garlandInveisibleLayer;//花环隐藏时的层数
 
-	Vector3 handDestPos;
-	Vector3 garlandDesPos;
-	Vector3 offset;
+	float moveSpeed;//这个速度应该是 offset/老鼠动画的时间
+
+	Vector3 originHandPos;
+	Vector3 destHandPos;
+	Vector3 desGarlandPos;
+	Vector3 moveOffset;
 
 
 	void Awake()
@@ -47,9 +51,11 @@ public class LevelNine : MonoBehaviour
 		garlandFrontLayer=40;
 		garlandBackLayer=5;	
 		garlandInveisibleLayer=0;
+		originHandPos=originHandTran.position;
 
 		ShowMouse();
 		ShowGarland();
+
 
 		Init();
 	}
@@ -62,32 +68,37 @@ public class LevelNine : MonoBehaviour
 		move=false;
 		aniPlayed=false;
 		audioAsidePlayed=false;
-
-		//花环的层要还原
-		SetGarlandLayer(garlandInveisibleLayer);
+		pause=false;
 
 
 		//手的位置还原  to do.....
-
+//		hand.transform.position=originHandPos;
 
 
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
 			showFingerOnMouse=false;
+			isOver=true;
+
 		}
 		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
 		{
 			showFingerOnMouse=true;
+			isOver=false;
+
 		}
 
+
+		//这里一定要把动画的速度还原为1，不然动画会卡住不动
 		if (mouseAnimator!=null) 
 		{
 			mouseAnimator.speed=1;
 		}
 
 	}
-	
+
+
 
 	void Update () 
 	{
@@ -133,6 +144,7 @@ public class LevelNine : MonoBehaviour
 				{
 					if (!audioAsidePlayed) 
 					{
+						isOver=false;
 						//播放旁白 ，显示字幕
 						BussinessManager._instance.PlayAudioAside();
 						audioAsidePlayed=true;
@@ -143,7 +155,8 @@ public class LevelNine : MonoBehaviour
 					//播放动画
 					if (!aniPlayed) 
 					{
-						Debug.Log("开始播放动画");
+						//改变手的图片并显示花环
+						ChangeHandSpriteAndShowGarland();
 						PlayAnimation();
 
 						aniPlayed=true;
@@ -154,7 +167,7 @@ public class LevelNine : MonoBehaviour
 
 			}
 
-
+			MoveTo();
 
 			//如果动画播放完了，字幕也显示完了，就跳转界面   to do....
 
@@ -172,29 +185,43 @@ public class LevelNine : MonoBehaviour
 
 	void MoveTo()
 	{
-		//手变换图片，并开始移动
 
-
-		//花环改变层，并移动
-
-
-
-		//如果花环移动到了目的地，就改变花环的层数
-
-
+		if (!pause) 
+		{
+			if(!isOver)
+			{
+				//手开始移动
+				//花环并移动
+				//如果花环移动到了目的地，就改变花环的层数
+				hand.transform.position+= moveOffset.normalized * moveSpeed * Time.deltaTime;
+				garland.transform.position+=moveOffset.normalized * moveSpeed * Time.deltaTime;
+				//				if (hand.transform.position.x>=destHandPos.x)
+				Debug.Log("-------"+Vector3.Distance(desGarlandPos, garland.transform.position));
+				if(Vector3.Distance(desGarlandPos, garland.transform.position)<=0.1f)
+				{
+					isOver = true;
+					hand.transform.position = destHandPos;
+					garland.transform.position = desGarlandPos;
+					SetGarlandLayer(garlandFrontLayer);
+				}
+			
+			}
+		}
 	}
 
-
-
-
+	void ChangeHandSpriteAndShowGarland()
+	{
+		hand.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Hand/hand_1");
+		SetGarlandLayer(garlandBackLayer);
+	}
+		
 	void PlayAnimation()
 	{
 		//老鼠播放动画，
 		mouseAnimator.CrossFade("Hooray",0);
-
-
-
 	}
+
+
 	/// <summary>
 	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
 	/// </summary>
@@ -218,14 +245,24 @@ public class LevelNine : MonoBehaviour
 		Reset();
 
 	}
+
 	void Reset()
 	{
+		//有Animaator组件的话，一定要把Animator.speed置为1，不然动画会卡住不动，Init中已经设置过了，所以这里不用再重复
 		Init();
 
+		//老鼠动画还原，位置还原
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("Hooray",0);
+		mouse.transform.position=originMouseTrans.position;
 	
-		mouse.transform.position=originMousePos.position;
+		//手的位置还原，图片还原
+		hand.transform.position=originHandPos;
+		hand.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Hand/hand_1");
+
+		//花环的位置和层还原
+		garland.transform.position=originGarlandTran.position;
+		SetGarlandLayer(garlandBackLayer);
 
 	}
 
@@ -255,11 +292,13 @@ public class LevelNine : MonoBehaviour
 	void PauseAnimation()
 	{
 		mouseAnimator.speed=0;
+		pause=true;
 	
 	}
 	void ResumeAnimation()
 	{
 		mouseAnimator.speed=1;
+		pause=false;
 
 	}
 
@@ -300,7 +339,7 @@ public class LevelNine : MonoBehaviour
 			mouse=Manager._instance.mouseGo;
 		}
 
-		mouse.transform.position=originMousePos.position;
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
 
 
@@ -312,13 +351,22 @@ public class LevelNine : MonoBehaviour
 		{
 			garland=Manager._instance.garland;
 		}
-		garland.transform.position=originGarlandPos.position;
+		garland.transform.position=originGarlandTran.position;
+		SetGarlandLayer(garlandInveisibleLayer);
 
-		garlandDesPos=GameObject.Find("Mouse/GarlandDest").transform.position;
+		desGarlandPos=GameObject.Find("Mouse/GarlandDest").transform.position;
+		Debug.Log("garland.transform.position--"+garland.transform.position);
+		Debug.Log("desGarlandPos----"+desGarlandPos);
 
-		offset=garlandDesPos-garland.transform.position;
+		moveOffset=desGarlandPos-garland.transform.position;
 
-		handDestPos=originHandPos.position+offset;
+		destHandPos=originHandTran.position+moveOffset;
+
+		//速度=offset/老鼠动画的时间 
+		moveSpeed=(Vector3.Distance(destHandPos, originHandPos))/6.6f;
+
+
+
 
 	}
 
