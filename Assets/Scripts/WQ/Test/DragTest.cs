@@ -17,8 +17,8 @@ public class DragTest : MonoBehaviour {
 
 	void OnDrag(Vector2 delta)
 	{
-		Debug .Log ("//////");
-		Ray ray = UICamera.current.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+		
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		Plane plane = new Plane(transform.forward, transform.position);
 		float dist;
 		if (plane.Raycast(ray,out dist))
