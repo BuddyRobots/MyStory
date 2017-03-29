@@ -4,19 +4,53 @@ using UnityEngine;
 
 public class MouseDrag : MonoBehaviour 
 {
+	public static MouseDrag _instance;
 
 	private Vector3 lastMousePosition = Vector3.zero;
-	private bool isMouseDown = false;  
+	public  bool isMouseDown = false;  
 	Animator mouseAnimator;
 
-	bool isOnNet;
+	public bool isOnNet;
 	bool closingFloor;
 	bool changeAni;
+	bool mouseClicked;
+	float y_MouseLowestLimit;
+
+	public bool mouseDraging;
+
+
+	void Awake()
+	{
+
+		_instance=this;
+	}
 
 	void Start()
 	{
 		mouseAnimator=GetComponent<Animator>();
 		isOnNet=false;
+		mouseClicked=false;
+
+		y_MouseLowestLimit=-4.4f;
+	}
+
+	void OnMouseDown() {
+		mouseDraging=true;
+		Debug.Log("drag begin");
+
+	}
+
+	void OnMouseDrag()
+	{
+		mouseDraging=true;
+		Debug.Log("drag ing");
+
+	}
+	void OnMouseUp()
+	{
+		mouseDraging=false;
+		Debug.Log("drag end");
+
 	}
 
 	void Update () 
@@ -31,6 +65,8 @@ public class MouseDrag : MonoBehaviour
 					if (c.tag=="Player") 
 					{
 						isMouseDown = true; 
+						mouseClicked=true;
+						mouseDraging=true;
 					}
 				}
 			}
@@ -44,14 +80,10 @@ public class MouseDrag : MonoBehaviour
 			gameObject.GetComponent<Rigidbody2D>().gravityScale=1;
 
 
-
-
-
 		}  
 		if (isMouseDown)  
 		{  
 			
-
 			if (lastMousePosition != Vector3.zero)  
 			{  
 				Vector3 offset = Camera.main.ScreenToWorldPoint(Input.mousePosition) - lastMousePosition;  
@@ -76,71 +108,36 @@ public class MouseDrag : MonoBehaviour
 		} 
 		else
 		{
-			if (transform.position.y<=-4.4f) 
+			if (mouseClicked) 
 			{
-				closingFloor=true;
-				Debug.Log("快到地面了");
 
-			}
-
-
-			if (closingFloor) 
-			{
-				if (!changeAni) 
+				if (transform.position.y<=y_MouseLowestLimit) 
 				{
-					mouseAnimator.CrossFade("8_FallClosingFloor",0);
-
-					changeAni=true;
+					closingFloor=true;
 				}
-			}
-			else
-			{
-				mouseAnimator.CrossFade("8_FallOnAir",0);
 
+
+				if (closingFloor) 
+				{
+					if (!changeAni) 
+					{
+						mouseAnimator.CrossFade("8_FallClosingFloor",0);
+
+						changeAni=true;
+					}
+				}
+				else
+				{
+					mouseAnimator.CrossFade("8_FallOnAir",0);
+
+				}
+				
 			}
+
 
 		}
-
-
-
-
 
 	} 
-
-
-
-
-
-	void OnTriggerEnter2D(Collider2D other) 
-	{
-		if (other.tag=="Net" && isMouseDown) 
-		{
-//			Debug.Log("collide the net");
-//			mouseAnimator.CrossFade("8_Bite",0);
-		}
-
-		isOnNet=true;
-	}
-
-	void OnTriggerStay2D(Collider2D other)
-	{
-
-
-		isOnNet=true;
-
-	}
-
-
-
-	void OnTriggerExit2D(Collider2D other) 
-	{
-
-//		mouseAnimator.CrossFade("8_FallOnAir",0);
-		isOnNet=false;
-	}
-
-
-
 
 
 }

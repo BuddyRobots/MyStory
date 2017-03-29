@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 
 public class RemoveColor2D : MonoBehaviour 
@@ -6,6 +7,7 @@ public class RemoveColor2D : MonoBehaviour
 	public GameObject netGO;
 	[Range (0, 100)]
 	public int brushRadius = 40;
+	private float worldRadius;
 
 	SpriteRenderer netSpriteRenderer;
 	Sprite netSprite;
@@ -13,6 +15,11 @@ public class RemoveColor2D : MonoBehaviour
 	Texture2D newTexture;
 	int textureHalfWidth;
 	int textureHalfHeight;
+
+
+
+	public List<Transform> keyPoints;
+	public List<int> flags;
 
 
 	void Awake()
@@ -24,14 +31,25 @@ public class RemoveColor2D : MonoBehaviour
 		newTexture.SetPixels32(netTexture.GetPixels32());
 		textureHalfWidth = netTexture.width/2;
 		textureHalfHeight = netTexture.height/2;
+
+		worldRadius = brushRadius / netSprite.bounds.extents.x * textureHalfWidth;
+		Debug.Log("worldRadius--"+worldRadius);
+
+		flags.Clear();
+		for (int i = 0; i < keyPoints.Count; i++) {
+			flags.Add(0);
+		}
 	}		
 
 	void Update()
 	{
-		if (Input.GetMouseButton(0))
+		if(MouseDrag._instance.mouseDraging) //(Input.GetMouseButton(0))
 		{
+
 			// Get Mouse position - convert to global world position
-			Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);    
+			Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
+			Vector3 localPosInNet = transform.InverseTransformPoint (screenPos);
+
 			screenPos = new Vector2(screenPos.x, screenPos.y);
 
 			// Check if we clicked on our object
@@ -41,15 +59,24 @@ public class RemoveColor2D : MonoBehaviour
 
 				// You will want to tag the image you want to lookup
 				if (ray[i].collider.name == "net")
-				{ 					
+				{ 			
+					
+					MouseDrag._instance.isOnNet=true;
+
 					// Set click position to the gameobject local area
 					screenPos -= ray[i].collider.gameObject.transform.position;
+					CheckIfNetWasErased(screenPos);
+
 					int x = (int)(screenPos.x * textureHalfWidth / netSprite.bounds.extents.x) + textureHalfWidth;
 					int y = (int)(screenPos.y * textureHalfHeight / netSprite.bounds.extents.y) + textureHalfHeight;
 
 					EraseCircle(newTexture, x, y, brushRadius);
 					break;
 
+				}
+				else
+				{
+					MouseDrag._instance.isOnNet=false;
 				}
 			} 
 			newTexture.Apply();
@@ -73,4 +100,37 @@ public class RemoveColor2D : MonoBehaviour
 					newTexture.SetPixel(xSym, ySym, new Color(0, 0, 0, 0));
 				}
 	}
+
+
+
+	void CheckIfNetWasErased(Vector3 center)
+	{
+
+		int index=0;
+
+
+		for (int i = 0; i < keyPoints.Count; i++)
+		{
+			if (keyPoints[i].position.x>=center.x-worldRadius && keyPoints[i].position.x<=center.x+worldRadius
+				&& keyPoints[i].position.y>=center.y-worldRadius && keyPoints[i].position.y<=center.y+worldRadius) 
+			{
+				flags[i]=1;
+			}
+		}
+		for (int i = 0; i < flags.Count; i++) 
+		{
+			Debug.Log("flags["+i+"]:"+flags[i]);
+			if (flags[i]==1) 
+			{
+				index++;
+			}
+			
+		}
+
+	}
+
+
+
+
+
 }
