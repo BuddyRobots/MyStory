@@ -1,149 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 public class RemoveColor2D : MonoBehaviour 
 {
-	public Camera cam;
-	Texture2D newTex;
+	public GameObject netGO;
+	public int brushRadius = 25;
 
-	public GameObject mouse;
-	public GameObject net;
-
-
-	bool mouseClicked;
-	bool netClicked;
-
-
-	Color colour=new Color(0,0,0,0);
-
-	private int netTexWidth;
-	private int netTexHeight;
-	int brushSize=100;
-
-	private Texture2D netTex2D;
-	SpriteRenderer netRender;
+	SpriteRenderer netSpriteRenderer;
+	Sprite netSprite;
+	Texture2D netTexture;
+	Texture2D newTexture;
+	int textureHalfWidth;
+	int textureHalfHeight;
 
 
-
-	void Start()
+	void Awake()
 	{
-		cam = GetComponent<Camera>();
-		newTex=null;
-
-		netRender=net.GetComponent<SpriteRenderer>();
-		netTex2D=net.GetComponent<SpriteRenderer>().sprite.texture;
-		netTexWidth=net.GetComponent<SpriteRenderer>().sprite.texture.width;
-		netTexHeight=net.GetComponent<SpriteRenderer>().sprite.texture.height;
-
-	}
-
+		netSpriteRenderer = netGO.GetComponent<SpriteRenderer>();
+		netSprite = netSpriteRenderer.sprite;
+		netTexture = netSprite.texture;
+		newTexture = new Texture2D (netTexture.width, netTexture.height, TextureFormat.RGBA32, false);
+		newTexture.SetPixels32(netTexture.GetPixels32());
+		textureHalfWidth = netTexture.width/2;
+		textureHalfHeight = netTexture.height/2;
+	}		
 
 	void Update()
 	{
-
-
 		if (Input.GetMouseButton(0))
 		{
-			Ray myRay=Camera.main.ScreenPointToRay(Input.mousePosition);
+			// Get Mouse position - convert to global world position
+			Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);    
+			screenPos = new Vector2(screenPos.x, screenPos.y);
 
-			RaycastHit2D hit=Physics2D.Raycast(new Vector2(myRay.origin.x,myRay.origin.y),Vector2.down);
-			if (hit.collider) 
+			// Check if we clicked on our object
+			RaycastHit2D[] ray = Physics2D.RaycastAll(screenPos, Vector2.zero, 0.01f);
+			for (int i = 0; i < ray.Length; i++)
 			{
-				if (hit.collider.name=="net") 
-				{
+				// You will want to tag the image you want to lookup
+				if (ray[i].collider.name == "net")
+				{ 					
+					// Set click position to the gameobject local area
+					screenPos -= ray[i].collider.gameObject.transform.position;
+					int x = (int)(screenPos.x * textureHalfWidth / netSprite.bounds.extents.x) + textureHalfWidth;
+					int y = (int)(screenPos.y * textureHalfHeight / netSprite.bounds.extents.y) + textureHalfHeight;
 
-					Debug.Log("hit point--"+hit.point);
-					Debug.Log("hit point in net --"+net.transform.InverseTransformPoint(hit.point));
-
-					netTex2D=net.GetComponent<SpriteRenderer>().sprite.texture;
-
-					if (newTex==null) 
-					{
-						newTex = new Texture2D (netTex2D.width, netTex2D.height, TextureFormat.ARGB32, false);
-						newTex.SetPixels32(netTex2D.GetPixels32());
-					}
-
-					for (int k = -brushSize; k <brushSize; k++) 
-					{
-						for (int j = -brushSize; j < brushSize; j++)
-						{
-							
-							newTex.SetPixel((int)net.transform.InverseTransformPoint(hit.point).x+k, (int)  net.transform.InverseTransformPoint(hit.point).y+j, colour);
-//							newTex.SetPixel((int)  Input.mousePosition.x+k, (int)  Input.mousePosition.y+j, colour);
-						}
-					}
-
-
-
-					newTex.Apply();
-					netRender.sprite = Sprite.Create(newTex, netRender.sprite.rect, new Vector2(0.5f, 0.5f));
-
-
+					EraseCircle(newTexture, x, y, brushRadius);
+					break;
 				}
-			}
+			} 
+			newTexture.Apply();
+			netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f));
 		}
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		/*
-		if (Input.GetMouseButton(0))
-		{
-			Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-			worldPos.z = 0;
-
-			Debug.Log("worldPos--"+ worldPos);
-			Debug.Log("Input.mousePosition--"+ Input.mousePosition);
-
-			Collider2D[] col = Physics2D.OverlapPointAll(worldPos);
-			if(col.Length > 0)
-			{
-				for (int i = 0; i < col.Length; i++) 
+	private void EraseCircle(Texture2D texture, int xCenter, int yCenter, int radius)
+	{
+		for (var x = xCenter - radius; x <= xCenter; x++)
+			for (var y = yCenter - radius; y <= yCenter; y++)
+				// we don't have to take the square root, it's slow
+				if ((x - xCenter)*(x - xCenter) + (y - yCenter)*(y - yCenter) <= radius*radius) 
 				{
-
-					if (col[i].tag=="Net") 
-					{
-						Vector3 localPosInNet = net.transform.InverseTransformPoint (worldPos);
-						//Replace texture  这里需要重新创建一个和Tex一样的纹理，直接操作Tex的话会把文件给修改了
-						if (newTex==null) 
-						{
-							newTex = new Texture2D (netTex2D.width, netTex2D.height, TextureFormat.ARGB32, false);
-							newTex.SetPixels32(netTex2D.GetPixels32());
-						}
-							
-						for (int k = -brushSize; k <brushSize; k++) 
-						{
-							for (int j = -brushSize; j < brushSize; j++)
-							{
-
-								newTex.SetPixel((int)  Input.mousePosition.x+k, (int)  Input.mousePosition.y+j, colour);
-
-							}
-						}
-
-						newTex.Apply();
-						netRender.sprite = Sprite.Create(newTex, netRender.sprite.rect, new Vector2(0.5f, 0.5f));
-
-					}
+					var xSym = xCenter - (x - xCenter);
+					var ySym = yCenter - (y - yCenter);
+					// (x, y), (x, ySym), (xSym , y), (xSym, ySym) are in the circle
+					newTexture.SetPixel(x, y, new Color(0, 0, 0, 0));
+					newTexture.SetPixel(x, ySym, new Color(0, 0, 0, 0));
+					newTexture.SetPixel(xSym, y, new Color(0, 0, 0, 0));
+					newTexture.SetPixel(xSym, ySym, new Color(0, 0, 0, 0));
 				}
-			}
-
-
-		}
-		*/
-
 	}
 }
