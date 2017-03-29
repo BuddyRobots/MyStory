@@ -56,7 +56,8 @@ public class RemoveColor2D : MonoBehaviour
 					Debug.Log("hit point--"+hit.point);
 					Debug.Log("hit point in net --"+net.transform.InverseTransformPoint(hit.point));
 
-					netTex2D=net.GetComponent<SpriteRenderer>().sprite.texture;
+
+
 
 					if (newTex==null) 
 					{
@@ -64,16 +65,17 @@ public class RemoveColor2D : MonoBehaviour
 						newTex.SetPixels32(netTex2D.GetPixels32());
 					}
 
-					for (int k = -brushSize; k <brushSize; k++) 
-					{
-						for (int j = -brushSize; j < brushSize; j++)
-						{
-							
-							newTex.SetPixel((int)net.transform.InverseTransformPoint(hit.point).x+k, (int)  net.transform.InverseTransformPoint(hit.point).y+j, colour);
-//							newTex.SetPixel((int)  Input.mousePosition.x+k, (int)  Input.mousePosition.y+j, colour);
-						}
-					}
-
+//					for (int k = -brushSize; k <brushSize; k++) 
+//					{
+//						for (int j = -brushSize; j < brushSize; j++)
+//						{
+//							
+//							newTex.SetPixel((int)net.transform.InverseTransformPoint(hit.point).x+k, (int)  net.transform.InverseTransformPoint(hit.point).y+j, colour);
+////							newTex.SetPixel((int)  Input.mousePosition.x+k, (int)  Input.mousePosition.y+j, colour);
+//						}
+//					}
+					newTex.SetPixel((int)(net.transform.InverseTransformPoint(hit.point).x), (int) (net.transform.InverseTransformPoint(hit.point).y), colour);
+					Debug.Log("x:"+(int)net.transform.InverseTransformPoint(hit.point).x+" , y:"+(int)net.transform.InverseTransformPoint(hit.point).y);
 
 
 					newTex.Apply();

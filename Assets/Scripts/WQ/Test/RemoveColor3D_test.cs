@@ -39,6 +39,8 @@ public class RemoveColor3D_test : MonoBehaviour
 					Vector2 pixelUV = hit.textureCoord;
 					pixelUV.x *= tex.width;
 					pixelUV.y *= tex.height;
+				Debug.Log("hit-----"+hit.point);
+				Debug.Log("hit.texureCoord---"+hit.textureCoord);
 
 
 					//Replace texture  这里需要重新创建一个和Tex一样的纹理，直接操作Tex的话会把文件给修改了
