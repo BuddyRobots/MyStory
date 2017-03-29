@@ -16,29 +16,29 @@ public class DragMouse :MonoBehaviour
 	private int netTexWidth;
 	private int netTexHeight;
 	public int brushSize=30;
+	Color colour=new Color(0,0,0,0);
 
 	private Texture2D netTex2D;
+
+	Texture2D newTex;
 
 	void Start () 
 	{
 		netTexWidth = net.GetComponent<SpriteRenderer>().sprite.texture.width;
 		netTexHeight= net.GetComponent<SpriteRenderer>().sprite.texture.height;
-
-		netTex2D = net.GetComponent<SpriteRenderer>().material.mainTexture as Texture2D;
+		netTex2D = net.GetComponent<SpriteRenderer>().sprite.texture as Texture2D;
 	}
 	
 	void Update () 
 	{
 		GameObjectDragAndDrog2D();
-		if (Input.GetMouseButton (0))
-		{
-		}
 
 	}
 
 	//返回老鼠
 	private GameObject ReturnGameObjectDrag2D()
 	{
+		target = null;
 
 		RaycastHit2D hit2D =Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition),transform.position);
 
@@ -50,7 +50,7 @@ public class DragMouse :MonoBehaviour
 
 			}
 		}
-		return target.transform.parent.gameObject;
+		return target;
 	}
 
 	private void GameObjectDragAndDrog2D()
@@ -60,11 +60,9 @@ public class DragMouse :MonoBehaviour
 			target = ReturnGameObjectDrag2D();
 			if (target != null)
 			{
-//				Debug.Log("-----"+target.name);
+
 				isMouseDrag = true;
-				screenPosition = Camera.main.WorldToScreenPoint(target.transform.position);
-//				Debug.Log("老鼠的世界坐标 target.transform.position----"+target.transform.position);
-//				Debug.Log("老鼠的屏幕坐标 screenPosition----"+screenPosition);
+				screenPosition = Camera.main.WorldToScreenPoint(target.transform.parent.transform.position);
 				//offset=老鼠的世界坐标-鼠标的世界坐标（由屏幕坐标转化而来）
 				offset = target.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPosition.z));
 			}      
@@ -78,16 +76,12 @@ public class DragMouse :MonoBehaviour
 
 		if (isMouseDrag)
 		{
-
 			Vector3 currentScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPosition.z);
 //			Debug.Log("鼠标的屏幕坐标 currentScreenSpace----"+currentScreenSpace);
-
 			Vector3 currentPosition = Camera.main.ScreenToWorldPoint(currentScreenSpace) + offset;
 //			Debug.Log("鼠标的世界坐标加上偏移值 currentPosition----"+currentPosition);
-
 			target.transform.localPosition = new Vector3(currentPosition.x, currentPosition.y, currentPosition.z);
 //			Debug.Log("target.transform.localPosition----"+target.transform.localPosition);
-			CheckPointToEraseColor (Input.mousePosition);
 
 		}
 
@@ -114,15 +108,14 @@ public class DragMouse :MonoBehaviour
 							continue;
 
 						netTex2D.SetPixel(i+(int)netTexWidth/2,j+(int)netTexHeight/2,new Color(0, 0, 0, 0));
+
+
 					}
 				}
+			
 				netTex2D.Apply ();
-//				CheckIfNetIsErased();
-
 				return true;
 			}
-
-
 		}
 		return false;
 	}
