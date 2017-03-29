@@ -4,7 +4,8 @@
 public class RemoveColor2D : MonoBehaviour 
 {
 	public GameObject netGO;
-	public int brushRadius = 25;
+	[Range (0, 100)]
+	public int brushRadius = 40;
 
 	SpriteRenderer netSpriteRenderer;
 	Sprite netSprite;
