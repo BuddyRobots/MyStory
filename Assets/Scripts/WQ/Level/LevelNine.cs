@@ -17,14 +17,17 @@ public class LevelNine : MonoBehaviour
 	public GameObject hand;
 
     Animator mouseAnimator;
+	AnimatorStateInfo animatorInfo;
 
 	bool showFingerOnMouse;
 	bool mouseClicked;
-	bool move;
 	bool aniPlayed;
 	bool audioAsidePlayed;
 	bool pause;
 	bool isOver;
+	bool changeScene;
+	[HideInInspector]
+	public bool aniDone;
 
 	int garlandFrontLayer;//花环在老鼠头上时的层数
 	int garlandBackLayer;//花环在后面时的层数
@@ -65,15 +68,10 @@ public class LevelNine : MonoBehaviour
 
 		showFingerOnMouse=false;
 		mouseClicked=false;
-		move=false;
 		aniPlayed=false;
 		audioAsidePlayed=false;
 		pause=false;
-
-
-		//手的位置还原  to do.....
-//		hand.transform.position=originHandPos;
-
+		changeScene=false;
 
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
@@ -127,11 +125,8 @@ public class LevelNine : MonoBehaviour
 				
 				if (!aniPlayed) 
 				{
-
-					//播放动画.......
-
+					//播放动画
 					PlayAnimation();
-
 					aniPlayed=true;
 				}
 
@@ -172,6 +167,18 @@ public class LevelNine : MonoBehaviour
 			//如果动画播放完了，字幕也显示完了，就跳转界面   to do....
 
 
+			if(aniDone && Manager._instance.isSubtitleShowOver)
+			{
+//				SetGarlandLayer(garlandFrontLayer);
+				//在正常状态或者播放状态下
+				if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
+				{
+					FormalScene._instance.ChangeSceneAutomatically();
+					mouseAnimator.CrossFade("idle",0);
+				}	
+				aniDone=false;
+
+			}
 
 
 
@@ -275,15 +282,10 @@ public class LevelNine : MonoBehaviour
 		PauseAnimation();
 		BussinessManager._instance.PauseAudioAside();
 		SubtitleShow._instance.pause=true;
-//		pause=true;
-		move=false;
-
 	}
 
 	public void ResumeStory()
 	{
-//		pause=false;
-		move=true;
 		BussinessManager._instance.ResumeAudioAside();
 		ResumeAnimation();
 		SubtitleShow._instance.pause=false;
@@ -341,7 +343,10 @@ public class LevelNine : MonoBehaviour
 
 		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
-
+		animatorInfo = mouseAnimator.GetCurrentAnimatorStateInfo (0);
+		if (mouse.GetComponent<MouseCtrl>()==null) {
+			mouse.AddComponent<MouseCtrl>();
+		}
 
 	}
 

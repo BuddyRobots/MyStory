@@ -196,11 +196,7 @@ public class LevelFour : MonoBehaviour
 		}
 		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
 
-//		if (GameObject.Find("Ball")) 
-//		{
-//			GameObject.Find("Ball").SetActive(true);
-//		}
-			
+
 		
 	}
 

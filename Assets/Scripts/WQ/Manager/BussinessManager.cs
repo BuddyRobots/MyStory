@@ -55,7 +55,6 @@ public class BussinessManager : MonoBehaviour
 			break;
 		case 3:
 			LevelThree._instance.PauseStory();
-
 			break;
 		case 4:
 			break;
@@ -66,12 +65,12 @@ public class BussinessManager : MonoBehaviour
 			LevelSix._instance.PauseStory();
 			break;
 		case 7:
+			LevelSeven._instance.PauseStory();
 			break;
 		case 8:
 			break;
 		case 9:
 			LevelNine._instance.PauseStory();
-
 			break;
 		default:
 			break;
@@ -95,7 +94,6 @@ public class BussinessManager : MonoBehaviour
 			break;
 		case 3:
 			LevelThree._instance.StartStoryToRecordAudioAndVideo();
-
 			break;
 		case 4:
 			break;
@@ -106,12 +104,12 @@ public class BussinessManager : MonoBehaviour
 			LevelSix._instance.StartStoryToRecordAudioAndVideo();
 			break;
 		case 7:
+			LevelSeven._instance.StartStoryToRecordAudioAndVideo();
 			break;
 		case 8:
 			break;
 		case 9:
 			LevelNine._instance.StartStoryToRecordAudioAndVideo();
-
 			break;
 		default:
 			break;
@@ -124,7 +122,6 @@ public class BussinessManager : MonoBehaviour
 		switch (LevelManager.currentLevelData.LevelID)
 		{
 		case 1:
-			
 			LevelOne._instance.ResumeStory();
 			break;
 		case 2:
@@ -142,12 +139,12 @@ public class BussinessManager : MonoBehaviour
 			LevelSix._instance.ResumeStory();
 			break;
 		case 7:
+			LevelSeven._instance.ResumeStory();
 			break;
 		case 8:
 			break;
 		case 9:
 			LevelNine._instance.ResumeStory();
-
 			break;
 		default:
 			break;
@@ -164,16 +161,13 @@ public class BussinessManager : MonoBehaviour
 		switch (LevelManager.currentLevelData.LevelID)
 		{
 		case 1:
-
 			LevelOne._instance.PlayStoryWithAudioRecording();
-
 			break;
 		case 2:
 			LevelTwo._instance.PlayStoryWithAudioRecording();
 			break;
 		case 3:
 			LevelThree._instance.PlayStoryWithAudioRecording();
-
 			break;
 		case 4:
 			break;
@@ -184,54 +178,17 @@ public class BussinessManager : MonoBehaviour
 			LevelSix._instance.PlayStoryWithAudioRecording();
 			break;
 		case 7:
+			LevelSeven._instance.PlayStoryWithAudioRecording();
 			break;
 		case 8:
 			break;
 		case 9:
 			LevelNine._instance.PlayStoryWithAudioRecording();
-
 			break;
 		default:
 			break;
 		}
 	}
-
-
-
-
-
-	public void Init()
-	{
-
-		switch (LevelManager.currentLevelData.LevelID)
-		{
-		case 1:
-
-
-			break;
-		case 2:
-			LevelTwo._instance.Init();
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-		case 6:
-			break;
-		case 7:
-			break;
-		case 8:
-			break;
-		case 9:
-			break;
-		default:
-			break;
-		}
-	}
-
-
 
 	public void DestroyFinger()
 	{
