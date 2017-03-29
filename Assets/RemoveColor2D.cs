@@ -16,10 +16,12 @@ public class RemoveColor2D : MonoBehaviour
 	int textureHalfWidth;
 	int textureHalfHeight;
 
+	public int numToEraseNet = 8;
+	public List<Transform> keyPointList = new List<Transform>();
+	private List<bool> keyPointFlagList = new List<bool>();
 
-
-	public List<Transform> keyPoints;
-	public List<int> flags;
+	[HideInInspector]
+	public bool netIsErased = false;
 
 
 	void Awake()
@@ -32,20 +34,16 @@ public class RemoveColor2D : MonoBehaviour
 		textureHalfWidth = netTexture.width/2;
 		textureHalfHeight = netTexture.height/2;
 
-		worldRadius = brushRadius / netSprite.bounds.extents.x * textureHalfWidth;
-		Debug.Log("worldRadius--"+worldRadius);
+		worldRadius = brushRadius * netSprite.bounds.extents.x / textureHalfWidth;
 
-		flags.Clear();
-		for (int i = 0; i < keyPoints.Count; i++) {
-			flags.Add(0);
-		}
+		for (int i = 0; i < keyPointList.Count; i++)
+			keyPointFlagList.Add(false);		
 	}		
 
 	void Update()
 	{
-		if(MouseDrag._instance.mouseDraging) //(Input.GetMouseButton(0))
+		if(MouseDrag._instance.mouseDraging)
 		{
-
 			// Get Mouse position - convert to global world position
 			Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
 			Vector3 localPosInNet = transform.InverseTransformPoint (screenPos);
@@ -56,31 +54,32 @@ public class RemoveColor2D : MonoBehaviour
 			RaycastHit2D[] ray = Physics2D.RaycastAll(screenPos, Vector2.zero, 0.01f);
 			for (int i = 0; i < ray.Length; i++)
 			{
-
 				// You will want to tag the image you want to lookup
 				if (ray[i].collider.name == "net")
-				{ 			
-					
-					MouseDrag._instance.isOnNet=true;
+				{ 								
+					MouseDrag._instance.isOnNet = true;
 
 					// Set click position to the gameobject local area
 					screenPos -= ray[i].collider.gameObject.transform.position;
-					CheckIfNetWasErased(screenPos);
 
 					int x = (int)(screenPos.x * textureHalfWidth / netSprite.bounds.extents.x) + textureHalfWidth;
 					int y = (int)(screenPos.y * textureHalfHeight / netSprite.bounds.extents.y) + textureHalfHeight;
 
 					EraseCircle(newTexture, x, y, brushRadius);
+					EraseKeyPoint(screenPos.x, screenPos.y, worldRadius);
 					break;
-
 				}
 				else
 				{
-					MouseDrag._instance.isOnNet=false;
+					MouseDrag._instance.isOnNet = false;
 				}
 			} 
 			newTexture.Apply();
 			netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f));
+
+			netIsErased = CheckIfNetWasErased();
+
+			Debug.Log("netIsErased = " + netIsErased);
 		}
 	}
 
@@ -101,36 +100,30 @@ public class RemoveColor2D : MonoBehaviour
 				}
 	}
 
-
-
-	void CheckIfNetWasErased(Vector3 center)
+	private void EraseKeyPoint(float xCenter, float yCenter, float radius)
 	{
-
-		int index=0;
-
-
-		for (int i = 0; i < keyPoints.Count; i++)
+		for (var i = 0; i < keyPointList.Count; i++)
 		{
-			if (keyPoints[i].position.x>=center.x-worldRadius && keyPoints[i].position.x<=center.x+worldRadius
-				&& keyPoints[i].position.y>=center.y-worldRadius && keyPoints[i].position.y<=center.y+worldRadius) 
-			{
-				flags[i]=1;
-			}
+			float x = keyPointList[i].localPosition.x;
+			float y = keyPointList[i].localPosition.y;
+
+			if((x > xCenter - radius) && (x < xCenter + radius) && (y > yCenter - radius) && (y < yCenter + radius))
+				keyPointFlagList[i] = true;
 		}
-		for (int i = 0; i < flags.Count; i++) 
-		{
-			Debug.Log("flags["+i+"]:"+flags[i]);
-			if (flags[i]==1) 
-			{
-				index++;
-			}
 			
-		}
+	}			
+		
+	private bool CheckIfNetWasErased()
+	{
+		int count = 0;
 
+		for (var i = 0; i < keyPointFlagList.Count; i++)
+			if (keyPointFlagList[i] == true)
+				count++;
+
+		if (count >= numToEraseNet)
+			return true;
+		else
+			return false;
 	}
-
-
-
-
-
 }
