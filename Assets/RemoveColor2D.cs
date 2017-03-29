@@ -32,6 +32,7 @@ public class RemoveColor2D : MonoBehaviour
 		textureHalfWidth = netTexture.width/2;
 		textureHalfHeight = netTexture.height/2;
 
+
 		worldRadius = brushRadius / netSprite.bounds.extents.x * textureHalfWidth;
 		Debug.Log("worldRadius--"+worldRadius);
 
