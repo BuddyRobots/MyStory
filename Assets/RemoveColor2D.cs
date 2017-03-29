@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class RemoveColor2D : MonoBehaviour 
 {
+	
 	public GameObject netGO;
 	[Range (0, 100)]
 	public int brushRadius = 40;
@@ -16,7 +17,7 @@ public class RemoveColor2D : MonoBehaviour
 	int textureHalfWidth;
 	int textureHalfHeight;
 
-	public int numToEraseNet = 8;
+	public int numToEraseNet = 3;
 	public List<Transform> keyPointList = new List<Transform>();
 	private List<bool> keyPointFlagList = new List<bool>();
 
@@ -44,45 +45,50 @@ public class RemoveColor2D : MonoBehaviour
 
 	void Update()
 	{
-		if(MouseDrag._instance.mouseDraging)
+		if (MouseDrag._instance!=null) 
 		{
-			// Get Mouse position - convert to global world position
-			Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
-			Vector3 localPosInNet = transform.InverseTransformPoint (screenPos);
-
-			screenPos = new Vector2(screenPos.x, screenPos.y);
-
-			// Check if we clicked on our object
-			RaycastHit2D[] ray = Physics2D.RaycastAll(screenPos, Vector2.zero, 0.01f);
-			for (int i = 0; i < ray.Length; i++)
+			if(MouseDrag._instance.mouseDraging)
 			{
-				// You will want to tag the image you want to lookup
-				if (ray[i].collider.name == "net")
-				{ 								
-					MouseDrag._instance.isOnNet = true;
+				// Get Mouse position - convert to global world position
+				Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
 
-					// Set click position to the gameobject local area
-					screenPos -= ray[i].collider.gameObject.transform.position;
+				screenPos = new Vector2(screenPos.x, screenPos.y);
 
-					int x = (int)(screenPos.x * textureHalfWidth / netSprite.bounds.extents.x) + textureHalfWidth;
-					int y = (int)(screenPos.y * textureHalfHeight / netSprite.bounds.extents.y) + textureHalfHeight;
-
-					EraseCircle(newTexture, x, y, brushRadius);
-					EraseKeyPoint(screenPos.x, screenPos.y, worldRadius);
-					break;
-				}
-				else
+				// Check if we clicked on our object
+				RaycastHit2D[] ray = Physics2D.RaycastAll(screenPos, Vector2.zero, 0.01f);
+				for (int i = 0; i < ray.Length; i++)
 				{
-					MouseDrag._instance.isOnNet = false;
-				}
-			} 
-			newTexture.Apply();
-			netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f));
+					// You will want to tag the image you want to lookup
+					if (ray[i].collider.name == "net")
+					{ 								
+						MouseDrag._instance.isOnNet = true;
 
-			netIsErased = CheckIfNetWasErased();
+						// Set click position to the gameobject local area
+						screenPos -= ray[i].collider.gameObject.transform.position;
 
-			Debug.Log("netIsErased = " + netIsErased);
+						int x = (int)(screenPos.x * textureHalfWidth / netSprite.bounds.extents.x) + textureHalfWidth;
+						int y = (int)(screenPos.y * textureHalfHeight / netSprite.bounds.extents.y) + textureHalfHeight;
+
+						EraseCircle(newTexture, x, y, brushRadius);
+						EraseKeyPoint(screenPos.x, screenPos.y, worldRadius);
+						break;
+					}
+					else
+					{
+						MouseDrag._instance.isOnNet = false;
+					}
+				} 
+				newTexture.Apply();
+				netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f));
+
+				netIsErased = CheckIfNetWasErased();
+				LevelEight._instance.netIsErased=netIsErased;
+
+				Debug.Log("netIsErased = " + netIsErased);
+			}
+			
 		}
+
 	}
 
 	private void EraseCircle(Texture2D texture, int xCenter, int yCenter, int radius)

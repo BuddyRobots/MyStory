@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class LevelEight : MonoBehaviour 
 {
-	
+	public static LevelEight _instance;
 	
 	GameObject mouse;
 	Animator mouseAnimator;
@@ -13,13 +13,22 @@ public class LevelEight : MonoBehaviour
 
 	public Transform originMouseTrans;
 	bool showFingerOnMouse;
+	[HideInInspector]
+	public bool netIsErased;
 
+
+	bool nextBtnActivated;
+
+	void Awake()
+	{
+		_instance=this;
+	}
 
 	void Start () 
 	{
 		//下一步按钮隐藏
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
-
+		FormalScene._instance.recordBtn.gameObject.SetActive(false);
 		ShowMouse();
 
 	}
@@ -45,6 +54,17 @@ public class LevelEight : MonoBehaviour
 				ClickMouse();
 			}
 
+
+			if (netIsErased) 
+			{
+				if (!nextBtnActivated) 
+				{
+					FormalScene._instance.nextBtn.gameObject.SetActive(true);
+
+					nextBtnActivated=true;
+				}
+
+			}
 		
 		}
 
@@ -125,6 +145,8 @@ public class LevelEight : MonoBehaviour
 		{
 			Destroy(mouse.GetComponent<MouseDrag>());
 		}
+		mouse.GetComponent<Rigidbody2D>().gravityScale=0f;
+		mouseAnimator.CrossFade("idle",0);
 
 	}
 
