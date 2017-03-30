@@ -7,7 +7,10 @@ public class LevelEight : MonoBehaviour
 {
 	public static LevelEight _instance;
 	
-	GameObject mouse;
+	private GameObject mouse;
+	public GameObject net;
+
+
 	Animator mouseAnimator;
 
 
@@ -19,6 +22,12 @@ public class LevelEight : MonoBehaviour
 
 	bool nextBtnActivated;
 
+	float alphaChangeTimer=0;
+	float alphaChangeTime=1f;
+
+	Color col;
+
+
 	void Awake()
 	{
 		_instance=this;
@@ -29,10 +38,11 @@ public class LevelEight : MonoBehaviour
 		//下一步按钮隐藏
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		FormalScene._instance.recordBtn.gameObject.SetActive(false);
+
+		col=net.GetComponent<SpriteRenderer>().color;
 		ShowMouse();
 
 	}
-
 
 
 
@@ -61,7 +71,16 @@ public class LevelEight : MonoBehaviour
 				{
 					FormalScene._instance.nextBtn.gameObject.SetActive(true);
 
+
 					nextBtnActivated=true;
+				}
+
+				alphaChangeTimer+=Time.deltaTime;
+				col.a=Mathf.Lerp(1,0,alphaChangeTimer/alphaChangeTime);
+				net.GetComponent<SpriteRenderer>().color=col;
+				if (alphaChangeTimer>=alphaChangeTime) 
+				{
+					alphaChangeTimer=alphaChangeTime;
 				}
 
 			}

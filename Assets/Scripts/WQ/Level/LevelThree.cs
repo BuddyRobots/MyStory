@@ -443,7 +443,11 @@ public class LevelThree : MonoBehaviour
 
 	void OnDisable()
 	{
-		ball.transform.parent=null;
+		if (ball) 
+		{
+			ball.transform.parent=null;
+
+		}
 
 		Manager._instance.Reset();
 

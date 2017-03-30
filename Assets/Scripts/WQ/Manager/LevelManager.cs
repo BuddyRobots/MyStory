@@ -56,7 +56,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 2,
            			""nextLevelID"": 4,
-					""recordTime"":10,
+					""recordTime"":5,
 					""sentenceTimeString"":""3,3,5""
 				},
 				{
@@ -66,7 +66,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 3,
            			""nextLevelID"": 5,
-					""recordTime"":11,
+					""recordTime"":5,
 					""sentenceTimeString"":""0""
 				},
 				{

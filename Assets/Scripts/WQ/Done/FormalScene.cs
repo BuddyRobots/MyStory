@@ -29,6 +29,7 @@ public class FormalScene : MonoBehaviour
 	private Button shareBtn_RecordDoneFrame;
 	private Button saveVideoToAlbumBtn_RecordDoneFrame;
 	private Button confirmBtn;
+	private Button saveVideoToAlbum;
 
 	private GameObject music;
 	private GameObject mask;
@@ -39,11 +40,13 @@ public class FormalScene : MonoBehaviour
 	private GameObject winFrame;
 	private GameObject subtitle;
 	private GameObject sceneParent;
+	private GameObject saveSuccessNotice;
 
 	private Slider recordTimeSlider;
 
 	private bool sliderMoving=false;
 	bool screenLightenDone;//屏幕是否亮完了的标志，值为true以后才能出现小手开始游戏
+	bool saveVideoOver;//是否点击了保存按钮保存了视频
 
 	private float sliderMovingTimer=0;
 	float blackMaskFadingTimer;
@@ -113,7 +116,7 @@ public class FormalScene : MonoBehaviour
 		shareBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/Share").GetComponent<Button>();
 		saveVideoToAlbumBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/SaveToAlbum").GetComponent<Button>();
 		confirmBtn=transform.Find("WinFrame/Btn").GetComponent<Button>();
-
+		saveVideoToAlbum=transform.Find("SaveVideoToAlbum").gameObject.GetComponent<Button>();
 		music=transform.Find("Music").gameObject;
 		mask=transform.Find("Mask").gameObject;
 		blackMask=transform.Find("BlackMask").gameObject;
@@ -128,6 +131,7 @@ public class FormalScene : MonoBehaviour
 		subtitle=transform.Find("Subtitle").gameObject;
 		subtitle.SetActive(false);
 		recordTimeSlider=transform.Find("RecordingFrame/RecordTimeSlider").GetComponent<Slider>();
+		saveSuccessNotice=transform.Find("SaveSuccessNotice").gameObject;
 
 		audioSource=GameObject.Find("Manager").GetComponent<AudioSource>();
 
@@ -139,6 +143,8 @@ public class FormalScene : MonoBehaviour
 
 		sliderMoving=false;
 		storyBegin=false;
+		saveVideoOver=false;
+
 
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
@@ -153,6 +159,8 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(nextBtn_RecordDoneFrame.gameObject).onClick=OnNextBtnClick;
 		EventTriggerListener.Get(shareBtn_RecordDoneFrame.gameObject).onClick=OnShareBtnClick;
 		EventTriggerListener.Get(saveVideoToAlbumBtn_RecordDoneFrame.gameObject).onClick=OnSaveVideoToAlbumBtnClick;
+		EventTriggerListener.Get(saveVideoToAlbum.gameObject).onClick=OnSaveVideoToAlbumBtnClick;
+
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
 
 
@@ -361,18 +369,33 @@ public class FormalScene : MonoBehaviour
 		{
 			if (screenGrowingDarkAndLight) 
 			{
-//				if (!blackMaskShow) 
-				{
-//					blackMaskShow=true;
-					StartCoroutine(ScreenDarkenThenLighten());
-
-				}
+				StartCoroutine(ScreenDarkenThenLighten());
 				screenGrowingDarkAndLight=false;
 			}
 		}
 		#endregion
 
+		if (saveVideoOver)
+		{
+			//出现保存成功提示框
+
+			saveSuccessNoticeFadingTimer+=Time.deltaTime;
+			saveSuccessNotice.GetComponent<CanvasGroup>().alpha=Mathf.Lerp(1,0,saveSuccessNoticeFadingTimer/saveSuccessNoticeFadingTime);
+			if (saveSuccessNoticeFadingTimer>=saveSuccessNoticeFadingTime)
+			{
+				saveSuccessNoticeFadingTimer=0;
+				saveSuccessNotice.gameObject.SetActive(false);
+				saveVideoOver=false;
+			}
+
+
+			
+		}
+
 	}
+
+	float saveSuccessNoticeFadingTimer=0;
+	float saveSuccessNoticeFadingTime=2f;
 
 	private void OnBackBtnClick(GameObject btn)
 	{
@@ -441,18 +464,7 @@ public class FormalScene : MonoBehaviour
 		}
 		else
 		{
-//			if (currentLevelID==1) 
-//			{
-//
-//				Manager._instance.levelOneOver=false;
-//				MousePlayBall._instance.OrderMouseToKickBallOutSide();	
-//
-//			}
-//			else
-//			{
-//				UpgradeLevel();
-//				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
-//			}	
+
 			UpgradeLevel();
 			StartCoroutine(ScreenDarkenThenLoadSceneAsync());
 		}
@@ -516,21 +528,17 @@ public class FormalScene : MonoBehaviour
 
 	private void OnStartRecordBtnClick(GameObject btn)
 	{
-//		Manager._instance.bgMusicFadeOut=true;
 		Manager.storyStatus=StoryStatus.Recording;
 
 		mask.SetActive(false);
 		noticeToRecordFrame.SetActive(false);
 		recordingFrame.SetActive(true);
-//		subtitle.SetActive(true);
-		//录音，slider倒计时，音量大小显示，
-		//同步字幕，录屏  to do ...
 
 		HideSubtitle();
 		ShowSubtitle();
 
 		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
-//		VideoRecManager._instance.StartRec();
+		VideoRecManager._instance.StartRec();//开始录屏
 
 		sliderMoving=true;
 
@@ -561,13 +569,13 @@ public class FormalScene : MonoBehaviour
 	{
 
 		Manager.storyStatus=StoryStatus.Recording;
-		Debug.Log("---------------record  Again--");
+
 		mask.SetActive(false);
 		recordDoneFrame.SetActive(false);
 		recordingFrame.SetActive(true);
 
 
-		//字幕不是一开始录音就显示的
+		//字幕不是一开始录音就显示的.... to do
 		subtitle.SetActive(true);
 		music.SetActive(false);
 
@@ -589,13 +597,10 @@ public class FormalScene : MonoBehaviour
 		shareBtn.transform.gameObject.SetActive(true);
 		saveVideoToAlbumBtn.transform.gameObject.SetActive(true);
 
-
 		//保存音频，并播放
 		MicroPhoneInputSaveWav.getInstance().SaveMusic();
 		MicroPhoneInputSaveWav.getInstance().PlayRecord();
 
-//		
-//		LevelOne._instance.StartStory();
 		HideSubtitle();
 		ShowSubtitle();
 
@@ -604,12 +609,19 @@ public class FormalScene : MonoBehaviour
 
 	}
 
+
+
 	void OnSaveVideoToAlbumBtnClick(GameObject btn)
 	{
 
 		//保存视频到相册，并弹出保存成功提示框   to do...
 
-//		VideoRecManager._instance.SaveVideoToPhotoAlbum();
+		VideoRecManager._instance.SaveVideoToPhotoAlbum();
+
+		saveVideoOver=true;
+		saveSuccessNotice.SetActive(true);
+		saveSuccessNotice.GetComponent<CanvasGroup>().alpha=1;
+		Debug.Log("点击了保存按钮");
 
 	}
 
