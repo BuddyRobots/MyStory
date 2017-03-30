@@ -10,41 +10,40 @@ using UnityEngine.EventSystems;
 public class LevelThree : MonoBehaviour 
 {
 
-
 	public static LevelThree _instance;
 
 	private Animator mouseAnimator;
 	private Animator ballAnimator;
 	private Animator lionAnimator;
 
-	GameObject mouse;
-	GameObject ball;
-	GameObject cam;
 	public GameObject lion;
+	private GameObject mouse;
+	private GameObject ball;
+	private GameObject cam;
 
-	Vector3 originMousePos;
-	Vector3 originBallPos;
-	Vector3 destCamPos;
-	Vector3 originCamPos;
-
-	bool showFingerOnLion;//是否出现小手提示点击狮子
-	bool lionClick;
-	bool shakeTofall;
-	bool canShowFinger;
-	bool audioAsidePlayed;
-	bool changeScene;
-	bool lionChange;
+	public Transform originMouseTrans;
+	public Transform originBallTrans;
+	public Transform originCamTrans;
+	public Transform destCamTrans;
 
 	[HideInInspector]
 	public bool mouseFall;
 	[HideInInspector]
 	public	bool ballFall;
-	public bool pause;
+	private bool showFingerOnLion;//是否出现小手提示点击狮子
+	private bool lionClick;
+	private bool shakeTofall;
+	private bool canShowFinger;
+	private bool audioAsidePlayed;
+	private bool changeScene;
+	private bool lionChange;
+	private bool pause;
+
 
 	float camMovespeed;
+	float fallSpeed;
 
 	Sprite lionSprite;
-	float fallSpeed=10;
 
 
 	void Awake()
@@ -55,18 +54,12 @@ public class LevelThree : MonoBehaviour
 	void Start ()
 	{
 		Manager.storyStatus =StoryStatus.Normal;
+		cam=GameObject.Find("Main Camera");
+		lionAnimator=lion.GetComponent<Animator>();
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
 		camMovespeed=3f;
-		fallSpeed=4;
-
-		originCamPos=new Vector3(0,0,-10);
-		destCamPos=new Vector3 (-9.07f,0,-10);
-
-		cam=GameObject.Find("Main Camera");
-		lionAnimator=lion.GetComponent<Animator>();
-
-
+		fallSpeed=4f;
 
 		Init();
 
@@ -86,11 +79,10 @@ public class LevelThree : MonoBehaviour
 		audioAsidePlayed=false;
 		changeScene=false;
 		lionChange=false;
+		lionClick=false;
 
-		originMousePos=new Vector3(-4.4f,2.06f,0);
-		originBallPos=new Vector3(-6f,2.2f,0);
-		cam.transform.position=originCamPos;
-		GameObject.Find("Manager").transform.position=originBallPos;
+		cam.transform.position=originCamTrans.position;
+		GameObject.Find("Manager").transform.position=originBallTrans.position;
 
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
@@ -132,14 +124,14 @@ public class LevelThree : MonoBehaviour
 			#region 移动摄像机
 			if (!pause) 
 			{
-				if (cam.transform.position.x>destCamPos.x) 
+				if (cam.transform.position.x>destCamTrans.position.x) 
 				{
 					cam.transform.Translate(Vector3.left*camMovespeed*Time.deltaTime);
 
 				}
 				else
 				{
-					cam.transform.position=destCamPos;
+					cam.transform.position=destCamTrans.position;
 					if (!lionChange) 
 					{
 						lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionEyeMove") as Sprite;
@@ -176,6 +168,7 @@ public class LevelThree : MonoBehaviour
 				}
 				else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
 				{
+					lionClick=true;
 					
 					//播放动画
 					if (!shakeTofall) 
@@ -194,14 +187,12 @@ public class LevelThree : MonoBehaviour
 				//如果是正常状态下就播放旁白
 				if (Manager.storyStatus==StoryStatus.Normal)
 				{
-					if (!audioAsidePlayed) {
+					if (!audioAsidePlayed) 
+					{
 						//播放旁白 ，显示字幕
 						BussinessManager._instance.PlayAudioAside();
 						audioAsidePlayed=true;
 					}
-
-					FormalScene._instance.ShowSubtitle();
-
 					//播放动画
 					if (!shakeTofall) 
 					{
@@ -212,7 +203,7 @@ public class LevelThree : MonoBehaviour
 					}
 				}
 
-
+				FormalScene._instance.ShowSubtitle();
 
 			}
 
@@ -260,7 +251,10 @@ public class LevelThree : MonoBehaviour
 		
 	}
 
-
+	void LateUpdate()
+	{
+		mouse.transform.localRotation=Quaternion.Euler(0,0,0);
+	}
 
 
 	void ClickLion()
@@ -331,8 +325,8 @@ public class LevelThree : MonoBehaviour
 
 
 		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
-		ball.transform.parent.position=originBallPos;
-		mouse.transform.position=originMousePos;
+		ball.transform.parent.position=originBallTrans.position;
+		mouse.transform.position=originMouseTrans.position;
 
 		ball.SetActive(true);
 
@@ -401,7 +395,7 @@ public class LevelThree : MonoBehaviour
 			mouse=Manager._instance.mouseGo;
 		}
 
-		mouse.transform.position=originMousePos;
+		mouse.transform.position=originMouseTrans.position;
 		mouse.transform.rotation=Quaternion.Euler(0, 0, 0);
 		mouseAnimator=mouse.GetComponent<Animator>();
 		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;

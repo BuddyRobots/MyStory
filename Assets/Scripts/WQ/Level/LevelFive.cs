@@ -12,8 +12,8 @@ public class LevelFive : MonoBehaviour
 	GameObject ball;
 	GameObject mouse;
 
-	public Transform originMousePos;
-	Vector3 originBallPos=new Vector3(0.47f,-0.11f,0);
+	public Transform originMouseTrans;
+	public Transform originBallTrans;
 
 	bool storyPlay;
 	[HideInInspector]
@@ -27,7 +27,7 @@ public class LevelFive : MonoBehaviour
 
 	void Start () 
 	{
-
+		Manager.storyStatus=StoryStatus.Normal;
 
 		EnlargeCameraSize();
 		ShowMouse();
@@ -55,9 +55,6 @@ public class LevelFive : MonoBehaviour
 		if (FormalScene._instance.storyBegin) 
 		{
 
-			//播放动画，旁白，字幕
-
-
 			if (!storyPlay )
 			{
 				mouseAnimator.CrossFade("RunAway",0);
@@ -67,8 +64,9 @@ public class LevelFive : MonoBehaviour
 				if (Manager.storyStatus==StoryStatus.Normal) 
 				{
 					BussinessManager._instance.PlayAudioAside();
-					FormalScene._instance.ShowSubtitle();
 				}
+				FormalScene._instance.ShowSubtitle();
+
 
 				storyPlay=true;
 			}
@@ -95,12 +93,8 @@ public class LevelFive : MonoBehaviour
 
 	void LateUpdate()
 	{
-
-
 		mouse.transform.localRotation=Quaternion.Euler(0,0,0);
 	}
-
-
 
 
 	void EnlargeCameraSize()
@@ -115,7 +109,7 @@ public class LevelFive : MonoBehaviour
 		{
 			mouse=Manager._instance.mouseGo;
 		}
-		mouse.transform.position=originMousePos.position;
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
 		mouseAnimator.CrossFade("MouseRunAway_Idle",0);
 		mouse.GetComponent<Rigidbody2D>().simulated=true;
@@ -135,7 +129,7 @@ public class LevelFive : MonoBehaviour
 
 		}
 		ball.transform.parent=GameObject.Find("Mouse/Hip/Torso/L arm/L hand").transform;
-		ball.transform.localPosition=originBallPos;
+		ball.transform.localPosition=originBallTrans.position;
 		ball.SetActive(true);
 
 	}
@@ -144,16 +138,17 @@ public class LevelFive : MonoBehaviour
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		Init();
-		mouse.transform.position=originMousePos.position;
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("RunAway",0);
+		MouseRunAway._instance.ResetSpeed();
 
 	}
 
 	public void PlayStoryWithAudioRecording()
 	{
 		Init();
-		mouse.transform.position=originMousePos.position;
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("RunAway",0);
 

@@ -19,7 +19,7 @@ public class LevelSix : MonoBehaviour
 
 	void Start () 
 	{
-
+		Manager.storyStatus=StoryStatus.Normal;
 		Init();
 	}
 
@@ -49,8 +49,9 @@ public class LevelSix : MonoBehaviour
 					if (Manager.storyStatus==StoryStatus.Normal) 
 					{
 						BussinessManager._instance.PlayAudioAside();
-						FormalScene._instance.ShowSubtitle();
 					}
+					FormalScene._instance.ShowSubtitle();
+
 
 					NetMove._instance.Move();
 				}

@@ -555,7 +555,7 @@ public class FormalScene : MonoBehaviour
 		recordingFrame.SetActive(true);
 
 		HideSubtitle();
-		ShowSubtitle();
+//		ShowSubtitle();
 
 		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 //		VideoRecManager._instance.StartRec();//开始录屏
@@ -622,7 +622,7 @@ public class FormalScene : MonoBehaviour
 		MicroPhoneInputSaveWav.getInstance().PlayRecord();
 
 		HideSubtitle();
-		ShowSubtitle();
+//		ShowSubtitle();
 
 		BussinessManager._instance.PlayStoryWithAudioRecording();
 

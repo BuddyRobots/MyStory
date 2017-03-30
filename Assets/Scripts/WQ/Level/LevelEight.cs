@@ -35,6 +35,9 @@ public class LevelEight : MonoBehaviour
 
 	void Start () 
 	{
+
+		Manager.storyStatus=StoryStatus.Normal;
+
 		//下一步按钮隐藏
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		FormalScene._instance.recordBtn.gameObject.SetActive(false);

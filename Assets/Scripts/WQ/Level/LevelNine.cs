@@ -38,17 +38,17 @@ public class LevelNine : MonoBehaviour
 	Vector3 desGarlandPos;
 	Vector3 moveOffset;
 
-
 	void Awake()
 	{
 
 		_instance=this;
 	}
 
-
-
 	void Start () 
 	{
+
+		Manager.storyStatus=StoryStatus.Normal;
+
 		garlandFrontLayer=40;
 		garlandBackLayer=5;	
 		garlandInveisibleLayer=0;
@@ -65,7 +65,6 @@ public class LevelNine : MonoBehaviour
 	{
 
 		showFingerOnMouse=false;
-		mouseClicked=false;
 		aniPlayed=false;
 		audioAsidePlayed=false;
 		pause=false;
@@ -74,12 +73,16 @@ public class LevelNine : MonoBehaviour
 		{
 			showFingerOnMouse=false;
 			isOver=true;
+			mouseClicked=false;
+
 
 		}
 		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
 		{
 			showFingerOnMouse=true;
 			isOver=false;
+			mouseClicked=true;
+
 
 		}
 
@@ -112,23 +115,7 @@ public class LevelNine : MonoBehaviour
 						ClickMouse();
 					}
 				}
-
-
-
 			}
-			else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
-			{
-				
-				if (!aniPlayed) 
-				{
-					//播放动画
-					PlayAnimation();
-					aniPlayed=true;
-				}
-
-
-			}
-
 			if (mouseClicked)
 			{
 				if (Manager.storyStatus==StoryStatus.Normal)
@@ -140,32 +127,24 @@ public class LevelNine : MonoBehaviour
 						BussinessManager._instance.PlayAudioAside();
 						audioAsidePlayed=true;
 					}
-
-					FormalScene._instance.ShowSubtitle();
-
-					//播放动画
-					if (!aniPlayed) 
-					{
-						//改变手的图片并显示花环
-						ChangeHandSpriteAndShowGarland();
-						PlayAnimation();
-
-						aniPlayed=true;
-					}
-
 				}
+				//播放动画
+				if (!aniPlayed) 
+				{
+					//改变手的图片并显示花环
+					ChangeHandSpriteAndShowGarland();
+					PlayAnimation();
 
+					aniPlayed=true;
+				}
+				FormalScene._instance.ShowSubtitle();
 
 			}
 
 			MoveTo();
 
-			//如果动画播放完了，字幕也显示完了，就跳转界面   to do....
-
-
 			if(aniDone && Manager._instance.isSubtitleShowOver)
 			{
-//				SetGarlandLayer(garlandFrontLayer);
 				//在正常状态或者播放状态下
 				if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
 				{
@@ -175,8 +154,7 @@ public class LevelNine : MonoBehaviour
 				aniDone=false;
 
 			}
-
-			
+	
 		}
 	}
 
@@ -194,8 +172,7 @@ public class LevelNine : MonoBehaviour
 				//如果花环移动到了目的地，就改变花环的层数
 				hand.transform.position+= moveOffset.normalized * moveSpeed * Time.deltaTime;
 				garland.transform.position+=moveOffset.normalized * moveSpeed * Time.deltaTime;
-				//				if (hand.transform.position.x>=destHandPos.x)
-				Debug.Log("-------"+Vector3.Distance(desGarlandPos, garland.transform.position));
+//				Debug.Log("-------"+Vector3.Distance(desGarlandPos, garland.transform.position));
 				if(Vector3.Distance(desGarlandPos, garland.transform.position)<=0.1f)
 				{
 					isOver = true;
@@ -379,8 +356,6 @@ public class LevelNine : MonoBehaviour
 
 		Manager._instance.Reset();
 		mouseAnimator.CrossFade("idle",0);
-
-
 
 	}
 

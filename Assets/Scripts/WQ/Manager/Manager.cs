@@ -23,9 +23,6 @@ public class Manager :MonoBehaviour
 	[HideInInspector]
 	public bool recordBtnHide;
 
-	public Vector3 ballPosForLevelThree;
-	public Vector3 mousePosForLevelThree;
-
 	[HideInInspector]
 	public AudioSource bgAudio;
 

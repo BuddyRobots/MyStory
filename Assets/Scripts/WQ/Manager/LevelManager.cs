@@ -76,7 +76,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 4,
            			""nextLevelID"": 6,
-					""recordTime"":12,
+					""recordTime"":5,
 					""sentenceTimeString"":""5,7,3""
 				},
 				{
@@ -86,7 +86,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 5,
            			""nextLevelID"": 7,
-					""recordTime"":13,
+					""recordTime"":5,
 					""sentenceTimeString"":""3""
 				},
 				{
@@ -96,7 +96,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 6,
            			""nextLevelID"": 8,
-					""recordTime"":14,
+					""recordTime"":5,
 					""sentenceTimeString"":""6,6""
 				},
 				{
@@ -106,7 +106,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 7,
            			""nextLevelID"": 9,
-					""recordTime"":15,
+					""recordTime"":5,
 					""sentenceTimeString"":""0""
 				},
 				{
@@ -116,7 +116,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 8,
            			""nextLevelID"": 10,
-					""recordTime"":16,
+					""recordTime"":5,
 					""sentenceTimeString"":""5,6,5""
 				}
 				]
