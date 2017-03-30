@@ -261,9 +261,11 @@ public class LevelTwo : MonoBehaviour
 			{
 				Vector3 offSet = tar - mouse.transform.position;
 				mouse.transform.position += offSet.normalized * moveSpeed * Time.deltaTime;
-				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
+//				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
+				if (mouse.transform.position.x-tar.x<=0.1f)
 				{
 					isOver = true;
+					Debug.Log("到达了，停止移动");
 					mouse.transform.position = tar;
 				}
 			}

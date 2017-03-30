@@ -205,8 +205,11 @@ public class Manager :MonoBehaviour
 //			Destroy(ball.GetComponent<BallMoveWithBg>());
 //		}
 
+		if (garland)
+		{
+			garland.transform.position=outsideScreenPos;
 
-		garland.transform.position=outsideScreenPos;
+		}
 
 	}
 

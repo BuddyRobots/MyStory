@@ -59,6 +59,7 @@ public class LevelSeven : MonoBehaviour
 		mouseClicked=false;
 		audioAsidePlayed=false;
 		talkAniPlayed=false;
+		showFingerOnMouse=false;
 
 		move=true;//一开始老鼠就是可以移动的
 
@@ -302,11 +303,11 @@ public class LevelSeven : MonoBehaviour
 
 	}
 
+	void OnDisable()
+	{
 
-
-
-
-
-
+		Manager._instance.Reset();
+		mouseAnimator.CrossFade("idle",0);
+	}
 
 }

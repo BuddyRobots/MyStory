@@ -30,6 +30,7 @@ public class FormalScene : MonoBehaviour
 	private Button saveVideoToAlbumBtn_RecordDoneFrame;
 	private Button confirmBtn;
 	private Button saveVideoToAlbum;
+	public Button homeBtn;
 
 	private GameObject music;
 	private GameObject mask;
@@ -151,6 +152,8 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(recordBtn.gameObject).onClick=OnRecordBtnClick;
 		EventTriggerListener.Get(shareBtn.gameObject).onClick=OnShareBtnClick;
 		EventTriggerListener.Get(saveVideoToAlbumBtn.gameObject).onClick=OnAlbumBtnClick;
+		EventTriggerListener.Get(homeBtn.gameObject).onClick=OnHomeBtnClick;
+
 		EventTriggerListener.Get(cancelBtn.gameObject).onClick=OnCancelBtnClick;
 		EventTriggerListener.Get(startRecordBtn.gameObject).onClick=OnStartRecordBtnClick;
 
@@ -399,15 +402,19 @@ public class FormalScene : MonoBehaviour
 
 	private void OnBackBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了上一步按钮");
+
 		//先获取当前是第几关，在当前关卡上减一关，再修改当前关卡为减去一关的关卡
 
 		if (currentLevelID==1) //如果是第一关，点击该按钮应该切换到选关界面
 		{
+			Debug.Log("当前关卡是："+currentLevelID);
 			StartCoroutine(ChangeSceneToLeveSelect());
 		}
 		else
 		{
 			currentLevelID--;
+			Debug.Log("当前关卡是："+currentLevelID);
 			if (currentLevelID<=1) 
 			{
 				currentLevelID=1;
@@ -425,6 +432,7 @@ public class FormalScene : MonoBehaviour
 
 	private void OnNextBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了下一步按钮，当前关卡是："+currentLevelID);
 		//切换到下一个场景界面  
 		if (currentLevelID==9) 
 		{
@@ -436,6 +444,7 @@ public class FormalScene : MonoBehaviour
 		{
 			if (currentLevelID==1) 
 			{
+				Debug.Log("当前是第一关");
 				if (!Manager._instance.levelOneOver) 
 				{
 					Manager._instance.levelOneOver=true;
@@ -447,6 +456,7 @@ public class FormalScene : MonoBehaviour
 			else
 			{
 				UpgradeLevel();
+				Debug.Log("OnNextBtnClick---- UpgradeLevel ");
 				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
 			}	
 		}
@@ -466,6 +476,8 @@ public class FormalScene : MonoBehaviour
 		{
 
 			UpgradeLevel();
+			Debug.Log("ChangeSceneAutomatically---- UpgradeLevel ");
+
 			StartCoroutine(ScreenDarkenThenLoadSceneAsync());
 		}
 
@@ -473,7 +485,10 @@ public class FormalScene : MonoBehaviour
 
 	public void UpgradeLevel()
 	{
+		
 		currentLevelID++;
+
+		Debug.Log("升级关卡，当前关卡是："+currentLevelID);
 		if (currentLevelID>=9) 
 		{
 			currentLevelID=9;
@@ -514,6 +529,11 @@ public class FormalScene : MonoBehaviour
 
 	}
 
+	private void OnHomeBtnClick(GameObject btn)
+	{
+		SceneManager.LoadSceneAsync("5_SelectLevel");
+	}
+
 	private void OnCancelBtnClick(GameObject btn)
 	{
 		mask.SetActive(false);
@@ -538,7 +558,7 @@ public class FormalScene : MonoBehaviour
 		ShowSubtitle();
 
 		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
-		VideoRecManager._instance.StartRec();//开始录屏
+//		VideoRecManager._instance.StartRec();//开始录屏
 
 		sliderMoving=true;
 
@@ -580,7 +600,7 @@ public class FormalScene : MonoBehaviour
 		music.SetActive(false);
 
 
-		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
+//		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 		sliderMoving=true;
 
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
@@ -616,7 +636,7 @@ public class FormalScene : MonoBehaviour
 
 		//保存视频到相册，并弹出保存成功提示框   to do...
 
-		VideoRecManager._instance.SaveVideoToPhotoAlbum();
+//		VideoRecManager._instance.SaveVideoToPhotoAlbum();
 
 		saveVideoOver=true;
 		saveSuccessNotice.SetActive(true);

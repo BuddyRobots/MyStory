@@ -17,7 +17,6 @@ public class LevelNine : MonoBehaviour
 	public GameObject hand;
 
     Animator mouseAnimator;
-	AnimatorStateInfo animatorInfo;
 
 	bool showFingerOnMouse;
 	bool mouseClicked;
@@ -25,7 +24,6 @@ public class LevelNine : MonoBehaviour
 	bool audioAsidePlayed;
 	bool pause;
 	bool isOver;
-	bool changeScene;
 	[HideInInspector]
 	public bool aniDone;
 
@@ -71,8 +69,6 @@ public class LevelNine : MonoBehaviour
 		aniPlayed=false;
 		audioAsidePlayed=false;
 		pause=false;
-		changeScene=false;
-
 
 		if (Manager.storyStatus ==StoryStatus.Normal) 
 		{
@@ -179,10 +175,6 @@ public class LevelNine : MonoBehaviour
 				aniDone=false;
 
 			}
-
-
-
-
 
 			
 		}
@@ -343,7 +335,6 @@ public class LevelNine : MonoBehaviour
 
 		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
-		animatorInfo = mouseAnimator.GetCurrentAnimatorStateInfo (0);
 		if (mouse.GetComponent<MouseCtrl>()==null) {
 			mouse.AddComponent<MouseCtrl>();
 		}
@@ -370,12 +361,7 @@ public class LevelNine : MonoBehaviour
 		//速度=offset/老鼠动画的时间 
 		moveSpeed=(Vector3.Distance(destHandPos, originHandPos))/6.6f;
 
-
-
-
 	}
-
-
 
 	void ShowFinger(Vector3 pos)
 	{
@@ -388,5 +374,14 @@ public class LevelNine : MonoBehaviour
 		garland.GetComponent<SpriteRenderer>().sortingOrder=layerNum;
 	}
 
+	void OnDisable()
+	{
+
+		Manager._instance.Reset();
+		mouseAnimator.CrossFade("idle",0);
+
+
+
+	}
 
 }

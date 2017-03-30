@@ -93,6 +93,13 @@ public class LevelFive : MonoBehaviour
 		
 	}
 
+	void LateUpdate()
+	{
+
+
+		mouse.transform.localRotation=Quaternion.Euler(0,0,0);
+	}
+
 
 
 
@@ -192,6 +199,7 @@ public class LevelFive : MonoBehaviour
 	{
 		
 		ball.transform.parent=null;
+		ball.transform.position=Manager._instance.outsideScreenPos;
 
 		Manager._instance.Reset();
 		if (mouse.GetComponent<MouseRunAway>()) 

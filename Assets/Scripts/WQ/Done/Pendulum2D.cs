@@ -106,9 +106,13 @@ public class Pendulum2D : MonoBehaviour
 		
 		}
 	}
+
+
 	int index = 0; //用于记录recordPoints的点
 	bool forward = true; //true的时候从0开始(上升),false,开始下落
 	bool isCross = false; //用于做穿过检查----此时需要重新计算recordPoints
+
+
 	void FixedUpdate()
 	{
 		if (index < 0 || index >= recordPoints.Count) return; //如果index异常了,不做处理

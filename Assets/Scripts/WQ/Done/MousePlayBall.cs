@@ -14,6 +14,7 @@ public class MousePlayBall : MonoBehaviour
 
 	public GameObject ball;
 	bool mouseIsMoving;
+	bool flag;
 
 	void Awake()
 	{
@@ -26,6 +27,7 @@ public class MousePlayBall : MonoBehaviour
 
 		ballMoveSpeed=1f;
 		mouseIsMoving=false;
+		flag=false;
 		mouseAnimator=GetComponent<Animator>();
 	
 		if (ball==null) 
@@ -114,16 +116,20 @@ public class MousePlayBall : MonoBehaviour
 		{
 			Manager._instance.move=false;
 
-			Debug.Log("碰到了球");
-
 			//碰到了球就切换动画
 			mouseAnimator.CrossFade("KickingToStand",0);
 			if (Manager._instance.levelOneOver) 
 			{
-				StartCoroutine(waitMouseClickBall());
+				if (!flag) // to ensure the coroutine be called only once
+				{
+					flag =true;
+					StartCoroutine(waitMouseClickBall());
+
+				}
 			}
 		}
 	}
+
 
 
 	IEnumerator  waitMouseClickBall()
@@ -137,8 +143,9 @@ public class MousePlayBall : MonoBehaviour
 	/// </summary>
 	void UpradeLevelAndChangeScene()
 	{
-
+		Debug.Log("MousePlayBall---UpradeLevelAndChangeScene()");
 		FormalScene._instance.UpgradeLevel();
+
 
 		FormalScene._instance.ScreenDarkenThenReloadFormalScene();
 	}

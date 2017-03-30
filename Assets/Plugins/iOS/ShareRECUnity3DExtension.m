@@ -141,22 +141,22 @@ extern "C" {
             UnitySendMessage([observerStr UTF8String], "shareRECCallback", [resultStr UTF8String]);
             
             
-            //必须添加的方法
-            SRERecording *recording=[[ShareREC currentLocalRecordings]lastObject];
-            [ShareREC confirmEditRecording:recording result:^(BOOL successes,NSError* error){
-                NSString* Path=recording.mergeAudioVideoPath;
-                ALAssetsLibrary* library=[[ALAssetsLibrary alloc] init];
-                [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:Path]
-                                            completionBlock:^(NSURL *assetURL, NSError *error) {
-                                                if (error) {
-                                                    NSLog(@"保存失败：%@",error);
-                                                }else{
-                                                    NSLog(@"保存成功");
-                                                }
-                                            }];
-                
-            }];
-            
+//            //必须添加的方法
+//            SRERecording *recording=[[ShareREC currentLocalRecordings]lastObject];
+//            [ShareREC confirmEditRecording:recording result:^(BOOL successes,NSError* error){
+//                NSString* Path=recording.mergeAudioVideoPath;
+//                ALAssetsLibrary* library=[[ALAssetsLibrary alloc] init];
+//                [library writeVideoAtPathToSavedPhotosAlbum:[NSURL fileURLWithPath:Path]
+//                                            completionBlock:^(NSURL *assetURL, NSError *error) {
+//                                                if (error) {
+//                                                    NSLog(@"保存失败：%@",error);
+//                                                }else{
+//                                                    NSLog(@"保存成功");
+//                                                }
+//                                            }];
+//                
+//            }];
+//            
             
             
             
