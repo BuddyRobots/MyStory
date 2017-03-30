@@ -19,7 +19,7 @@ public class VideoRecManager : MonoBehaviour
 //	private static extern void _IOSSaveImageToPhotosAlbum(string readAddr);
 
 	[DllImport("__Internal")]
-	private static extern void _IOSSaveVideoToPhotosAlbum(string readAddr);
+	private static extern void _IOSSaveVideoToPhotosAlbum();
 
 	void Start () 
 	{
@@ -40,8 +40,9 @@ public class VideoRecManager : MonoBehaviour
 		FinishedRecordEvent finishedEvent=new FinishedRecordEvent(recordFinishedHandler);
 		ShareREC.stopRecording (finishedEvent);
 
-
 	}
+
+
 		
 	void recordFinishedHandler(Exception ex)
 	{
@@ -79,8 +80,7 @@ public class VideoRecManager : MonoBehaviour
 
 	public void SaveVideoToPhotoAlbum()
 	{
-		string videoName="video_test";
-		_IOSSaveVideoToPhotosAlbum(ShareREC.lastRecordingPath());
+		_IOSSaveVideoToPhotosAlbum();
 
 	}
 		

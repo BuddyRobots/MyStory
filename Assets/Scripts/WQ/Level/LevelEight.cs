@@ -1,80 +1,128 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class LevelEight : MonoBehaviour 
 {
+	public static LevelEight _instance;
 	
-	
-	GameObject mouse;
-	Animator mouseAnimator;
-	Camera cam;
+	private GameObject mouse;
+	public GameObject net;
 
-	public Transform originMousePos;
+
+	Animator mouseAnimator;
+
+
+	public Transform originMouseTrans;
+	bool showFingerOnMouse;
+	[HideInInspector]
+	public bool netIsErased;
+
+
+	bool nextBtnActivated;
+
+	float alphaChangeTimer=0;
+	float alphaChangeTime=1f;
+
+	Color col;
+
+
+	void Awake()
+	{
+		_instance=this;
+	}
 
 	void Start () 
 	{
 		//下一步按钮隐藏
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+		FormalScene._instance.recordBtn.gameObject.SetActive(false);
 
+		col=net.GetComponent<SpriteRenderer>().color;
+		ShowMouse();
 
-		cam=GameObject.Find("Main Camera").GetComponent<Camera>();
 	}
-	
+
+
+
 
 	void Update ()
 	{
-
-
 		if (FormalScene._instance.storyBegin) 
 		{
 
-
-
-			if (Input.GetMouseButton(0))
+			if (!showFingerOnMouse)
 			{
+				ShowFinger(mouse.transform.position);
 
-				RaycastHit hit;
+				showFingerOnMouse=true;
+			}
+			//如果显示了小手，就可以开始点击老鼠了
+			if (showFingerOnMouse) 
+			{
+				ClickMouse();
+			}
 
-				if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
+
+			if (netIsErased) 
+			{
+				if (!nextBtnActivated) 
 				{
-					Renderer rend = hit.transform.GetComponent<Renderer>();
-					MeshCollider meshCollider = hit.collider as MeshCollider;
+					FormalScene._instance.nextBtn.gameObject.SetActive(true);
 
-					if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
-						return;
 
-					Texture2D tex = rend.material.mainTexture as Texture2D;
-					Vector2 pixelUV = hit.textureCoord;
-					pixelUV.x *= tex.width;
-					pixelUV.y *= tex.height;
-
-					tex.SetPixel((int)pixelUV.x, (int)pixelUV.y, Color.black);
-					tex.Apply();
-
+					nextBtnActivated=true;
 				}
 
-
-
+				alphaChangeTimer+=Time.deltaTime;
+				col.a=Mathf.Lerp(1,0,alphaChangeTimer/alphaChangeTime);
+				net.GetComponent<SpriteRenderer>().color=col;
+				if (alphaChangeTimer>=alphaChangeTime) 
+				{
+					alphaChangeTimer=alphaChangeTime;
+				}
 
 			}
-				
-
-
-
-
-
-
-
-
-
+		
 		}
 
 
-
-
-
-
 	}
+
+	void ClickMouse()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			if (EventSystem.current.IsPointerOverGameObject())
+			{
+				Debug.Log("当前点击是在UI 上");
+				return ;
+			}
+
+
+			Collider2D[] col = Physics2D.OverlapPointAll(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+			if (col.Length>0) 
+			{
+				foreach (Collider2D c in col) 
+				{
+					if (c.tag=="Player") 
+					{
+						//如果没有销毁小手，则销毁小手
+						if (BussinessManager._instance.finger!=null) 
+						{
+							Destroy(BussinessManager._instance.finger);
+
+						}
+					}
+				}
+			}
+
+
+		}
+	}
+
+
 
 
 
@@ -83,25 +131,41 @@ public class LevelEight : MonoBehaviour
 		BussinessManager._instance.ShowFinger(pos);//这个坐标位置可以灵活设置
 
 	}
+
 	void ShowMouse()
 	{
 		if (mouse ==null) 
 		{
 			mouse=Manager._instance.mouseGo;
 		}
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
 		mouseAnimator.CrossFade("idle",0);
+
 
 		if (mouse.GetComponent<Rigidbody2D>()!=null) 
 		{
 			mouse.GetComponent<Rigidbody2D>().simulated=true;
 		}
 
+		if (mouse.GetComponent<MouseDrag>()==null) 
+		{
+			mouse.AddComponent<MouseDrag>();
+		}
+
 	}
+
+
 
 	void OnDisable()
 	{
 		Manager._instance.Reset();
+		if (mouse.GetComponent<MouseDrag>()!=null)
+		{
+			Destroy(mouse.GetComponent<MouseDrag>());
+		}
+		mouse.GetComponent<Rigidbody2D>().gravityScale=0f;
+		mouseAnimator.CrossFade("idle",0);
 
 	}
 

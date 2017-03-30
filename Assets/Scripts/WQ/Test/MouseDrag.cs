@@ -6,17 +6,21 @@ public class MouseDrag : MonoBehaviour
 {
 	public static MouseDrag _instance;
 
-	private Vector3 lastMousePosition = Vector3.zero;
-	public  bool isMouseDown = false;  
 	Animator mouseAnimator;
 
-	public bool isOnNet;
+    Vector3 lastMousePosition = Vector3.zero;
+	float y_MouseLowestLimit;
+
 	bool closingFloor;
 	bool changeAni;
 	bool mouseClicked;
-	float y_MouseLowestLimit;
+	bool isMouseDown = false;  
 
+
+	[HideInInspector]
 	public bool mouseDraging;
+	[HideInInspector]
+	public bool isOnNet;
 
 
 	void Awake()
