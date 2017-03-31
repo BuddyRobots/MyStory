@@ -3,7 +3,7 @@
 # Unity3D related
 !/Assets
 Assets/AssetStoreTools
-Assets/OpenCVForUnity
+!/ProjectSettings
 *.unitypackage
 
 
