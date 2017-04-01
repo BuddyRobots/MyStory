@@ -22,8 +22,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	private List<List<string>> allLevelSubTitleList=new List<List<string>>();
 
-	[HideInInspector]
-	public List<bool> levelPassedList;
 
 
 	//json字符串，保存关卡的信息（这里的信息字段名和levelItemData里的属性保持一致）
@@ -111,7 +109,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	{
 //		Debug.Log("levelManager-----awake()");
 //		code for test...
-		PlayerPrefs.SetInt ("LevelID",4);
+		PlayerPrefs.SetInt ("LevelID",8);
 		PlayerPrefs.SetInt ("LevelProgress",0);
 
 
@@ -204,6 +202,12 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		UpdateLevelItemDataList (levelID,levelPro);
 
 	}
+
+
+
+
+
+
 
 	/// <summary>
 	/// 更新关卡数据信息

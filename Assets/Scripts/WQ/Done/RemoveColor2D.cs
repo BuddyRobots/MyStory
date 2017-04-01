@@ -84,7 +84,7 @@ public class RemoveColor2D : MonoBehaviour
 				netIsErased = CheckIfNetWasErased();
 				LevelEight._instance.netIsErased=netIsErased;
 
-				Debug.Log("netIsErased = " + netIsErased);
+//				Debug.Log("netIsErased = " + netIsErased);
 			}
 			
 		}
