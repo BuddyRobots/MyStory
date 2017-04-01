@@ -8,22 +8,20 @@ public class LevelTwo : MonoBehaviour
 
 	private Animator mouseAnimator;
 
-	[HideInInspector]
-	public GameObject mouse;
-	[HideInInspector]
-	public GameObject ball;
+	private GameObject mouse;
+	private GameObject ball;
+
 	public Transform tar_0;
 	public Transform tar_1;
 	public Transform tar_2;
+	public Transform originMouseTrans;
+	public Transform originBallTrans;
+
 	//三个目标点
 	private Vector3 dest_0;
-	private  Vector3 dest_1;
+	private Vector3 dest_1;
 	private Vector3 dest_2;//球的边缘的位置（改点的x===球的位置的X+球的图形的一半,y和z的值与球一样）
-
 	private Vector3 dest;
-
-	Vector3 originMousePos;
-	Vector3 originBallPos;
 
 	[HideInInspector]
 	public bool startToWalk;
@@ -43,7 +41,7 @@ public class LevelTwo : MonoBehaviour
 	bool pause;
 	bool flag;
 
-	int destFlag;//值为1，2，3，1代表到达目标点1，2代表叨叨目标点2；。。。
+	int destFlag;//值为1，2，3，1代表到达目标点1，2代表到达目标点2；。。。
 
 	StoryStatus storyStatus;
 	[HideInInspector]
@@ -61,15 +59,11 @@ public class LevelTwo : MonoBehaviour
 	
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
+		dest_0=new Vector3(tar_0.position.x,originMouseTrans.position.y,originMouseTrans.position.z);
 		dest_1=tar_1.position;
 		dest_2=tar_2.position;
-	
-		originMousePos=new Vector3(7.6f,-3.3f,0);
-		originBallPos=new Vector3(-6f,2.3f,0);
-		dest_0=new Vector3(tar_0.position.x,originMousePos.y,originMousePos.z);
 
-		Manager._instance.ballPosForLevelThree=originBallPos;
-		Manager._instance.mousePosForLevelThree=dest_2;
+
 		Init();
 
 
@@ -132,7 +126,7 @@ public class LevelTwo : MonoBehaviour
 			}
 
 			//如果到达了第一个点
-			if (isOver && destFlag==1)//mouse.transform.position==dest_0) 
+			if (isOver && destFlag==1)
 			{
 				if (startToWalk) 
 				{
@@ -196,9 +190,10 @@ public class LevelTwo : MonoBehaviour
 						BussinessManager._instance.PlayAudioAside();
 						audioAsidePlayed=true;
 					}
-					// 显示字幕
-					FormalScene._instance.ShowSubtitle();
+
 				}
+				// 显示字幕
+				FormalScene._instance.ShowSubtitle();
 
 				#region 老鼠运动
 				//小老鼠移向第二个点（播放跑的动画）
@@ -261,9 +256,11 @@ public class LevelTwo : MonoBehaviour
 			{
 				Vector3 offSet = tar - mouse.transform.position;
 				mouse.transform.position += offSet.normalized * moveSpeed * Time.deltaTime;
-				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
+//				if(Vector3.Distance(tar, mouse.transform.position)<=0.1f)
+				if (mouse.transform.position.x-tar.x<=0.1f)
 				{
 					isOver = true;
+					Debug.Log("到达了，停止移动");
 					mouse.transform.position = tar;
 				}
 			}
@@ -305,7 +302,7 @@ public class LevelTwo : MonoBehaviour
 
 
 		mouse=Manager._instance.mouseGo;
-		mouse.transform.position=originMousePos;
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
 		if (mouse.GetComponent<MouseEnterScene>()==null) 
 		{
@@ -321,7 +318,7 @@ public class LevelTwo : MonoBehaviour
 			ball=Manager._instance.ball;
 		}
 
-		ball.transform.position=originBallPos;
+		ball.transform.position=originBallTrans.position;
 
 		if (ball.GetComponent<Rigidbody2D>()) 
 		{
@@ -396,10 +393,14 @@ public class LevelTwo : MonoBehaviour
 	void OnDisable()
 	{
 		Manager._instance.Reset();
-		if (mouse.GetComponent<MouseEnterScene>()) 
+		if (mouse)
 		{
-			Destroy(mouse.GetComponent<MouseEnterScene>());
+			if (mouse.GetComponent<MouseEnterScene>()) 
+			{
+				Destroy(mouse.GetComponent<MouseEnterScene>());
+			}
 		}
+
 
 	}
 

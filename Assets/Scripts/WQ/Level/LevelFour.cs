@@ -9,23 +9,18 @@ using UnityEngine.EventSystems;
 public class LevelFour : MonoBehaviour 
 {
 	public static LevelFour _instance;
+	Animator mouseAnimator;
+
 
 	[HideInInspector]
     public 	GameObject mouse;
+	private GameObject center;
 
-	GameObject center;
-
-	bool storyBegin;//故事是否开始的标志
-
-	Animator mouseAnimator;
-
-	Vector3 originMousePos=new Vector3(1.5f,1.7f,0);
-	Vector3 outsidePos=new Vector3(50f,50f,0);
-
+	public Transform originMouseTrans;
 
 	[HideInInspector]
 	public bool showFingerOnMouse;//是否出现小手提示点击老鼠
-
+	private bool storyBegin;//故事是否开始的标志
 
 
 	void Awake()
@@ -35,6 +30,7 @@ public class LevelFour : MonoBehaviour
 
 	void Start () 
 	{
+		Manager.storyStatus=StoryStatus.Normal;
 		
 		center=GameObject.Find("Manager");
 		if (center) 
@@ -49,7 +45,7 @@ public class LevelFour : MonoBehaviour
 		
 		
 		FormalScene._instance.recordBtn.gameObject.SetActive(false);
-		Manager._instance.mouseGo.transform.position=originMousePos;
+		Manager._instance.mouseGo.transform.position=originMouseTrans.position;
 		ShowMouse();
 
 	}
@@ -196,6 +192,7 @@ public class LevelFour : MonoBehaviour
 		}
 		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
 
+		mouse.transform.localRotation=Quaternion.Euler(0,0,0);
 
 		
 	}

@@ -17,7 +17,7 @@ public class RemoveColor2D : MonoBehaviour
 	int textureHalfWidth;
 	int textureHalfHeight;
 
-	public int numToEraseNet = 15;
+	public int numToEraseNet = 10;
 	public List<Transform> keyPointList = new List<Transform>();
 	private List<bool> keyPointFlagList = new List<bool>();
 
@@ -84,7 +84,7 @@ public class RemoveColor2D : MonoBehaviour
 				netIsErased = CheckIfNetWasErased();
 				LevelEight._instance.netIsErased=netIsErased;
 
-				Debug.Log("netIsErased = " + netIsErased);
+//				Debug.Log("netIsErased = " + netIsErased);
 			}
 			
 		}
