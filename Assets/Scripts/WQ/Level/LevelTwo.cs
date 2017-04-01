@@ -393,10 +393,14 @@ public class LevelTwo : MonoBehaviour
 	void OnDisable()
 	{
 		Manager._instance.Reset();
-		if (mouse.GetComponent<MouseEnterScene>()) 
+		if (mouse)
 		{
-			Destroy(mouse.GetComponent<MouseEnterScene>());
+			if (mouse.GetComponent<MouseEnterScene>()) 
+			{
+				Destroy(mouse.GetComponent<MouseEnterScene>());
+			}
 		}
+
 
 	}
 

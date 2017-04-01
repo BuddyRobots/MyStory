@@ -150,6 +150,13 @@ public class LevelEight : MonoBehaviour
 		{
 			mouse.GetComponent<Rigidbody2D>().simulated=true;
 		}
+		else
+		{
+			mouse.AddComponent<Rigidbody2D>();
+			mouse.GetComponent<Rigidbody2D>().gravityScale=0;
+			mouse.GetComponent<Rigidbody2D>().constraints=RigidbodyConstraints2D.FreezeRotation;
+
+		}
 
 		if (mouse.GetComponent<MouseDrag>()==null) 
 		{
@@ -167,7 +174,11 @@ public class LevelEight : MonoBehaviour
 		{
 			Destroy(mouse.GetComponent<MouseDrag>());
 		}
-		mouse.GetComponent<Rigidbody2D>().gravityScale=0f;
+		if (mouse.GetComponent<Rigidbody2D>()!=null) {
+			
+//			mouse.GetComponent<Rigidbody2D>().simulated=false;
+			Destroy(mouse.GetComponent<Rigidbody2D>());
+		}
 		mouseAnimator.CrossFade("idle",0);
 
 	}

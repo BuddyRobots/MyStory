@@ -234,6 +234,7 @@ public class FormalScene : MonoBehaviour
 		blackMask.transform.localPosition=blackMask_screenInsidePos;
 		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+		Manager._instance.Reset();
 		SceneManager.LoadSceneAsync("6_FormalScene_0");
 
 		Manager._instance.ChangeSceneToSetBgAudioVolumeNormal();
@@ -248,6 +249,7 @@ public class FormalScene : MonoBehaviour
 		blackMask.transform.localPosition=blackMask_screenInsidePos;
 		blackMask.GetComponent<Image>().CrossFadeAlpha(1,Constant.SCREEN_FADINGTIME,true);
 		yield return new WaitForSeconds(Constant.SCREEN_FADINGTIME);
+		Manager._instance.Reset();
 		SceneManager.LoadSceneAsync("5_SelectLevel");
 		Manager._instance.ChangeSceneToSetBgAudioVolumeNormal();
 
@@ -485,7 +487,15 @@ public class FormalScene : MonoBehaviour
 
 	public void UpgradeLevel()
 	{
-		
+		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
+		if(data.Progress != LevelProgress.Done)
+		{
+			PlayerPrefs.SetInt ("LevelID",data.LevelID);
+			PlayerPrefs.SetInt ("LevelProgress",1);
+			LevelManager.Instance.LoadLocalLevelProgressData ();
+		}
+
+
 		currentLevelID++;
 
 		Debug.Log("升级关卡，当前关卡是："+currentLevelID);
@@ -531,6 +541,18 @@ public class FormalScene : MonoBehaviour
 
 	private void OnHomeBtnClick(GameObject btn)
 	{
+		Manager._instance.Reset();
+
+
+		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
+		if(data.Progress != LevelProgress.Done)
+		{
+			PlayerPrefs.SetInt ("LevelID",data.LevelID);
+			PlayerPrefs.SetInt ("LevelProgress",1);
+			LevelManager.Instance.LoadLocalLevelProgressData ();
+		}
+
+
 		SceneManager.LoadSceneAsync("5_SelectLevel");
 	}
 

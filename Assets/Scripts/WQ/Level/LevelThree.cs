@@ -431,6 +431,9 @@ public class LevelThree : MonoBehaviour
 		{
 			ball.AddComponent<BallFall>();
 		}
+		if (ball.GetComponent<Animator>()!=null) {
+			ball.GetComponent<Animator>().enabled=true;
+		}
 	}
 
 
@@ -454,6 +457,9 @@ public class LevelThree : MonoBehaviour
 		if (ball.GetComponent<BallFall>())
 		{
 			Destroy(ball.GetComponent<BallFall>());
+		}
+		if (ball.GetComponent<Animator>()!=null) {
+			ball.GetComponent<Animator>().enabled=false;
 		}
 
 	}

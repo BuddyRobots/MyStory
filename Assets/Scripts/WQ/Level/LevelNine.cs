@@ -356,6 +356,10 @@ public class LevelNine : MonoBehaviour
 
 		Manager._instance.Reset();
 		mouseAnimator.CrossFade("idle",0);
+		if (mouse.GetComponent<MouseCtrl>()!=null) 
+		{
+			Destroy(mouse.GetComponent<MouseCtrl>());
+		}
 
 	}
 

@@ -272,7 +272,14 @@ public class LevelOne : MonoBehaviour
 		mouseAnimator.CrossFade("idle",0);
 
 		mouse.GetComponentInChildren<BoxCollider2D>().enabled=false;
+		if (mouse.GetComponent<Rigidbody2D>()==null) 
+		{
+			mouse.AddComponent<Rigidbody2D>();
+		}
+		mouse.GetComponent<Rigidbody2D>().gravityScale=0;
+		mouse.GetComponent<Rigidbody2D>().constraints=RigidbodyConstraints2D.FreezeRotation;
 		mouse.GetComponent<Rigidbody2D>().simulated=true;
+
 
 
 	}

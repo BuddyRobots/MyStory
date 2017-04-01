@@ -59,7 +59,10 @@ public class LevelFive : MonoBehaviour
 			{
 				mouseAnimator.CrossFade("RunAway",0);
 				Debug.Log("播放跑动画");
-				MouseRunAway._instance.move=true;
+				if (MouseRunAway._instance) {
+					MouseRunAway._instance.move=true;
+
+				}
 
 				if (Manager.storyStatus==StoryStatus.Normal) 
 				{
@@ -132,6 +135,7 @@ public class LevelFive : MonoBehaviour
 		ball.transform.localPosition=originBallTrans.position;
 		ball.SetActive(true);
 
+
 	}
 
 
@@ -195,6 +199,7 @@ public class LevelFive : MonoBehaviour
 		
 		ball.transform.parent=null;
 		ball.transform.position=Manager._instance.outsideScreenPos;
+
 
 		Manager._instance.Reset();
 		if (mouse.GetComponent<MouseRunAway>()) 

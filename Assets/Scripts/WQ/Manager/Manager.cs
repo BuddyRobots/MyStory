@@ -184,23 +184,27 @@ public class Manager :MonoBehaviour
 	/// </summary>
 	public void Reset()
 	{
-		mouseGo.transform.position=outsideScreenPos;
-
-
-		ball.transform.position=outsideScreenPos;
-		if (GetComponent<Rigidbody2D>()==null) 
+		if (mouseGo) 
 		{
-			ball.AddComponent<Rigidbody2D>();
+			mouseGo.transform.position=outsideScreenPos;
+			mouseGo.GetComponent<Animator>().CrossFade("idle",0);
 		}
 
-		ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
 
+		if (ball) 
+		{
+			ball.transform.position=outsideScreenPos;
+			if (GetComponent<Rigidbody2D>()==null) 
+			{
+				ball.AddComponent<Rigidbody2D>();
+			}
 
-
-//		if (ball.GetComponent<BallMoveWithBg>()!=null) 
-//		{
-//			Destroy(ball.GetComponent<BallMoveWithBg>());
-//		}
+			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
+			if (ball.GetComponent<Animator>()!=null) {
+				ball.GetComponent<Animator>().CrossFade("BallIdle",0);
+			}
+			
+		}
 
 		if (garland)
 		{
