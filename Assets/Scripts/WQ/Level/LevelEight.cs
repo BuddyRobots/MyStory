@@ -170,16 +170,20 @@ public class LevelEight : MonoBehaviour
 	void OnDisable()
 	{
 		Manager._instance.Reset();
-		if (mouse.GetComponent<MouseDrag>()!=null)
+		if (mouse) 
 		{
-			Destroy(mouse.GetComponent<MouseDrag>());
+			if (mouse.GetComponent<MouseDrag>()!=null)
+			{
+				Destroy(mouse.GetComponent<MouseDrag>());
+			}
+			if (mouse.GetComponent<Rigidbody2D>()!=null) {
+
+				//			mouse.GetComponent<Rigidbody2D>().simulated=false;
+				Destroy(mouse.GetComponent<Rigidbody2D>());
+			}
+			mouseAnimator.CrossFade("idle",0);
 		}
-		if (mouse.GetComponent<Rigidbody2D>()!=null) {
-			
-//			mouse.GetComponent<Rigidbody2D>().simulated=false;
-			Destroy(mouse.GetComponent<Rigidbody2D>());
-		}
-		mouseAnimator.CrossFade("idle",0);
+
 
 	}
 
