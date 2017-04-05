@@ -82,9 +82,11 @@ public class SubtitleShow : MonoBehaviour
 			}
 
 		}
+		if (Manager.storyStatus!=StoryStatus.Recording) {
+			//字幕切换完毕，屏幕需要变暗再变亮
+			FormalScene._instance.screenGrowingDarkAndLight = true;
+		}
 
-		//字幕切换完毕，屏幕需要变暗再变亮
-		FormalScene._instance.screenGrowingDarkAndLight = true;
 
 		Manager._instance.isSubtitleShowOver=true;
 		Debug.Log("字幕结束");

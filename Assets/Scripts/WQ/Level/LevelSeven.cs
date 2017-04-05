@@ -14,23 +14,20 @@ public class LevelSeven : MonoBehaviour
 	public Transform originMouseTrans;
 	public Transform destMouseTrans;
 
-
-
 	[HideInInspector]
 	public float speed;
-
 
 	[HideInInspector]
 	public bool walkToLionAniOver;
 	[HideInInspector]
 	public bool aniDone;
 
-	bool walkAniPlayed;
-	bool move;
-	bool showFingerOnMouse;
-	bool mouseClicked;
-	bool audioAsidePlayed;
-	bool talkAniPlayed;
+	private bool walkAniPlayed;
+	private bool move;
+	private bool showFingerOnMouse;
+	private bool mouseClicked;
+	private bool audioAsidePlayed;
+	private bool talkAniPlayed;
 
 
 	void Awake()
@@ -40,11 +37,10 @@ public class LevelSeven : MonoBehaviour
 	}
 
 
-
-
-
 	void Start() 
 	{
+
+		Manager.storyStatus=StoryStatus.Normal;
 		Init();
 
 		ShowMouse();
@@ -59,11 +55,8 @@ public class LevelSeven : MonoBehaviour
 		mouseClicked=false;
 		audioAsidePlayed=false;
 		talkAniPlayed=false;
-
+		showFingerOnMouse=false;
 		move=true;//一开始老鼠就是可以移动的
-
-
-
 	}
 
 
@@ -120,10 +113,10 @@ public class LevelSeven : MonoBehaviour
 					{
 						mouseAnimator.CrossFade("Talk",0);
 
+						FormalScene._instance.ShowSubtitle();
+
 						talkAniPlayed=true;
 					}
-
-
 
 				}
 				if (mouseClicked) 
@@ -138,7 +131,7 @@ public class LevelSeven : MonoBehaviour
 						{
 							//播放旁白 ，显示字幕
 							BussinessManager._instance.PlayAudioAside();
-							FormalScene._instance.ShowSubtitle();
+
 							audioAsidePlayed=true;
 						}
 
@@ -151,7 +144,7 @@ public class LevelSeven : MonoBehaviour
 
 
 					}
-
+					FormalScene._instance.ShowSubtitle();
 
 				}
 
@@ -302,11 +295,15 @@ public class LevelSeven : MonoBehaviour
 
 	}
 
+	void OnDisable()
+	{
 
-
-
-
-
-
+		Manager._instance.Reset();
+		mouseAnimator.CrossFade("idle",0);
+		if (mouse.GetComponent<MouseCtrl>()!=null) 
+		{
+			Destroy(mouse.GetComponent<MouseCtrl>());
+		}
+	}
 
 }

@@ -31,93 +31,74 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 				{
            			""levelID"": 1,
            			""levelName"": ""第一关"",
-           			""levelsubtitle"":  ""有一天，小老鼠正在踢皮球，小皮球真淘气，滚来滚去捉迷藏。。。"" ,
            			""progress"":1,
            			""preLevelID"": 0,
            			""nextLevelID"": 2,
-					""recordTime"":8,
-					""sentenceTimeString"":""3,4,5""
-
+					""recordTime"":8
 				},
 				{
            			""levelID"": 2,
            			""levelName"": ""第二关"",
-           			""levelsubtitle"":  ""咦，小皮球藏进了草丛里，小老鼠快去捉住它。"" ,
            			""progress"":0,
            			""preLevelID"": 1,
            			""nextLevelID"": 3,
-					""recordTime"":9,
-					""sentenceTimeString"":""6""
+					""recordTime"":9
 				},
 				{
            			""levelID"": 3,
            			""levelName"": ""第三关"",
-           			""levelsubtitle"":  ""”嗷呜~~！是谁在我头上跳来跳去？“”哎呀坏了，原来是只大狮子。“”嗯！原来是个小不点，好大的胆子，看我吃了你！“"" ,
            			""progress"":0,
            			""preLevelID"": 2,
            			""nextLevelID"": 4,
-					""recordTime"":5,
-					""sentenceTimeString"":""3,3,5""
+					""recordTime"":5
 				},
 				{
            			""levelID"": 4,
            			""levelName"": ""第四关"",
-           			""levelsubtitle"":  ""  "" ,
            			""progress"":0,
            			""preLevelID"": 3,
            			""nextLevelID"": 5,
-					""recordTime"":5,
-					""sentenceTimeString"":""0""
+					""recordTime"":5
 				},
 				{
            			""levelID"": 5,
            			""levelName"": ""第五关"",
-           			""levelsubtitle"":  ""”狮子先生别生气，今天您要是放我走，将来有一天我一定会报答您的！“小老鼠苦苦哀求着。”哈哈哈哈，报答我？就凭你？你这个小家伙还真有趣，今天我心情好，就放你走吧。哈哈哈哈！“狮子捂着肚皮笑得满地打滚。"" ,
            			""progress"":0,
            			""preLevelID"": 4,
            			""nextLevelID"": 6,
-					""recordTime"":12,
-					""sentenceTimeString"":""5,7,3""
+					""recordTime"":5
 				},
 				{
            			""levelID"": 6,
            			""levelName"": ""第六关"",
-           			""levelsubtitle"":  ""过了一个星期，狮子在散步时不慎落入了猎人布下的陷阱。"" ,
            			""progress"":0,
            			""preLevelID"": 5,
            			""nextLevelID"": 7,
-					""recordTime"":13,
-					""sentenceTimeString"":""3""
+					""recordTime"":5
 				},
 				{
            			""levelID"": 7,
            			""levelName"": ""第七关"",
-           			""levelsubtitle"":  ""“狮子先生，别怕，我来救你了！”呀，原来是小老鼠出现了！”别说大话了，我这么强壮就没办法，你一个小不点能做什么呢？“狮子绝望地说。"" ,
            			""progress"":0,
            			""preLevelID"": 6,
            			""nextLevelID"": 8,
-					""recordTime"":14,
-					""sentenceTimeString"":""6,6""
+					""recordTime"":5
 				},
 				{
            			""levelID"": 8,
            			""levelName"": ""第八关"",
-           			""levelsubtitle"":  ""   "" ,
            			""progress"":0,
            			""preLevelID"": 7,
            			""nextLevelID"": 9,
-					""recordTime"":15,
-					""sentenceTimeString"":""0""
+					""recordTime"":5
 				},
 				{
            			""levelID"": 9,
            			""levelName"": ""第九关"",
-           			""levelsubtitle"":  ""”小老鼠，你是我的救命恩人，真是太谢谢你啦！“狮子得救了，高兴地为小老鼠带上了一顶花冠。从那以后，他们成了形影不离的好朋友。"" ,
            			""progress"":0,
            			""preLevelID"": 8,
            			""nextLevelID"": 10,
-					""recordTime"":16,
-					""sentenceTimeString"":""5,6,5""
+					""recordTime"":5
 				}
 				]
             }";
@@ -128,50 +109,15 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	{
 //		Debug.Log("levelManager-----awake()");
 //		code for test...
-		PlayerPrefs.SetInt ("LevelID",9);
+		PlayerPrefs.SetInt ("LevelID",8);
 		PlayerPrefs.SetInt ("LevelProgress",0);
 
-//		ReadSubtitleText();
+
 		ParseLevelItemInfo();
-//		SetSubtitleForLevel();
 		SetAudioclipForLevel();
 		LoadLocalLevelProgressData ();
 	}
 
-
-
-	public void ReadSubtitleText()
-	{
-//		Debug.Log("--ReadSubtitleText()");
-		string 	allSubtitle=Resources.Load("Txt/Subtitle").ToString();//读取字幕文本文件
-		string[] singleLevelSubtitle=allSubtitle.Split('|');//每一关的字幕
-//		Debug.Log("一共有 "+singleLevelSubtitle.Length+" 段话");
-		for (int i = 0; i < singleLevelSubtitle.Length; i++) 
-		{
-			string[] sentences=singleLevelSubtitle[i].Split('*');//每一句的字幕
-			List<string> temp=new List<string>();
-//			Debug.Log("第 "+i+" 段话有 "+sentences.Length+" 句话，分别是：");
-			for (int j = 0; j < sentences.Length; j++)
-			{
-//				Debug.Log("第 "+j+" 句是："+sentences[j]);
-				temp.Add(sentences[j]);
-			}
-			allLevelSubTitleList.Add(temp);
-
-//			Debug.Log("----------------------------------");
-
-		}
-	}
-
-	void SetSubtitleForLevel()
-	{
-		Debug.Log("--SetSubtitleForLevel()");
-		for (int i = 0; i < levelItemDataList.Count; i++) 
-		{
-			levelItemDataList[i].SubtitleList=allLevelSubTitleList[i];
-//			Debug.Log("************levelItemDataList[i].SubtitleList.count---"+levelItemDataList[i].SubtitleList.Count);
-		}
-	}
 
 	/// <summary>
 	/// 给关卡设置旁白音频
@@ -205,29 +151,10 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 				LevelItemData levelItemData = new LevelItemData ();
 				levelItemData.LevelID = (int)jdLevelItems [i] ["levelID"];
 				levelItemData.LevelName = (string)jdLevelItems [i] ["levelName"];
-				levelItemData.LevelSubtitle = (string)jdLevelItems [i] ["levelsubtitle"];
-
-
-
-
 				levelItemData.Progress = (LevelProgress)((int)jdLevelItems [i] ["progress"]);
 				levelItemData.PrelevelID = (int)jdLevelItems [i] ["preLevelID"];
 				levelItemData.NextLevelID = (int)jdLevelItems [i] ["nextLevelID"];
-				//				Debug.Log("*******000"+levelItemData.NextLevelID);
 				levelItemData.RecordTime=(int)jdLevelItems[i]["recordTime"];
-				//				Debug.Log("*********"+levelItemData.RecordTime);
-				levelItemData.SentenceTimeString=(string)jdLevelItems[i]["sentenceTimeString"];
-
-
-
-
-				string[] temp_sentenceTimeList=levelItemData.SentenceTimeString.Split(',');
-
-				for (int j = 0; j < temp_sentenceTimeList.Length; j++) 
-				{
-					levelItemData.SentenceTimeList.Add(float.Parse(temp_sentenceTimeList[j]));
-				}
-
 
 
 				levelItemDataList.Add (levelItemData);
@@ -235,12 +162,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 			}
 
 		}
-
-//		Manager._instance.ReadSubtitleText();
-//		for (int i = 0; i < levelItemDataList.Count; i++) 
-//		{
-//			Debug.Log("levelItemDataList[i].SubtitleList.Count---"+levelItemDataList[i].SubtitleList.Count);
-//		}
 
 	}
 	/// <summary>
@@ -255,7 +176,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		{
 			//如果本地存储中有LevelID这个字段，表示玩家有闯关记录，则需要去拿到这个数据
 			levelID = PlayerPrefs.GetInt ("LevelID");
-//			Debug.Log ("levelID==" + levelID);
+			Debug.Log ("levelID==" + levelID);
 		}
 		else 
 		{
@@ -268,7 +189,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		{
 
 			levelPro = PlayerPrefs.GetInt ("LevelProgress");
-//			Debug.Log ("levelPro==" + levelPro);
+			Debug.Log ("levelPro==" + levelPro);
 		}
 		else
 		{
@@ -281,6 +202,12 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		UpdateLevelItemDataList (levelID,levelPro);
 
 	}
+
+
+
+
+
+
 
 	/// <summary>
 	/// 更新关卡数据信息

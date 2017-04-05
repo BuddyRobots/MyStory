@@ -35,6 +35,9 @@ public class LevelEight : MonoBehaviour
 
 	void Start () 
 	{
+
+		Manager.storyStatus=StoryStatus.Normal;
+
 		//下一步按钮隐藏
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		FormalScene._instance.recordBtn.gameObject.SetActive(false);
@@ -147,6 +150,13 @@ public class LevelEight : MonoBehaviour
 		{
 			mouse.GetComponent<Rigidbody2D>().simulated=true;
 		}
+		else
+		{
+			mouse.AddComponent<Rigidbody2D>();
+			mouse.GetComponent<Rigidbody2D>().gravityScale=0;
+			mouse.GetComponent<Rigidbody2D>().constraints=RigidbodyConstraints2D.FreezeRotation;
+
+		}
 
 		if (mouse.GetComponent<MouseDrag>()==null) 
 		{
@@ -160,12 +170,20 @@ public class LevelEight : MonoBehaviour
 	void OnDisable()
 	{
 		Manager._instance.Reset();
-		if (mouse.GetComponent<MouseDrag>()!=null)
+		if (mouse) 
 		{
-			Destroy(mouse.GetComponent<MouseDrag>());
+			if (mouse.GetComponent<MouseDrag>()!=null)
+			{
+				Destroy(mouse.GetComponent<MouseDrag>());
+			}
+			if (mouse.GetComponent<Rigidbody2D>()!=null) {
+
+				//			mouse.GetComponent<Rigidbody2D>().simulated=false;
+				Destroy(mouse.GetComponent<Rigidbody2D>());
+			}
+			mouseAnimator.CrossFade("idle",0);
 		}
-		mouse.GetComponent<Rigidbody2D>().gravityScale=0f;
-		mouseAnimator.CrossFade("idle",0);
+
 
 	}
 

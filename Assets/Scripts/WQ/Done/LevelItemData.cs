@@ -18,14 +18,11 @@ public class LevelItemData
 	private int m_LevelID;
 	private int m_LevelNumber;//关卡数字
 	private string m_LevelName;//关卡名字
-	private string m_LevelSubtitle;//关卡字幕
 	private LevelProgress progress;
 	private int preLevelID;
 	private int nextLevelID;
 	private int recordTime;//录音时长
-	private string sentenceTimeString;
 	private List<string> subtitleList;//字幕（以句为单位）
-	private List<float> sentenceTimeList=new List<float>();//存储每一句字幕的时间
 	private AudioClip audioAside;//旁白音频
 
 	public AudioClip AudioAside
@@ -78,17 +75,7 @@ public class LevelItemData
 			m_LevelName = value;
 		}
 	}
-	public string LevelSubtitle
-	{
-		get
-		{ 
-			return m_LevelSubtitle;
-		}
-		set
-		{ 
-			m_LevelSubtitle = value;
-		}
-	}
+
 
 	public  LevelProgress Progress
 	{
@@ -141,17 +128,7 @@ public class LevelItemData
 			recordTime = value;
 		}
 	}
-	public string SentenceTimeString
-	{
-		get
-		{
-			return sentenceTimeString;
-		}
-		set
-		{
-			sentenceTimeString=value;
-		}
-	}
+
 
 	public List<string> SubtitleList
 	{
@@ -164,16 +141,6 @@ public class LevelItemData
 			subtitleList = value;
 		}
 	}
-	public List<float> SentenceTimeList
-	{
-		get
-		{ 
-			return sentenceTimeList;
-		}
-		set
-		{ 
-			sentenceTimeList = value;
-		}
-	}
+
 
 }
