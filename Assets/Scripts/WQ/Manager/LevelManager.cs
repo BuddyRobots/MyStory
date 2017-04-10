@@ -167,11 +167,13 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// <summary>
 	/// 加载本地已经完成的关卡
 	/// </summary>
+	public int levelID = 0; //保存整个的游戏完成进度，已经玩到哪一关卡了  这个得设计成全局的，别的地方也需要访问 modify by tyq
+	public int levelPro = 0; //
 	public void LoadLocalLevelProgressData()
 	{
 		Debug.Log("----LoadLocalLevelProgressData");
-		int levelID = 0;
-		int levelPro = 0;
+//		int levelID = 0;
+//		int levelPro = 0;
 		if (PlayerPrefs.HasKey ("LevelID"))
 		{
 			//如果本地存储中有LevelID这个字段，表示玩家有闯关记录，则需要去拿到这个数据

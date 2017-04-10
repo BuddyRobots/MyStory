@@ -487,12 +487,21 @@ public class FormalScene : MonoBehaviour
 
 	public void UpgradeLevel()
 	{
+		//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 add by tyq
+		Debug.Log("UpgradeLevel_LevelManager.Instance.levelID==" + LevelManager.Instance.levelID + "__currentLevelID==" + currentLevelID);
+			
 		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
 		if(data.Progress != LevelProgress.Done)
-		{
-			PlayerPrefs.SetInt ("LevelID",data.LevelID);
-			PlayerPrefs.SetInt ("LevelProgress",1);
-			LevelManager.Instance.LoadLocalLevelProgressData ();
+		{	
+			Debug.Log("UpgradeLevel_data.Progress != LevelProgress.Done");
+			//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 add by tyq
+			if(currentLevelID >= LevelManager.Instance.levelID){
+				Debug.Log("UpgradeLevel_data.currentLevelID >= LevelManager.Instance.levelID_AA");
+				PlayerPrefs.SetInt ("LevelID",data.LevelID);
+				PlayerPrefs.SetInt ("LevelProgress",1);
+				LevelManager.Instance.LoadLocalLevelProgressData ();
+			}
+
 		}
 
 
@@ -508,8 +517,13 @@ public class FormalScene : MonoBehaviour
 		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
 		LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
 
-		PlayerPrefs.SetInt ("LevelID", currentLevelID);
-		PlayerPrefs.SetInt ("LevelProgress", 0);
+		//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 add by tyq，
+		if(currentLevelID >= LevelManager.Instance.levelID){
+			Debug.Log("UpgradeLevel_data.currentLevelID >= LevelManager.Instance.levelID_BB");
+			PlayerPrefs.SetInt ("LevelID", currentLevelID);
+			PlayerPrefs.SetInt ("LevelProgress", 0);
+		}
+
 
 	}
 

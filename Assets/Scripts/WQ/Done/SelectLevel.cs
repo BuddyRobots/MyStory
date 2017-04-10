@@ -51,7 +51,7 @@ public class SelectLevel : MonoBehaviour
 	{
 
 		int levelID=GetLevel(go.name);//得到关卡数字
-		Debug.Log("levelID----"+levelID);
+		Debug.Log("currentPlayLevelID----"+levelID);
 		data=LevelManager.Instance.GetSingleLevelItem(levelID);//根据关卡数字拿到关卡数据
 		LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
 		SceneManager.LoadSceneAsync("6_FormalScene_0");
@@ -89,6 +89,7 @@ public class SelectLevel : MonoBehaviour
 //			Debug.Log("levelID-----"+levelID);
 			if (data.LevelID ==levelID) 
 			{
+				Debug.Log("levelID-----"+levelID + "progress==" + data.Progress);
 				switch (data.Progress)
 				{
 
