@@ -17,7 +17,9 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	{
 		_instance=this;
 		recordVideo = new RecordVideo(vr, true);
+//		Manager.recordingDone=recordVideo.finishedRecording;
 	}
+
 
 	public void  RecordVideo()
 	{
@@ -33,6 +35,6 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	{
 		micLoudness = recordVideo.micLoudness;
 		Debug.Log("micLoudness-----"+micLoudness);
-
+		Manager.recordingDone=recordVideo.finishedRecording;
 	}
 }

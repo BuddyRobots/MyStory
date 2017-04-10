@@ -47,7 +47,7 @@ public class RemoveColor2D : MonoBehaviour
 	{
 		if (MouseDrag._instance!=null) 
 		{
-			if(MouseDrag._instance.mouseDraging)
+			if(MouseDrag._instance.mouseDraging && MouseDrag._instance.isMouseDown)
 			{
 				// Get Mouse position - convert to global world position
 				Vector3 screenPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);  

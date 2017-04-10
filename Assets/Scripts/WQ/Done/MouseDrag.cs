@@ -14,7 +14,9 @@ public class MouseDrag : MonoBehaviour
 	bool closingFloor;
 	bool changeAni;
 	bool mouseClicked;
-	bool isMouseDown = false;  
+
+	[HideInInspector]
+	public bool isMouseDown = false;  
 
 
 	[HideInInspector]
