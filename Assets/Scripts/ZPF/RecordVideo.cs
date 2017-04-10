@@ -18,6 +18,8 @@ public class RecordVideo {
 			return vr.GetMicLoudness();
 		}
 	}
+
+	public bool finishedRecording = false;
 		
 	iVidCapPro vr;
 	int framesRecorded;
@@ -33,6 +35,8 @@ public class RecordVideo {
 
 	public IEnumerator RecordForSeconds(int seconds, string name = "MyRecordedVideo", int vidWidth = 640, int vidHeight = 480)
 	{
+		finishedRecording = false;
+
 		// Register a delegate to be called when the video is complete.
 		vr.RegisterSessionCompleteDelegate(HandleSessionComplete);
 		// Register a delegate in case an error occurs during the recording session.
@@ -70,6 +74,7 @@ public class RecordVideo {
 	public void HandleSessionComplete()
 	{
 		// Do UI stuff when video is complete.
+		finishedRecording = true;
 		Debug.Log("RecordVideoAndAudio.cs HandleSessionComplete() : Video record completed!");
 	}
 
