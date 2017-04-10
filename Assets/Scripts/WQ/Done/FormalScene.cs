@@ -487,15 +487,15 @@ public class FormalScene : MonoBehaviour
 
 	public void UpgradeLevel()
 	{
-		//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 add by tyq
 		Debug.Log("UpgradeLevel_LevelManager.Instance.levelID==" + LevelManager.Instance.levelID + "__currentLevelID==" + currentLevelID);
 			
 		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
 		if(data.Progress != LevelProgress.Done)
 		{	
 			Debug.Log("UpgradeLevel_data.Progress != LevelProgress.Done");
-			//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 add by tyq
-			if(currentLevelID >= LevelManager.Instance.levelID){
+			//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 
+			if(currentLevelID >= LevelManager.Instance.levelID)
+			{
 				Debug.Log("UpgradeLevel_data.currentLevelID >= LevelManager.Instance.levelID_AA");
 				PlayerPrefs.SetInt ("LevelID",data.LevelID);
 				PlayerPrefs.SetInt ("LevelProgress",1);
@@ -517,7 +517,7 @@ public class FormalScene : MonoBehaviour
 		data =LevelManager.Instance.GetSingleLevelItem(currentLevelID);
 		LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
 
-		//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 add by tyq，
+		//这里需要做个判断，如果当前所玩的关卡比 游戏所玩的总进度关卡小，可以不用更新这儿，如果比之前游戏所玩的总进度关卡大，就需要更新游戏总进度 
 		if(currentLevelID >= LevelManager.Instance.levelID){
 			Debug.Log("UpgradeLevel_data.currentLevelID >= LevelManager.Instance.levelID_BB");
 			PlayerPrefs.SetInt ("LevelID", currentLevelID);
@@ -589,20 +589,17 @@ public class FormalScene : MonoBehaviour
 		mask.SetActive(false);
 		noticeToRecordFrame.SetActive(false);
 		recordingFrame.SetActive(true);
-
 		HideSubtitle();
-//		ShowSubtitle();
 
-		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
+
+//		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
+		RecordVideoWithIvidCapture._instance.RecordVideo();
 //		VideoRecManager._instance.StartRec();//开始录屏
 
 		sliderMoving=true;
 
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
-
-
 		Manager ._instance.fingerMove=true;
-
 		Manager._instance.RecordingToSetBgAudioVolumeZero();
 	
 	}
@@ -629,17 +626,13 @@ public class FormalScene : MonoBehaviour
 		mask.SetActive(false);
 		recordDoneFrame.SetActive(false);
 		recordingFrame.SetActive(true);
+		HideSubtitle();
 
-
-		//字幕不是一开始录音就显示的.... to do
-		subtitle.SetActive(true);
-		music.SetActive(false);
-
-
-//		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 		sliderMoving=true;
 
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
+		Manager ._instance.fingerMove=true;
+		Manager._instance.RecordingToSetBgAudioVolumeZero();
 
 	}
 		

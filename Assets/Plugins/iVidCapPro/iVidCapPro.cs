@@ -1678,7 +1678,7 @@ public class iVidCapPro : MonoBehaviour {
 		framesRendered++;
 	}
 
-	public float GetMicLoudness(int test_frameCount)
+	public float GetMicLoudness()
 	{
 		if (!isMicCapturing)
 			return 0.0f;
