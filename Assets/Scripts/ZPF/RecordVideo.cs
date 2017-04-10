@@ -5,12 +5,28 @@ using UnityEngine;
 
 public class RecordVideo {
 
-	public iVidCapPro vr;
+	float _micLoudness;
+	public float micLoudness
+	{
+		get
+		{
+			if (!vr)
+			{
+				Debug.LogError("RecordVideo.cs micLoudness : iVidCapPro not initialized!");
+				return 0;
+			}
+			return vr.GetMicLoudness();
+		}
+	}
+		
+	iVidCapPro vr;
 	int framesRecorded;
 	bool setDebug;
 
-	public RecordVideo(bool _setDebug = false)
+
+	public RecordVideo(iVidCapPro _iVidCapPro, bool _setDebug = false)
 	{
+		vr = _iVidCapPro;
 		setDebug = _setDebug;
 		vr.SetDebug(_setDebug);
 	}		
@@ -63,5 +79,4 @@ public class RecordVideo {
 		// Do stuff when an error occurred.
 		Debug.LogError("RecordVideoAndAudio.cs HandleSessionError() : Error when record video!");
 	}
-
 }
