@@ -53,7 +53,7 @@ public class RecordVideoAndAudio : MonoBehaviour {
 			30,                                        // frames per second when frame rate Locked/Throttled
 			iVidCapPro.CaptureAudio.No_Audio,          // whether or not to record audio
 			iVidCapPro.CaptureFramerateLock.Locked);   // capture type: Unlocked, Locked, Throttled
-		#elif
+		#elif !UNITY_EDITOR
 		vr.BeginRecordingSession(
 			"MyRecordedVideo",                         // name of the video
 			vidWidth, vidHeight,                       // video width & height in pixels
