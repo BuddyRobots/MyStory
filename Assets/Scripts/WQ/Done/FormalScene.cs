@@ -592,7 +592,7 @@ public class FormalScene : MonoBehaviour
 		HideSubtitle();
 
 
-//		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
+		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 		RecordVideoWithIvidCapture._instance.RecordVideo();
 //		VideoRecManager._instance.StartRec();//开始录屏
 

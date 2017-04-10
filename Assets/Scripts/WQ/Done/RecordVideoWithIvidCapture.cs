@@ -22,12 +22,17 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	public void  RecordVideo()
 	{
 		Debug.Log("RecordVideoWithIvidCapture---- RecordVideo()-----默认录音5秒");
+		Debug.Log("Application.dataPath-----"+Application.dataPath);
+		Debug.Log("Application.persistentDataPath-----"+Application.persistentDataPath);
+
+
 		StartCoroutine(recordVideo.RecordForSeconds(5));
 	}
 
 	void Update()
 	{
 		micLoudness = recordVideo.micLoudness;
+		Debug.Log("micLoudness-----"+micLoudness);
 
 	}
 }

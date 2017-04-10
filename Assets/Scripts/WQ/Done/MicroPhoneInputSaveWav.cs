@@ -303,20 +303,6 @@ public class MicroPhoneInputSaveWav : MonoBehaviour
 		filepath = Path.Combine(Application.persistentDataPath, filename);  
 		#endif  
 
-		/*
-		#if UNITY_STANDALONE_WIN  
-		Debug.Log("*****UNITY_STANDALONE_WIN****");
-		//string filepath =  filename;  
-		filepath = Path.Combine(Application.dataPath, filename);  
-		#endif  
-
-
-		#if UNITY_ANDROID  
-		Debug.Log("*****UNITY_ANDROID****");
-		filepath = Path.Combine(Application.persistentDataPath, filename);  
-		#endif  
-		*/
-
 		Debug.Log("filePath-----"+filepath);  
 
 		// Make sure directory exists if user is saving to sub dir.  
