@@ -87,7 +87,7 @@ public class FormalScene : MonoBehaviour
 	Vector3 blackMask_screenOutsidePos=new Vector3(0,1000f,0);//黑色遮罩在屏幕外面的位置
 	Vector3 blackMask_screenInsidePos=Vector3.zero;//黑色遮罩在屏幕中间的位置
 
-
+	string filePath="";
 
 	void Awake()
 	{
@@ -180,6 +180,8 @@ public class FormalScene : MonoBehaviour
 	
 		//屏幕变亮
 		StartCoroutine(ScreenLighten());
+
+		filePath = Application.persistentDataPath+"/tempAudio.wav";
 
 	
 
@@ -340,14 +342,9 @@ public class FormalScene : MonoBehaviour
 			tempScene.transform.parent=sceneParent.transform;
 		}
 	
-
-
-
-
-
 	}
 
-	string filePath = Application.persistentDataPath+"/tempAudio.wav";
+
 
 	void Update () 
 	{
@@ -369,25 +366,21 @@ public class FormalScene : MonoBehaviour
 
 			}
 
-
-
-
-
 			Manager.recordingDone=false;
 		} 
-		else 
-		{
-			if (System.IO.File.Exists(filePath)) 
-			{
-				print ("recordingdone==false----文件存在");
-			}
-			else
-			{
-				print ("recordingdone==false----文件不存在");
-
-			}
-			
-		}
+//		else 
+//		{
+//			if (System.IO.File.Exists(filePath)) 
+//			{
+//				print ("recordingdone==false----文件存在");
+//			}
+//			else
+//			{
+//				print ("recordingdone==false----文件不存在");
+//
+//			}
+//			
+//		}
 
 
 

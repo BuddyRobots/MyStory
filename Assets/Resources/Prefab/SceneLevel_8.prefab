@@ -908,7 +908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netGO: {fileID: 1686954858781270}
   brushRadius: 40
-  numToEraseNet: 15
+  numToEraseNet: 10
   keyPointList:
   - {fileID: 4924710129616814}
   - {fileID: 4959407585177068}
@@ -947,6 +947,7 @@ MonoBehaviour:
   net: {fileID: 1686954858781270}
   originMouseTrans: {fileID: 4127636359301364}
   netIsErased: 0
+  mouseClicked: 0
 --- !u!212 &212049814601642874
 SpriteRenderer:
   m_ObjectHideFlags: 1

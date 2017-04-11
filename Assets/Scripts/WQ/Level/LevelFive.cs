@@ -78,12 +78,13 @@ public class LevelFive : MonoBehaviour
 			//如果动画播完了，字幕也结束了，就切换场景
 			if (aniDone && Manager._instance.isSubtitleShowOver) 
 			{
+				mouseAnimator.CrossFade("idle",0);
 				//在正常状态或者播放状态下
 				if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
 				{
 					FormalScene._instance.ChangeSceneAutomatically();
 					MouseRunAway._instance.move=false;
-					mouseAnimator.CrossFade("idle",0);
+
 
 					aniDone=false;
 
@@ -132,6 +133,7 @@ public class LevelFive : MonoBehaviour
 
 		}
 		ball.transform.parent=GameObject.Find("Mouse/Hip/Torso/L arm/L hand").transform;
+		Debug.Log("ball.transform.parent--"+ball.transform.parent);
 		ball.transform.localPosition=originBallTrans.position;
 		ball.SetActive(true);
 

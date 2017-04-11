@@ -43,7 +43,7 @@ public class VolumeUICtrl : MonoBehaviour {
 //			float volume=MicroPhoneInputSaveWav.getInstance().GetSoundVolume();
 			float volume=RecordVideoWithIvidCapture._instance.micLoudness*1000;
 
-			Debug.Log("volume----"+volume);
+//			Debug.Log("volume----"+volume);
 
 			if (volume <=0) {
 				volumeImage.sprite=volumeImage_0;

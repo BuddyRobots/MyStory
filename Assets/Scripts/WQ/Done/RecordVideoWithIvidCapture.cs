@@ -34,7 +34,7 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	void Update()
 	{
 		micLoudness = recordVideo.micLoudness;
-		Debug.Log("micLoudness-----"+micLoudness);
+//		Debug.Log("micLoudness-----"+micLoudness);
 		Manager.recordingDone=recordVideo.finishedRecording;
 	}
 }

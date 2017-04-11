@@ -78,7 +78,7 @@ public class MouseDrag : MonoBehaviour
 			}
 
 		}  
-		if (Input.GetMouseButtonUp(0)) //如果松开了老鼠
+		if (Input.GetMouseButtonUp(0) && LevelEight._instance.mouseClicked) //如果松开了老鼠
 		{
 			isMouseDown = false;  
 			lastMousePosition = Vector3.zero;
