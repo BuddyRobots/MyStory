@@ -18,21 +18,24 @@ public class Manager :MonoBehaviour
 	public static ModelType modelType;//玩家选择画的角色类型，作为绘画展示界面显示什么图片的依据
 	public static StoryStatus storyStatus;//故事的进行状态，是正常进行的，还是非正常进行的（录音与播放的是非正常状态）
 
-	public bool bgMusicFadeOut;
-	public bool bgMusicFadeIn;
-	[HideInInspector]
-	public bool recordBtnHide;
-
 	[HideInInspector]
 	public AudioSource bgAudio;
+	public List<AudioClip> audioAside;
 
 	// Deprecated sourceMat.
 	[HideInInspector]
 	public Mat sourceMat;//用来存储从拍摄界面取得的Mat
 
+	[HideInInspector]
 	public Mouse mouse;
 
-	private float musicFadingTimer;//淡入淡出计时器
+	[HideInInspector]
+	public GameObject mouseGo;//存储的老鼠，每个场景里的老鼠都来自于这里，如果玩家没画老鼠，就用预先做好的老鼠形象，如果玩家画了小老鼠，就替换
+	[HideInInspector]
+	public GameObject ball;//存储的球
+	[HideInInspector]
+	public GameObject garland;//存储的花环
+
 
 	/// <summary>
 	/// 手是移动还是暂停移动的标志
@@ -41,24 +44,22 @@ public class Manager :MonoBehaviour
 	public bool fingerMove=true;
 	[HideInInspector]
 	public bool isSubtitleShowOver;//场景中字幕是否显示完的标志----有的关卡得根据这个标志来判读场景故事是不是结束了该跳到下一关了
-
-	public List<AudioClip> audioAside;
-
-	[HideInInspector]
-	public GameObject mouseGo;//存储的老鼠，每个场景里的老鼠都来自于这里，如果玩家没画老鼠，就用预先做好的老鼠形象，如果玩家画了小老鼠，就替换
-	[HideInInspector]
-	public GameObject ball;//存储的球
-	[HideInInspector]
-	public GameObject garland;//存储的花环
 	[HideInInspector]
 	public bool move;//背景是否移动的标志
-
-
+	[HideInInspector]
 	public bool levelOneOver;
+	public bool bgMusicFadeOut;
+	public bool bgMusicFadeIn;
+	[HideInInspector]
+	public bool recordBtnHide;
+
 	/// <summary>
 	/// position outside screen
 	/// </summary>
 	public Vector3 outsideScreenPos=new Vector3(0,20f,0);
+
+	private float musicFadingTimer;//淡入淡出计时器
+
 
 	void Awake()
 	{
@@ -95,7 +96,6 @@ public class Manager :MonoBehaviour
 			ball=Instantiate(Resources.Load("Prefab/Ball")) as GameObject;
 			ball.name="Ball";
 			ball.transform.position=outsideScreenPos;//球在屏幕外面
-//			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
 		}
 		if (garland==null)
 		{
@@ -124,7 +124,6 @@ public class Manager :MonoBehaviour
 		}
 		if (!Manager.musicOn )
 		{
-
 			//关闭音乐 
 			if (bgAudio.isPlaying) 
 			{
@@ -189,18 +188,18 @@ public class Manager :MonoBehaviour
 			mouseGo.transform.position=outsideScreenPos;
 			mouseGo.GetComponent<Animator>().CrossFade("idle",0);
 		}
-
-
+			
 		if (ball) 
 		{
 			ball.transform.position=outsideScreenPos;
-			if (GetComponent<Rigidbody2D>()==null) 
+			if (ball.GetComponent<Rigidbody2D>()==null) 
 			{
 				ball.AddComponent<Rigidbody2D>();
 			}
 
 			ball.GetComponent<Rigidbody2D>().simulated=false;//防止球掉下去
-			if (ball.GetComponent<Animator>()!=null) {
+			if (ball.GetComponent<Animator>()!=null) 
+			{
 				ball.GetComponent<Animator>().CrossFade("BallIdle",0);
 			}
 			
