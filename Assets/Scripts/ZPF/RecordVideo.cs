@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 
 public class RecordVideo {
@@ -22,6 +23,7 @@ public class RecordVideo {
 	public bool finishedRecording = false;
 		
 	iVidCapPro vr;
+	iVidCapPro.VideoDisposition videoPosition;
 	int framesRecorded;
 	bool setDebug;
 
@@ -29,21 +31,24 @@ public class RecordVideo {
 	public RecordVideo(iVidCapPro _iVidCapPro, bool _setDebug = false)
 	{
 		vr = _iVidCapPro;
+		videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Documents;
+		framesRecorded = 0;
 		setDebug = _setDebug;
+
 		vr.SetDebug(_setDebug);
 	}		
 
-	public IEnumerator RecordForSeconds(int seconds, string name = "MyRecordedVideo", int vidWidth = 640, int vidHeight = 480)
+	public IEnumerator RecordForSeconds(int seconds, 
+		iVidCapPro.VideoDisposition _videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Documents,
+		string name = "MyRecordedVideo", int vidWidth = 640, int vidHeight = 480)
 	{
 		finishedRecording = false;
+		videoPosition = _videoPosition;
 
-		// Register a delegate to be called when the video is complete.
 		vr.RegisterSessionCompleteDelegate(HandleSessionComplete);
-		// Register a delegate in case an error occurs during the recording session.
 		vr.RegisterSessionErrorDelegate(HandleSessionError);
 
 		#if UNITY_EDITOR
-		// "vr" is a reference to the iVidCapPro object.
 		vr.BeginRecordingSession(
 			name,                                      // name of the video
 			vidWidth, vidHeight,                       // video width & height in pixels
@@ -61,12 +66,22 @@ public class RecordVideo {
 
 		// Things are happening here that you want to be recorded.
 		if (setDebug)
-			Debug.Log("RecordVideo.cs RecourdForSeconds() : Start record video!");
+			Debug.Log("c.cs RecourdForSeconds() : Record video - Start!");
 		yield return new WaitForSeconds(seconds);
 
+		// Deprecated
+		// Copy audio file out
+//		string path = Application.persistentDataPath;
+//		string sourceName = "tempAudio.wav";
+//		string targetName = "recordedAudio.wav";
+//		// Use Path class to manipulate file and directory paths.
+//		string sourceFile = System.IO.Path.Combine(path, sourceName);
+//		string targetFile = System.IO.Path.Combine(path, sourceName);
+//		CopyFile(sourceFile, targetFile);
+
 		vr.EndRecordingSession(
-			iVidCapPro.VideoDisposition.Save_Video_To_Album,  // where to put the finished video 
-			out framesRecorded);                              // # of video frames recorded
+			videoPosition,          // where to put the finished video 
+			out framesRecorded);    // # of video frames recorded
 	}
 
 	// This delegate function is called when the recording session has completed successfully
@@ -75,13 +90,22 @@ public class RecordVideo {
 	{
 		// Do UI stuff when video is complete.
 		finishedRecording = true;
-		Debug.Log("RecordVideoAndAudio.cs HandleSessionComplete() : Video record completed!");
+		Debug.Log("RecordVideo.cs HandleSessionComplete() : Video record completed!");
 	}
 
 	// This delegate function is called if an error occurs during the recording session.
 	public void HandleSessionError(iVidCapPro.SessionStatusCode errorCode)
 	{
 		// Do stuff when an error occurred.
-		Debug.LogError("RecordVideoAndAudio.cs HandleSessionError() : Error when record video!");
+		Debug.LogError("RecordVideo.cs HandleSessionError() : Error when record video!");
 	}
+
+	public bool CopyFile(string sourcePath, string targetPath)
+	{
+		if (!File.Exists(sourcePath))
+			return false;
+
+		File.Copy(sourcePath, targetPath, true);
+		return true;
+	}		
 }
