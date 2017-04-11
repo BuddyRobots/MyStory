@@ -70,16 +70,17 @@ public class test_LoadSpriteParts : MonoBehaviour
 
 		// Add Box Collider
 		AddCollider(newMouseBoneRootGO);
-
 		// Add to a parent GameObject
 		GameObject newMouseAnimatedGO = new GameObject("Mouse");
 		mouseSpriteMeshRootGO.transform.parent = newMouseAnimatedGO.transform;
 		newMouseBoneRootGO.transform.parent = newMouseAnimatedGO.transform;
+		// Add RigidBody to mouse
 		Rigidbody2D rigidBody = newMouseAnimatedGO.AddComponent<Rigidbody2D>();
 		rigidBody.gravityScale = 0;
+		rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+		// Add garLand transform to mouse
 		GameObject garLandGO = GetPositionOfGarland(newMouseBoneRootGO);
 		garLandGO.transform.parent = newMouseAnimatedGO.transform;
-
 		// Add Animator to Mouse
 		Animator animator = newMouseAnimatedGO.AddComponent<Animator>();
 		//animator.runtimeAnimatorController = Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
