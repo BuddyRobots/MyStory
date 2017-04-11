@@ -14,7 +14,9 @@ public class MouseDrag : MonoBehaviour
 	bool closingFloor;
 	bool changeAni;
 	bool mouseClicked;
-	bool isMouseDown = false;  
+
+	[HideInInspector]
+	public bool isMouseDown = false;  
 
 
 	[HideInInspector]
@@ -76,7 +78,7 @@ public class MouseDrag : MonoBehaviour
 			}
 
 		}  
-		if (Input.GetMouseButtonUp(0)) //如果松开了老鼠
+		if (Input.GetMouseButtonUp(0) && LevelEight._instance.mouseClicked) //如果松开了老鼠
 		{
 			isMouseDown = false;  
 			lastMousePosition = Vector3.zero;

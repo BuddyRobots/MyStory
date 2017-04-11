@@ -63,9 +63,10 @@ public class LevelTwo : MonoBehaviour
 		dest_1=tar_1.position;
 		dest_2=tar_2.position;
 
+		ShowMouse();
+		ShowBall();
 
 		Init();
-
 
 	}
 
@@ -96,11 +97,6 @@ public class LevelTwo : MonoBehaviour
 		{
 			showFingerOnBall=true;
 		}
-
-
-		ShowMouse();
-		ShowBall();
-
 
 		//保证初始化的时候动画状态机不是暂停的
 		if (mouseAnimator!=null) 
@@ -346,11 +342,15 @@ public class LevelTwo : MonoBehaviour
 		}
 
 		Init();
+		mouse.transform.position=originMouseTrans.position;
+		mouseAnimator.CrossFade("",0);
+		mouseAnimator.CrossFade("01_WalkToBall",0);
 	}
 
 	public void PlayStoryWithAudioRecording()
 	{
 		Init();
+		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("01_WalkToBall",0);
 	}

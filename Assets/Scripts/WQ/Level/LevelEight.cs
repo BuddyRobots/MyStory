@@ -22,6 +22,9 @@ public class LevelEight : MonoBehaviour
 
 	bool nextBtnActivated;
 
+	[HideInInspector]
+	public bool mouseClicked;
+
 	float alphaChangeTimer=0;
 	float alphaChangeTime=1f;
 
@@ -115,6 +118,7 @@ public class LevelEight : MonoBehaviour
 						if (BussinessManager._instance.finger!=null) 
 						{
 							Destroy(BussinessManager._instance.finger);
+							mouseClicked=true;
 
 						}
 					}

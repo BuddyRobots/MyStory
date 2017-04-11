@@ -42,6 +42,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UIshow
+    uniqueID: 1239881477
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
