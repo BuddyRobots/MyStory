@@ -20,8 +20,8 @@ Builds/Xcode/Classes/*
 !Builds/Xcode/Classes/PhotoManager.m
 !Builds/Xcode/Classes/test_tensorflow.h
 !Builds/Xcode/Classes/test_tensorflow.mm
-
 !Builds/Xcode/Models
+!Builds/Xcode/Info.plist
 
 
 # MAC-OSX related
