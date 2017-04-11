@@ -311,6 +311,7 @@ public class LevelOne : MonoBehaviour
 			{
 				Destroy(mouse.GetComponent<MousePlayBall>());
 			}
+			mouse.GetComponentInChildren<BoxCollider2D>().enabled=true;
 		}
 
 

@@ -87,7 +87,7 @@ public class FormalScene : MonoBehaviour
 	Vector3 blackMask_screenOutsidePos=new Vector3(0,1000f,0);//黑色遮罩在屏幕外面的位置
 	Vector3 blackMask_screenInsidePos=Vector3.zero;//黑色遮罩在屏幕中间的位置
 
-
+	string filePath="";
 
 	void Awake()
 	{
@@ -180,6 +180,8 @@ public class FormalScene : MonoBehaviour
 	
 		//屏幕变亮
 		StartCoroutine(ScreenLighten());
+
+		filePath = Application.persistentDataPath+"/tempAudio.wav";
 
 	
 
@@ -340,23 +342,49 @@ public class FormalScene : MonoBehaviour
 			tempScene.transform.parent=sceneParent.transform;
 		}
 	
-
-
-
-
-
 	}
 
 
 
 	void Update () 
 	{
+		
 		if (Manager.recordingDone)
 		{
 			
 			ShowRecordDone();
+
+
+			Debug.Log("audiofilePath-----"+filePath);
+			if (System.IO.File.Exists(filePath)) 
+			{
+				print ("文件存在");
+			}
+			else
+			{
+				print ("文件不存在");
+
+			}
+
 			Manager.recordingDone=false;
-		}
+		} 
+//		else 
+//		{
+//			if (System.IO.File.Exists(filePath)) 
+//			{
+//				print ("recordingdone==false----文件存在");
+//			}
+//			else
+//			{
+//				print ("recordingdone==false----文件不存在");
+//
+//			}
+//			
+//		}
+
+
+
+
 		if (sliderMoving) 
 		{
 			sliderMovingTimer+=Time.deltaTime;
@@ -590,11 +618,9 @@ public class FormalScene : MonoBehaviour
 		noticeToRecordFrame.SetActive(false);
 		recordingFrame.SetActive(true);
 		HideSubtitle();
-
-
+	
 //		MicroPhoneInputSaveWav.getInstance().StartRecord();//开始录音
 		RecordVideoWithIvidCapture._instance.RecordVideo();
-//		VideoRecManager._instance.StartRec();//开始录屏
 
 		sliderMoving=true;
 
@@ -607,14 +633,11 @@ public class FormalScene : MonoBehaviour
 
 	void  ShowRecordDone()
 	{
-//		yield return new WaitForSeconds(3f);
-
 		mask.SetActive(true);
 		music.SetActive(true);
 		recordingFrame.SetActive(false);
 		subtitle.SetActive(false);
 		recordDoneFrame.SetActive(true);
-
 	}
 
 
@@ -627,13 +650,15 @@ public class FormalScene : MonoBehaviour
 		recordDoneFrame.SetActive(false);
 		recordingFrame.SetActive(true);
 		HideSubtitle();
+		Manager.recordingDone=false;
+
+		RecordVideoWithIvidCapture._instance.RecordVideo();
 
 		sliderMoving=true;
 
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
 		Manager ._instance.fingerMove=true;
 		Manager._instance.RecordingToSetBgAudioVolumeZero();
-
 	}
 		
 

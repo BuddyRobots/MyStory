@@ -90,6 +90,11 @@ public class LevelFour : MonoBehaviour
 		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StruggleAnimations/MouseStruggleController") as RuntimeAnimatorController;
 		mouseAnimator.CrossFade("idle",0);
 
+
+		mouse.GetComponentInChildren<BoxCollider2D>().enabled=true;
+
+
+
 		if (mouse.GetComponent<Rigidbody2D>()!=null) 
 		{
 			mouse.GetComponent<Rigidbody2D>().simulated=true;
