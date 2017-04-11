@@ -297,8 +297,11 @@ public class LevelSeven : MonoBehaviour
 
 	void OnDisable()
 	{
+		if (Manager._instance)
+		{
+			Manager._instance.Reset();
 
-		Manager._instance.Reset();
+		}
 		mouseAnimator.CrossFade("idle",0);
 		if (mouse.GetComponent<MouseCtrl>()!=null) 
 		{

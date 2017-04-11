@@ -11,8 +11,6 @@ using LitJson;
 public class LevelManager : AllSceneSinglton<LevelManager>
 {	
 
-
-
 	/// <summary>
 	/// 存储关卡数据的集合
 	/// </summary>
@@ -22,6 +20,9 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	private List<List<string>> allLevelSubTitleList=new List<List<string>>();
 
+	//保存整个的游戏完成进度，已经玩到哪一关卡了  这个得设计成全局的，别的地方也需要访问 
+	public int levelID = 0; 
+	public int levelPro = 0; 
 
 
 	//json字符串，保存关卡的信息（这里的信息字段名和levelItemData里的属性保持一致）
@@ -124,7 +125,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	void SetAudioclipForLevel()
 	{
-		Debug.Log("--SetAudioclipForLevel()");
 		for (int i = 0; i < levelItemDataList.Count; i++) 
 		{
 			levelItemDataList[i].AudioAside=Manager._instance.audioAside[i];
@@ -167,13 +167,10 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// <summary>
 	/// 加载本地已经完成的关卡
 	/// </summary>
-	public int levelID = 0; //保存整个的游戏完成进度，已经玩到哪一关卡了  这个得设计成全局的，别的地方也需要访问 modify by tyq
-	public int levelPro = 0; //
 	public void LoadLocalLevelProgressData()
 	{
 		Debug.Log("----LoadLocalLevelProgressData");
-//		int levelID = 0;
-//		int levelPro = 0;
+
 		if (PlayerPrefs.HasKey ("LevelID"))
 		{
 			//如果本地存储中有LevelID这个字段，表示玩家有闯关记录，则需要去拿到这个数据
