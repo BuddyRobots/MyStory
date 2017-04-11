@@ -73,6 +73,8 @@ public class FormalScene : MonoBehaviour
 
 
 
+
+
 	[HideInInspector]
 	public  bool screenGrowingDarkAndLight=false;
 	bool blackMaskShow=false;
@@ -114,7 +116,7 @@ public class FormalScene : MonoBehaviour
 		playBtn=transform.Find("RecordDoneFrame/Play").GetComponent<Button>();
 		recordAgainBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/RecordAgain").GetComponent<Button>();
 		nextBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/Next").GetComponent<Button>();
-		shareBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/Share").GetComponent<Button>();
+		shareBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/ShareBtn").GetComponent<Button>();
 		saveVideoToAlbumBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/SaveToAlbum").GetComponent<Button>();
 		confirmBtn=transform.Find("WinFrame/Btn").GetComponent<Button>();
 		saveVideoToAlbum=transform.Find("SaveVideoToAlbum").gameObject.GetComponent<Button>();
@@ -368,19 +370,6 @@ public class FormalScene : MonoBehaviour
 
 			Manager.recordingDone=false;
 		} 
-//		else 
-//		{
-//			if (System.IO.File.Exists(filePath)) 
-//			{
-//				print ("recordingdone==false----文件存在");
-//			}
-//			else
-//			{
-//				print ("recordingdone==false----文件不存在");
-//
-//			}
-//			
-//		}
 
 
 
@@ -462,6 +451,12 @@ public class FormalScene : MonoBehaviour
 
 	private void OnNextBtnClick(GameObject btn)
 	{
+		EnterNextLevel();
+	}
+
+	public void EnterNextLevel()
+	{
+
 		Debug.Log("点击了下一步按钮，当前关卡是："+currentLevelID);
 		//切换到下一个场景界面  
 		if (currentLevelID==9) 
@@ -481,7 +476,7 @@ public class FormalScene : MonoBehaviour
 					MousePlayBall._instance.OrderMouseToKickBallOutSide();	
 				}
 
-	
+
 			}
 			else
 			{
@@ -643,6 +638,11 @@ public class FormalScene : MonoBehaviour
 
 	private void OnRecordAgainBtnClick(GameObject btn)
 	{
+		RecordAgain();
+	}
+
+	public void RecordAgain()
+	{
 
 		Manager.storyStatus=StoryStatus.Recording;
 
@@ -688,15 +688,20 @@ public class FormalScene : MonoBehaviour
 	void OnSaveVideoToAlbumBtnClick(GameObject btn)
 	{
 
-		//保存视频到相册，并弹出保存成功提示框   to do...
+		//保存视频到相册 TODO
 
-//		VideoRecManager._instance.SaveVideoToPhotoAlbum();
+		SaveVideo();
 
+
+
+	}
+
+	public void SaveVideo()
+	{
 		saveVideoOver=true;
 		saveSuccessNotice.SetActive(true);
 		saveSuccessNotice.GetComponent<CanvasGroup>().alpha=1;
 		Debug.Log("点击了保存按钮");
-
 	}
 
 
