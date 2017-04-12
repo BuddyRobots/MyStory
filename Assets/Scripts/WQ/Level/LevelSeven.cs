@@ -287,12 +287,20 @@ public class LevelSeven : MonoBehaviour
 		mouseAnimator=mouse.GetComponent<Animator>();
 		mouseAnimator.CrossFade("idle",0);
 		mouseAnimator.speed=1;
-		mouse.GetComponent<Rigidbody2D>().simulated=true;
+
 
 		if (mouse.GetComponent<MouseCtrl>()==null) 
 		{
 			mouse.AddComponent<MouseCtrl>();
 		}
+
+		if (mouse.GetComponent<Rigidbody2D>()==null) 
+		{
+			mouse.AddComponent<Rigidbody2D>();
+		}
+		mouse.GetComponent<Rigidbody2D>().gravityScale=0;
+		mouse.GetComponent<Rigidbody2D>().constraints=RigidbodyConstraints2D.FreezeRotation;
+		mouse.GetComponent<Rigidbody2D>().simulated=true;
 
 	}
 

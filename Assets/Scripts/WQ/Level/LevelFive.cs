@@ -59,10 +59,9 @@ public class LevelFive : MonoBehaviour
 			if (!storyPlay )
 			{
 				mouseAnimator.CrossFade("RunAway",0);
-				Debug.Log("播放跑动画");
-				if (MouseRunAway._instance) {
+				if (MouseRunAway._instance) 
+				{
 					MouseRunAway._instance.move=true;
-
 				}
 
 				if (Manager.storyStatus==StoryStatus.Normal) 
@@ -117,7 +116,14 @@ public class LevelFive : MonoBehaviour
 		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
 		mouseAnimator.CrossFade("MouseRunAway_Idle",0);
+		if (mouse.GetComponent<Rigidbody2D>()==null) 
+		{
+			mouse.AddComponent<Rigidbody2D>();
+		}
+		mouse.GetComponent<Rigidbody2D>().gravityScale=0;
+		mouse.GetComponent<Rigidbody2D>().constraints=RigidbodyConstraints2D.FreezeRotation;
 		mouse.GetComponent<Rigidbody2D>().simulated=true;
+
 
 		if (mouse.GetComponent<MouseRunAway>()==null) 
 		{

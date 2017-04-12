@@ -40,23 +40,19 @@ public class MouseDrag : MonoBehaviour
 		y_MouseLowestLimit=-4.4f;
 	}
 
-	void OnMouseDown() {
+	void OnMouseDown() 
+	{
 		mouseDraging=true;
-		Debug.Log("drag begin");
 
 	}
 
 	void OnMouseDrag()
 	{
 		mouseDraging=true;
-		Debug.Log("drag ing");
-
 	}
 	void OnMouseUp()
 	{
 		mouseDraging=false;
-		Debug.Log("drag end");
-
 	}
 
 	void Update () 
