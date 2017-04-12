@@ -31,7 +31,7 @@ public class RecordVideo {
 	public RecordVideo(iVidCapPro _iVidCapPro, bool _setDebug = false)
 	{
 		vr = _iVidCapPro;
-		videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Album;
+		videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Documents;
 		framesRecorded = 0;
 		setDebug = _setDebug;
 
@@ -39,7 +39,7 @@ public class RecordVideo {
 	}		
 
 	public IEnumerator RecordForSeconds(int seconds, 
-		iVidCapPro.VideoDisposition _videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Album,
+		iVidCapPro.VideoDisposition _videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Documents,
 		string name = "MyRecordedVideo", int vidWidth = 640, int vidHeight = 480)
 	{
 		finishedRecording = false;
