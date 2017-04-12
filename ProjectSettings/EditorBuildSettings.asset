@@ -19,5 +19,3 @@ EditorBuildSettings:
     path: Assets/Scenes/5_SelectLevel.unity
   - enabled: 1
     path: Assets/Scenes/6_FormalScene_0.unity
-  - enabled: 1
-    path: Assets/Scenes/TestScenes_ZPF/Util_HSVThreshold.unity

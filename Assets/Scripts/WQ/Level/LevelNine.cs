@@ -48,6 +48,7 @@ public class LevelNine : MonoBehaviour
 	{
 
 		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
 		garlandFrontLayer=40;
 		garlandBackLayer=5;	

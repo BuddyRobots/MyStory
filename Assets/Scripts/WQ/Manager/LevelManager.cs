@@ -18,8 +18,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	public static LevelItemData currentLevelData;//这个数据可以被failurePanel，photoTakingPanel,photoRecognizingPanel 拿去获取当前关卡名字
 
-	private List<List<string>> allLevelSubTitleList=new List<List<string>>();
-
 	//保存整个的游戏完成进度，已经玩到哪一关卡了  这个得设计成全局的，别的地方也需要访问 
 	public int levelID = 0; 
 	public int levelPro = 0; 
@@ -139,13 +137,11 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	public void ParseLevelItemInfo()
 	{
-//		Debug.Log("----ParseLevelItemInfo()----正常情况下这里只执行一次");
 		JsonData jd = JsonMapper.ToObject(leveljsonstr);   
 		JsonData jdLevelItems = jd["levelData"]; 
 
 		if (jdLevelItems.IsArray) 
 		{
-
 			for (int i = 0; i < jdLevelItems.Count; i++) 
 			{
 				LevelItemData levelItemData = new LevelItemData ();
@@ -155,7 +151,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 				levelItemData.PrelevelID = (int)jdLevelItems [i] ["preLevelID"];
 				levelItemData.NextLevelID = (int)jdLevelItems [i] ["nextLevelID"];
 				levelItemData.RecordTime=(int)jdLevelItems[i]["recordTime"];
-
 
 				levelItemDataList.Add (levelItemData);
 
@@ -175,7 +170,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		{
 			//如果本地存储中有LevelID这个字段，表示玩家有闯关记录，则需要去拿到这个数据
 			levelID = PlayerPrefs.GetInt ("LevelID");
-			Debug.Log ("levelID==" + levelID);
+//			Debug.Log ("levelID==" + levelID);
 		}
 		else 
 		{
@@ -188,11 +183,10 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		{
 
 			levelPro = PlayerPrefs.GetInt ("LevelProgress");
-			Debug.Log ("levelPro==" + levelPro);
+//			Debug.Log ("levelPro==" + levelPro);
 		}
 		else
 		{
-
 			PlayerPrefs.SetInt ("LevelProgress", 0);
 			levelPro = PlayerPrefs.GetInt ("LevelProgress");
 		}
@@ -201,11 +195,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 		UpdateLevelItemDataList (levelID,levelPro);
 
 	}
-
-
-
-
-
 
 
 	/// <summary>
@@ -279,9 +268,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// <param name="data">Data.</param>
 	public void SetCurrentLevel(LevelItemData data)
 	{
-//		Debug.Log("----SetCurrentLevel");
 		currentLevelData = data;
-//		Debug.Log("currentLevelData.RecordTime---"+currentLevelData.RecordTime);
 
 	}
 

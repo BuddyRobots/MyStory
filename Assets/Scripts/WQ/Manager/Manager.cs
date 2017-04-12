@@ -137,7 +137,7 @@ public class Manager :MonoBehaviour
 		if (bgMusicFadeOut) //如果背景音乐需要淡出，音量在固定时间内从1渐变成0，然后暂停
 		{
 			musicFadingTimer+=Time.deltaTime;
-			bgAudio.volume=Mathf.Lerp(1f,0,musicFadingTimer/Constant.MUSIC_FADINGTIME);
+			bgAudio.volume=Mathf.Lerp(1f,0.3f,musicFadingTimer/Constant.MUSIC_FADINGTIME);
 			if (musicFadingTimer>=Constant.MUSIC_FADINGTIME) 
 			{
 				musicFadingTimer=0;
@@ -155,7 +155,7 @@ public class Manager :MonoBehaviour
 			}
 			musicFadingTimer+=Time.deltaTime;
 		
-			bgAudio.volume=Mathf.Lerp(0,1f,musicFadingTimer/Constant.MUSIC_FADINGTIME);
+			bgAudio.volume=Mathf.Lerp(0.3f,1f,musicFadingTimer/Constant.MUSIC_FADINGTIME);
 			if (musicFadingTimer>=Constant.MUSIC_FADINGTIME) 
 			{
 				musicFadingTimer=1f;
@@ -173,7 +173,9 @@ public class Manager :MonoBehaviour
 
 	public void RecordingToSetBgAudioVolumeZero()
 	{
-		bgAudio.volume=0;
+//		bgAudio.volume=0;
+		bgAudio.volume=0.3f;
+
 	}
 
 
