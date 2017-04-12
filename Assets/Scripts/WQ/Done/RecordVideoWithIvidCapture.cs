@@ -23,7 +23,7 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 
 	public void  RecordVideo()
 	{
-		if (!recordVideo.finishedRecording)
+		if (recordVideo.isRecording)
 			return;
 		
 		Debug.Log("RecordVideoWithIvidCapture---- RecordVideo()-----默认录音5秒");
