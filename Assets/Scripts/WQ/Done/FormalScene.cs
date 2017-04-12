@@ -66,6 +66,7 @@ public class FormalScene : MonoBehaviour
 
 	public GameObject closeRecordingDoneFrameBtn;
 	public GameObject closeRecordingAgainFrameBtn;
+	public GameObject recordAgainBtnOnRecordingAgainFrame;
 
 
 	[HideInInspector]
@@ -118,6 +119,7 @@ public class FormalScene : MonoBehaviour
 
 		closeRecordingDoneFrameBtn=transform.Find("RecordDoneFrame/CloseBtn").gameObject;
 		closeRecordingAgainFrameBtn=transform.Find("RecordAgainFrame/CloseBtn").gameObject;
+		recordAgainBtnOnRecordingAgainFrame=transform.Find("RecordAgainFrame/RecordAgain").gameObject;
 
 		sliderMoving=false;
 		storyBegin=false;
@@ -136,6 +138,7 @@ public class FormalScene : MonoBehaviour
 
 		EventTriggerListener.Get(closeRecordingDoneFrameBtn.gameObject).onClick=OnCloseRecordingDoneFrameBtnClick;
 		EventTriggerListener.Get(closeRecordingAgainFrameBtn.gameObject).onClick=OnCloseRecordingAgainFrameBtnClick;
+		EventTriggerListener.Get(recordAgainBtnOnRecordingAgainFrame.gameObject).onClick=OnRecordAgainBtnClick;
 
 
 //		Manager._instance.levelOneOver=false;
@@ -405,6 +408,8 @@ public class FormalScene : MonoBehaviour
 	}
 
 
+
+
 	public void ChangeSceneAutomatically()
 	{
 		//切换到下一个场景界面  
@@ -596,6 +601,15 @@ public class FormalScene : MonoBehaviour
 	void OnCloseRecordingAgainFrameBtnClick(GameObject btn)
 	{
 		transform.Find("RecordAgainFrame").gameObject.SetActive(false);
+
+	}
+
+	void OnRecordAgainBtnClick(GameObject btn)
+	{
+		transform.Find("RecordAgainFrame").gameObject.SetActive(false);
+		transform.Find("RecordDoneFrame").gameObject.SetActive(false);
+
+		RecordAgain();
 
 	}
 

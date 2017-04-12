@@ -23,7 +23,7 @@ public class RecordAgainFrameCtrl : MonoBehaviour
 	void Start () 
 	{
 		EventTriggerListener.Get(saveBtn.gameObject).onClick=OnSaveBtnClick;
-		EventTriggerListener.Get(recordAgainBtn.gameObject).onClick=OnRecordAgainBtnClick;
+//		EventTriggerListener.Get(recordAgainBtn.gameObject).onClick=OnRecordAgainBtnClick;
 //		EventTriggerListener.Get(closeBtn.gameObject).onClick=OnCloseBtnClick;
 
 		

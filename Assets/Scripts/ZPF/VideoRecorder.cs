@@ -40,6 +40,7 @@ public class VideoRecorder {
 		iVidCapPro.VideoDisposition _videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Documents,
 		string name = "MyRecordedVideo", int vidWidth = 640, int vidHeight = 480)
 	{	
+		finishedRecording = false;
 		isRecording = true;
 		iVidCapPro.SessionStatusCode status;
 
