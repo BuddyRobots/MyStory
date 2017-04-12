@@ -1576,10 +1576,6 @@ public class iVidCapPro : MonoBehaviour {
 		
 		// Tell the native plugin to release all resources.
 		StartCoroutine(ReleaseNativePlugin());
-		
-		// Tell our client that the session is complete.
-		if (sessionCompleteDelegate != null)
-			sessionCompleteDelegate();
 	}
 	
 	/* ------------------------------------------------------------------------
@@ -1635,6 +1631,10 @@ public class iVidCapPro : MonoBehaviour {
 		if (Application.platform != RuntimePlatform.OSXEditor) {
 			ivcp_Release();
 		}
+
+		// Tell our client that the session is complete.
+		if (sessionCompleteDelegate != null)
+			sessionCompleteDelegate();
 	}
 	
 	/* ------------------------------------------------------------------------
