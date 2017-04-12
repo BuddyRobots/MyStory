@@ -8,12 +8,12 @@ public class RecordVideoAndAudio : MonoBehaviour {
 	public iVidCapPro vr;
 	public Slider slider;
 
-	RecordVideo recordVideo;
+	VideoRecorder recordVideo;
 
 
 	void Awake()
 	{
-		recordVideo = new RecordVideo(vr, true);
+		recordVideo = new VideoRecorder(vr, true);
 	}
 
 	void Start()

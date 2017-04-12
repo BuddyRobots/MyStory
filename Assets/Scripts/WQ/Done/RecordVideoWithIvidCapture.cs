@@ -8,7 +8,7 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 
 	public iVidCapPro vr;
 
-	RecordVideo recordVideo;
+	VideoRecorder recordVideo;
 
 	[HideInInspector]
 	public float micLoudness;
@@ -16,17 +16,19 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	void Awake()
 	{
 		_instance=this;
-		recordVideo = new RecordVideo(vr, true);
+		recordVideo = new VideoRecorder(vr, true);
 //		Manager.recordingDone=recordVideo.finishedRecording;
 	}
 
 
 	public void  RecordVideo()
 	{
+		if (!recordVideo.finishedRecording)
+			return;
+		
 		Debug.Log("RecordVideoWithIvidCapture---- RecordVideo()-----默认录音5秒");
 		Debug.Log("Application.dataPath-----"+Application.dataPath);
 		Debug.Log("Application.persistentDataPath-----"+Application.persistentDataPath);
-
 
 		StartCoroutine(recordVideo.RecordForSeconds(5));
 	}
