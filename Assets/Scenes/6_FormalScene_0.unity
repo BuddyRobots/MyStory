@@ -1123,7 +1123,7 @@ MonoBehaviour:
   recordAgainBtn: {fileID: 179}
   shareBtn: {fileID: 172}
   closeBtn: {fileID: 1119107835}
-  playVideoBtn: {fileID: 0}
+  playVideoBtn: {fileID: 2140083096}
   recordAgainFrame: {fileID: 1676334647}
 --- !u!212 &67
 SpriteRenderer:

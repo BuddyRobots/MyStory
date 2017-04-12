@@ -353,26 +353,9 @@ public class FormalScene : MonoBehaviour
 		
 		if (Manager.recordingDone)
 		{
-			
 			ShowRecordDone();
-
-
-			Debug.Log("audiofilePath-----"+filePath);
-			if (System.IO.File.Exists(filePath)) 
-			{
-				print ("文件存在");
-			}
-			else
-			{
-				print ("文件不存在");
-
-			}
-
 			Manager.recordingDone=false;
 		} 
-
-
-
 
 		if (sliderMoving) 
 		{

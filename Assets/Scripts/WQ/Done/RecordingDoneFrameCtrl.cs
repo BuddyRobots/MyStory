@@ -61,22 +61,44 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 
 	void OnCloseBtnClick(GameObject btn)
 	{
-		recordAgainFrame.SetActive(true);
+
 		gameObject.SetActive(false);
 
 	}
 
+
+
+	private void TestFileCopy(string srcPath, string destPath)
+	{
+		///测试通过，可以成功拷贝
+//		string srcPath="/Users/WangQian/Documents/T0/body.png";
+//		string destPath="/Users/WangQian/Documents/T1/copy_body.png";
+		System.IO.File.Copy(srcPath,destPath);
+
+	}
+
+
+
 	void OnPlayVideoClick(GameObject btn)
 	{
 		//播放视频
-		string moviePath = Path.Combine(Application.persistentDataPath, "/tempAudio.wav");
+		string srcPath = Path.Combine(Application.persistentDataPath, "/MyRecordedVideo.mov");
+		string destPath=Path.Combine(Application.streamingAssetsPath, "/MyRecordedVideo.mov");
 
-		if (File.Exists(moviePath))
-			Debug.Log("movie exists.");
+		Debug.Log("srcPath------"+srcPath);
+		Debug.Log("destPath------"+destPath);
+
+
+//		TestFileCopy(srcPath, destPath);
+
+		Debug.Log("--after TestFileCopy(srcPath, destPath)");
+
+		if (File.Exists(srcPath))
+			Debug.Log("-----movie exists in Application.streamingAssetsPath");
 		else
-			Debug.Log("movie does not exist.");
+			Debug.Log("------movie does not exist in Application.streamingAssetsPath");
 
-		Handheld.PlayFullScreenMovie("file://" + moviePath, Color.black, FullScreenMovieControlMode.CancelOnInput);
+		Handheld.PlayFullScreenMovie("file://" + srcPath, Color.black, FullScreenMovieControlMode.CancelOnInput);
 
 	}
 
