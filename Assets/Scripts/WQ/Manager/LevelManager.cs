@@ -18,8 +18,6 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 
 	public static LevelItemData currentLevelData;//这个数据可以被failurePanel，photoTakingPanel,photoRecognizingPanel 拿去获取当前关卡名字
 
-	private List<List<string>> allLevelSubTitleList=new List<List<string>>();
-
 	//保存整个的游戏完成进度，已经玩到哪一关卡了  这个得设计成全局的，别的地方也需要访问 
 	public int levelID = 0; 
 	public int levelPro = 0; 

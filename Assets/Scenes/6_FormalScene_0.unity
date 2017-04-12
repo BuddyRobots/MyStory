@@ -2399,6 +2399,8 @@ MonoBehaviour:
   nextBtn: {fileID: 0}
   recordBtn: {fileID: 0}
   homeBtn: {fileID: 933518871}
+  saveSuccessNotice: {fileID: 0}
+  saveVideoOver: 0
   sceneLevel_1: {fileID: 1175315381556600, guid: 12b4db37bb92b45c9af60a0184bd05f6,
     type: 2}
   sceneLevel_2: {fileID: 1321157112791852, guid: f59c81329008e4e58a21b5c83379a2ad,
@@ -2417,6 +2419,8 @@ MonoBehaviour:
     type: 2}
   sceneLevel_9: {fileID: 1944146652189302, guid: 5e0ac87f7863d4765b2938898d0523f6,
     type: 2}
+  closeRecordingDoneFrameBtn: {fileID: 0}
+  closeRecordingAgainFrameBtn: {fileID: 0}
   screenGrowingDarkAndLight: 0
   storyBegin: 0
   addComponentToGo: 0
@@ -5131,7 +5135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveBtn: {fileID: 526879310}
   recordAgainBtn: {fileID: 571897000}
-  closeBtn: {fileID: 1335415}
+  closeBtn: {fileID: 1119107835}
   recordDoneFrame: {fileID: 8}
 --- !u!1 &1895932724
 GameObject:

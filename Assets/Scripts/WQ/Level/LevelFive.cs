@@ -28,6 +28,7 @@ public class LevelFive : MonoBehaviour
 	void Start () 
 	{
 		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
 		EnlargeCameraSize();
 		ShowMouse();

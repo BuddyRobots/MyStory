@@ -23,7 +23,7 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 		EventTriggerListener.Get(nextLevelBtn.gameObject).onClick=OnNextLevelBtnClick;
 		EventTriggerListener.Get(recordAgainBtn.gameObject).onClick=OnRecordAgainBtnClick;
 		EventTriggerListener.Get(shareBtn.gameObject).onClick=OnShareBtnClick;
-		EventTriggerListener.Get(closeBtn.gameObject).onClick=OnCloseBtnClick;
+//		EventTriggerListener.Get(closeBtn.gameObject).onClick=OnCloseBtnClick;
 		EventTriggerListener.Get(playVideoBtn.gameObject).onClick=OnPlayVideoClick;
 
 
@@ -61,7 +61,7 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 
 	void OnCloseBtnClick(GameObject btn)
 	{
-
+		Debug.Log("点击了关闭按钮");
 		gameObject.SetActive(false);
 
 	}
@@ -81,22 +81,17 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 
 	void OnPlayVideoClick(GameObject btn)
 	{
+		Debug.Log("*********click play btn");
 		//播放视频
-		string srcPath = Path.Combine(Application.persistentDataPath, "/MyRecordedVideo.mov");
-		string destPath=Path.Combine(Application.streamingAssetsPath, "/MyRecordedVideo.mov");
-
+		string srcPath = Path.Combine(Application.persistentDataPath, "MyRecordedVideo.mov");
+	
 		Debug.Log("srcPath------"+srcPath);
-		Debug.Log("destPath------"+destPath);
-
-
-//		TestFileCopy(srcPath, destPath);
-
-		Debug.Log("--after TestFileCopy(srcPath, destPath)");
+	
 
 		if (File.Exists(srcPath))
-			Debug.Log("-----movie exists in Application.streamingAssetsPath");
+			Debug.Log("-----movie exists in Application.persistentDataPath");
 		else
-			Debug.Log("------movie does not exist in Application.streamingAssetsPath");
+			Debug.Log("------movie does not exist in Application.persistentDataPath");
 
 		Handheld.PlayFullScreenMovie("file://" + srcPath, Color.black, FullScreenMovieControlMode.CancelOnInput);
 

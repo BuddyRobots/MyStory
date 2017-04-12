@@ -39,8 +39,9 @@ public class LevelSeven : MonoBehaviour
 
 	void Start() 
 	{
-
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		Manager.storyStatus=StoryStatus.Normal;
+
 		Init();
 
 		ShowMouse();

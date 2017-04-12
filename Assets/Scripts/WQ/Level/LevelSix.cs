@@ -20,6 +20,7 @@ public class LevelSix : MonoBehaviour
 	void Start () 
 	{
 		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		Init();
 	}
 
