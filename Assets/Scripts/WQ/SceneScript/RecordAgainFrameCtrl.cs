@@ -7,8 +7,7 @@ using System.Runtime.InteropServices;
 
 public class RecordAgainFrameCtrl : MonoBehaviour 
 {
-	[DllImport("__Internal")]
-	private static extern void _IOSSaveVideoToPhotosAlbum(string videoPath);
+	
 
 
 
@@ -42,18 +41,17 @@ public class RecordAgainFrameCtrl : MonoBehaviour
 		FormalScene._instance.saveSuccessNotice.SetActive(true);
 		FormalScene._instance.saveSuccessNotice.GetComponent<CanvasGroup>().alpha=1;
 
-		string srcPath = Path.Combine(Application.persistentDataPath, "MyRecordedVideo.mov");
-		_IOSSaveVideoToPhotosAlbum(srcPath);
-
+	
+		Manager._instance.IOSSaveVideoToPhotosAlbum();
+		gameObject.SetActive(false);
+		FormalScene._instance.RecordAgain();
 
 	}
-
+		
 	void OnRecordAgainBtnClick(GameObject btn)
 	{
 		gameObject.SetActive(false);
-
 		FormalScene._instance.RecordAgain();
-
 	}
 
 	void OnCloseBtnClick(GameObject btn)

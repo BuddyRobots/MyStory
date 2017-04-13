@@ -164,7 +164,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
 	/// </summary>
 	public void LoadLocalLevelProgressData()
 	{
-		Debug.Log("----LoadLocalLevelProgressData");
+//		Debug.Log("----LoadLocalLevelProgressData");
 
 		if (PlayerPrefs.HasKey ("LevelID"))
 		{

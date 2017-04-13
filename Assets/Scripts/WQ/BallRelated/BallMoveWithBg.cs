@@ -9,7 +9,7 @@ public class BallMoveWithBg : MonoBehaviour
 	/// <summary>
 	/// 球和背景一起移动时的速度
 	/// </summary>
-	public float speedWithBgMove=5f;
+	public float speedWithBgMove=8f;
 	Vector3 offset;
 	private Rigidbody2D rig2D;
 	bool move;
