@@ -17,6 +17,7 @@ public class VideoRecorder {
 		}
 	}
 
+	public delegate void SessionCompleteDelegate();
 	public bool isRecording = false;
 	public bool finishedRecording = false;
 		
@@ -34,7 +35,7 @@ public class VideoRecorder {
 		vr.SetDebug(_setDebug);
 		vr.RegisterSessionCompleteDelegate(HandleSessionComplete);
 		vr.RegisterSessionErrorDelegate(HandleSessionError);
-	}		
+	}
 
 	public IEnumerator RecordForSeconds(int seconds, 
 		iVidCapPro.VideoDisposition _videoPosition = iVidCapPro.VideoDisposition.Save_Video_To_Documents,
@@ -74,14 +75,36 @@ public class VideoRecorder {
 		}
 	}
 		
-	public void HandleSessionComplete()
+	public void RegisterSessionCompleteDelegate(iVidCapPro.SessionCompleteDelegate del)
+	{
+		vr.RegisterSessionCompleteDelegate(del);
+	}
+
+	public void EndRecording()
+	{
+		if (!isRecording)
+		{
+			Debug.Log("RecordVideo.cs Endrecording() : Session is not started!");
+			return;
+		}
+
+		videoPosition = iVidCapPro.VideoDisposition.Discard_Video;
+		iVidCapPro.SessionStatusCode status =
+			vr.EndRecordingSession(videoPosition, out framesRecorded);
+
+		if (status == iVidCapPro.SessionStatusCode.OK) {
+			Debug.Log("RecordVideo.cs RecordForSeconds() : Video discarded.");
+		} 
+	}
+
+	private void HandleSessionComplete()
 	{
 		isRecording = false;
 		finishedRecording = true;
 		Debug.Log("RecordVideo.cs HandleSessionComplete() : Video recording session completed!");
 	}
 
-	public void HandleSessionError(iVidCapPro.SessionStatusCode errorCode)
+	private void HandleSessionError(iVidCapPro.SessionStatusCode errorCode)
 	{
 		isRecording = false;
 		Debug.LogError("RecordVideo.cs HandleSessionError() : Error when recording video! ErrorCode : " + errorCode);
