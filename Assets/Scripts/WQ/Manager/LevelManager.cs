@@ -33,7 +33,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":1,
            			""preLevelID"": 0,
            			""nextLevelID"": 2,
-					""recordTime"":8
+					""recordTime"":6
 				},
 				{
            			""levelID"": 2,
@@ -41,7 +41,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 1,
            			""nextLevelID"": 3,
-					""recordTime"":9
+					""recordTime"":15
 				},
 				{
            			""levelID"": 3,
@@ -49,7 +49,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 2,
            			""nextLevelID"": 4,
-					""recordTime"":5
+					""recordTime"":17
 				},
 				{
            			""levelID"": 4,
@@ -57,7 +57,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 3,
            			""nextLevelID"": 5,
-					""recordTime"":5
+					""recordTime"":0
 				},
 				{
            			""levelID"": 5,
@@ -65,7 +65,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 4,
            			""nextLevelID"": 6,
-					""recordTime"":5
+					""recordTime"":8
 				},
 				{
            			""levelID"": 6,
@@ -73,7 +73,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 5,
            			""nextLevelID"": 7,
-					""recordTime"":5
+					""recordTime"":7
 				},
 				{
            			""levelID"": 7,
@@ -81,7 +81,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 6,
            			""nextLevelID"": 8,
-					""recordTime"":5
+					""recordTime"":14
 				},
 				{
            			""levelID"": 8,
@@ -89,7 +89,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 7,
            			""nextLevelID"": 9,
-					""recordTime"":5
+					""recordTime"":0
 				},
 				{
            			""levelID"": 9,
@@ -97,7 +97,7 @@ public class LevelManager : AllSceneSinglton<LevelManager>
            			""progress"":0,
            			""preLevelID"": 8,
            			""nextLevelID"": 10,
-					""recordTime"":5
+					""recordTime"":7
 				}
 				]
             }";

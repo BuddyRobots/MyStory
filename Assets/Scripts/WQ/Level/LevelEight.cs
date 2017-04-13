@@ -184,6 +184,7 @@ public class LevelEight : MonoBehaviour
 
 				//			mouse.GetComponent<Rigidbody2D>().simulated=false;
 				Destroy(mouse.GetComponent<Rigidbody2D>());
+//				mouse.GetComponent<Rigidbody2D>().gravityScale=0;
 			}
 			mouseAnimator.CrossFade("idle",0);
 		}
