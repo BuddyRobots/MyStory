@@ -242,7 +242,6 @@ public class FormalScene : MonoBehaviour
 		//告诉第一关，第一部分结束了，进入到第二部分
 		LevelOne._instance.secondSceneShow=true;
 		LevelOne._instance.showFingerOnMouse=false;
-		Debug.Log("第一部分结束，进入到第二部分");
 
 	}
 
@@ -528,7 +527,7 @@ public class FormalScene : MonoBehaviour
 	}
 		
 
-	void  ShowRecordDone()
+	public void  ShowRecordDone()
 	{
 		mask.SetActive(true);
 		music.SetActive(true);

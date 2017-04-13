@@ -243,6 +243,13 @@ public class LevelOne : MonoBehaviour
 		}
 		mouse.SetActive(false);
 		ball.SetActive(false);
+		//草重新播放动画，从新出现老鼠和球
+		 //TODO
+
+//		grassClicked=false;
+		flag=false;
+		aniPlayed=false;
+
 	}
 		
 	public void PauseStory()

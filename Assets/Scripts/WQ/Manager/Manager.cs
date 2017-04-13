@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using OpenCVForUnity;
 using MyStory;
+using System.Runtime.InteropServices;
+using System.IO;
 
 
 
@@ -10,6 +12,13 @@ using MyStory;
 
 public class Manager :MonoBehaviour
 {
+
+	[DllImport("__Internal")]
+	private static extern void _IOSSaveVideoToPhotosAlbum(string videoPath);
+
+
+
+
 	public static Manager _instance;
 
 	public static bool musicOn=true;
@@ -172,7 +181,6 @@ public class Manager :MonoBehaviour
 
 	public void RecordingToSetBgAudioVolumeZero()
 	{
-//		bgAudio.volume=0;
 		bgAudio.volume=0.3f;
 
 	}
@@ -212,6 +220,12 @@ public class Manager :MonoBehaviour
 
 		}
 
+	}
+		
+	public void IOSSaveVideoToPhotosAlbum()
+	{
+		string srcPath = Path.Combine(Application.persistentDataPath, "MyRecordedVideo.mov");
+		_IOSSaveVideoToPhotosAlbum(srcPath);
 	}
 
 }

@@ -165,8 +165,6 @@ public class LevelFour : MonoBehaviour
 	{
 		int randomNum=Random.Range(1,4);
 
-		Debug.Log("----"+randomNum);
-
 		switch (randomNum)
 		{
 		case 1:

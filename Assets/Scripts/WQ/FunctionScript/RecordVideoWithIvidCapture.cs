@@ -17,7 +17,9 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	{
 		_instance=this;
 		recordVideo = new VideoRecorder(vr, true);
-//		Manager.recordingDone=recordVideo.finishedRecording;
+		//构造完recordVideo后注册委托 formalscene 中的 ShowRecordDone()
+		//TODO
+
 	}
 
 
@@ -25,18 +27,13 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	{
 		if (recordVideo.isRecording)
 			return;
-		
-		Debug.Log("RecordVideoWithIvidCapture---- RecordVideo()-----默认录音5秒");
-		Debug.Log("Application.dataPath-----"+Application.dataPath);
-		Debug.Log("Application.persistentDataPath-----"+Application.persistentDataPath);
 
-		StartCoroutine(recordVideo.RecordForSeconds(5));
+		StartCoroutine(recordVideo.RecordForSeconds(LevelManager.currentLevelData.RecordTime));
 	}
 
 	void Update()
 	{
 		micLoudness = recordVideo.micLoudness;
-//		Debug.Log("micLoudness-----"+micLoudness);
 		Manager.recordingDone=recordVideo.finishedRecording;
 	}
 }
