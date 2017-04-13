@@ -97,8 +97,8 @@ public class MouseDrag : MonoBehaviour
 
 			closingFloor=false;
 			changeAni=false;
-			//如果点住了老鼠，老鼠在网上
-			if (isOnNet) 
+
+			if (isOnNet) //如果点住了老鼠，老鼠在网上
 			{
 				mouseAnimator.CrossFade("8_Bite",0);
 

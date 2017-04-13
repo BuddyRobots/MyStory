@@ -126,7 +126,6 @@ public class LevelThree : MonoBehaviour
 			{
 				if (cam.transform.position.x>destCamTrans.position.x) 
 				{
-					Debug.Log("time----"+Time.time);
 					cam.transform.Translate(Vector3.left*camMovespeed*Time.deltaTime);
 
 				}
@@ -135,7 +134,6 @@ public class LevelThree : MonoBehaviour
 					cam.transform.position=destCamTrans.position;
 					if (!lionChange) 
 					{
-						Debug.Log("end time----"+Time.time);
 
 						lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionEyeMove") as Sprite;
 
@@ -448,8 +446,11 @@ public class LevelThree : MonoBehaviour
 			ball.transform.parent=null;
 
 		}
+		if (Manager._instance) 
+		{
+			Manager._instance.Reset();
 
-		Manager._instance.Reset();
+		}
 
 		if (mouse.GetComponent<MouseFall>()) 
 		{

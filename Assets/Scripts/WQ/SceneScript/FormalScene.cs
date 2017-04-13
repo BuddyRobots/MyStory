@@ -21,8 +21,7 @@ public class FormalScene : MonoBehaviour
 	private Button cancelBtn;
 	private Button startRecordBtn;
 
-	private Button playBtn;
-	private Button nextBtn_RecordDoneFrame;
+
 	private Button confirmBtn;
 	public Button homeBtn;
 
@@ -83,6 +82,8 @@ public class FormalScene : MonoBehaviour
 	Vector3 blackMask_screenInsidePos=Vector3.zero;//黑色遮罩在屏幕中间的位置
 
 
+
+
 	void Awake()
 	{
 		_instance=this;
@@ -99,8 +100,7 @@ public class FormalScene : MonoBehaviour
 		recordBtn=transform.Find("Record").GetComponent<Button>();
 		cancelBtn=transform.Find("NoticeToRecordFrame/Cancel").GetComponent<Button>();
 		startRecordBtn=transform.Find("NoticeToRecordFrame/StartRecord").GetComponent<Button>();
-		playBtn=transform.Find("RecordDoneFrame/Play").GetComponent<Button>();
-		nextBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/Next").GetComponent<Button>();
+
 		confirmBtn=transform.Find("WinFrame/Btn").GetComponent<Button>();
 		music=transform.Find("Music").gameObject;
 		mask=transform.Find("Mask").gameObject;
@@ -132,16 +132,10 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(homeBtn.gameObject).onClick=OnHomeBtnClick;
 		EventTriggerListener.Get(cancelBtn.gameObject).onClick=OnCancelBtnClick;
 		EventTriggerListener.Get(startRecordBtn.gameObject).onClick=OnStartRecordBtnClick;
-		EventTriggerListener.Get(playBtn.gameObject).onClick=OnPlayBtnClick;
-		EventTriggerListener.Get(nextBtn_RecordDoneFrame.gameObject).onClick=OnNextBtnClick;
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
-
 		EventTriggerListener.Get(closeRecordingDoneFrameBtn.gameObject).onClick=OnCloseRecordingDoneFrameBtnClick;
 		EventTriggerListener.Get(closeRecordingAgainFrameBtn.gameObject).onClick=OnCloseRecordingAgainFrameBtnClick;
 		EventTriggerListener.Get(recordAgainBtnOnRecordingAgainFrame.gameObject).onClick=OnRecordAgainBtnClick;
-
-
-//		Manager._instance.levelOneOver=false;
 
 		Init();
 
@@ -291,16 +285,21 @@ public class FormalScene : MonoBehaviour
 	
 	}
 
-
+	bool recordingDoneShow=false;
 
 	void Update () 
 	{
-		
-		if (Manager.recordingDone)
-		{
-			ShowRecordDone();
-			Manager.recordingDone=false;
-		} 
+//		
+//		if (Manager.recordingDone)
+//		{
+//			if (!recordingDoneShow) 
+//			{
+//				recordingDoneShow=true;
+//				ShowRecordDone();
+//			}
+//
+////			Manager.recordingDone=false;
+//		} 
 
 		if (sliderMoving) 
 		{
@@ -479,6 +478,8 @@ public class FormalScene : MonoBehaviour
 	}
 
 
+
+
 	private void OnHomeBtnClick(GameObject btn)
 	{
 		Manager._instance.Reset();
@@ -492,6 +493,11 @@ public class FormalScene : MonoBehaviour
 			LevelManager.Instance.LoadLocalLevelProgressData ();
 		}
 
+		if (RecordVideoWithIvidCapture._instance)
+		{
+			RecordVideoWithIvidCapture._instance.recordVideo.EndRecording();
+
+		}
 
 		SceneManager.LoadSceneAsync("5_SelectLevel");
 	}
@@ -529,11 +535,24 @@ public class FormalScene : MonoBehaviour
 
 	public void  ShowRecordDone()
 	{
+		Debug.Log("ShowRecordDone()");
+
 		mask.SetActive(true);
+
+		Debug.Log("mask----"+mask.activeSelf);
+
 		music.SetActive(true);
+		Debug.Log("music----"+music.activeSelf);
+
 		recordingFrame.SetActive(false);
+		Debug.Log("recordingFrame----"+recordingFrame.activeSelf);
+
 		subtitle.SetActive(false);
+		Debug.Log("subtitle----"+subtitle.activeSelf);
+
 		recordDoneFrame.SetActive(true);
+		Debug.Log("recordDoneFrame----"+recordDoneFrame.activeSelf);
+
 	}
 
 	public void RecordAgain()
@@ -545,6 +564,8 @@ public class FormalScene : MonoBehaviour
 		recordingFrame.SetActive(true);
 		HideSubtitle();
 		Manager.recordingDone=false;
+		recordingDoneShow=false;
+
 
 		RecordVideoWithIvidCapture._instance.RecordVideo();
 
@@ -554,25 +575,7 @@ public class FormalScene : MonoBehaviour
 		Manager ._instance.fingerMove=true;
 		Manager._instance.RecordingToSetBgAudioVolumeZero();
 	}
-		
 
-	void OnPlayBtnClick(GameObject btn)
-	{
-		Manager.storyStatus =StoryStatus.PlayRecord;
-		recordDoneFrame.SetActive(false);
-		mask.SetActive(false);
-		music.SetActive(false);
-
-		//保存音频，并播放
-//		MicroPhoneInputSaveWav.getInstance().SaveMusic();
-//		MicroPhoneInputSaveWav.getInstance().PlayRecord();
-
-		HideSubtitle();
-
-		BussinessManager._instance.PlayStoryWithAudioRecording();
-	
-	}
-		
 
 	public void SaveVideo()
 	{

@@ -26,10 +26,6 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 //		EventTriggerListener.Get(closeBtn.gameObject).onClick=OnCloseBtnClick;
 		EventTriggerListener.Get(playVideoBtn.gameObject).onClick=OnPlayVideoClick;
 
-
-
-		gameObject.SetActive(false);
-
 	}
 
 	void OnNextLevelBtnClick(GameObject btn)

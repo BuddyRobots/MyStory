@@ -199,27 +199,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7964beee27f4d1385157fea46c7914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgMusicFadeOut: 0
-  bgMusicFadeIn: 0
-  recordBtnHide: 0
   bgAudio: {fileID: 0}
-  fingerMove: 1
-  isSubtitleShowOver: 0
   audioAside:
   - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
   - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
   - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
-  - {fileID: 8300000, guid: f0f1f0612492544dc99b5941207b10cb, type: 3}
-  - {fileID: 8300000, guid: f0f1f0612492544dc99b5941207b10cb, type: 3}
-  - {fileID: 8300000, guid: f0f1f0612492544dc99b5941207b10cb, type: 3}
-  - {fileID: 8300000, guid: f0f1f0612492544dc99b5941207b10cb, type: 3}
-  - {fileID: 8300000, guid: f0f1f0612492544dc99b5941207b10cb, type: 3}
-  - {fileID: 8300000, guid: f0f1f0612492544dc99b5941207b10cb, type: 3}
+  - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
+  - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
+  - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
+  - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
+  - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
+  - {fileID: 8300000, guid: cd612e1fe7dec43d299fb15ba260a031, type: 3}
   mouseGo: {fileID: 0}
   ball: {fileID: 0}
   garland: {fileID: 0}
+  fingerMove: 1
+  isSubtitleShowOver: 0
   move: 0
   levelOneOver: 0
+  bgMusicFadeOut: 0
+  bgMusicFadeIn: 0
+  recordBtnHide: 0
   outsideScreenPos: {x: 0, y: 20, z: 0}
 --- !u!4 &252218726
 Transform:
