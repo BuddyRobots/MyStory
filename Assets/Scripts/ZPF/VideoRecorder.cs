@@ -75,7 +75,7 @@ public class VideoRecorder {
 		}
 	}
 		
-	public void RegisterSessionCompleteDelegate(SessionCompleteDelegate del)
+	public void RegisterSessionCompleteDelegate(iVidCapPro.SessionCompleteDelegate del)
 	{
 		vr.RegisterSessionCompleteDelegate(del);
 	}
