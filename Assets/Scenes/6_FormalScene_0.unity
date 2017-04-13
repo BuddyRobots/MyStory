@@ -2421,6 +2421,7 @@ MonoBehaviour:
     type: 2}
   closeRecordingDoneFrameBtn: {fileID: 0}
   closeRecordingAgainFrameBtn: {fileID: 0}
+  recordAgainBtnOnRecordingAgainFrame: {fileID: 0}
   screenGrowingDarkAndLight: 0
   storyBegin: 0
   addComponentToGo: 0
