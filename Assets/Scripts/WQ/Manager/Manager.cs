@@ -127,7 +127,6 @@ public class Manager :MonoBehaviour
 			//关闭音乐 
 			if (bgAudio.isPlaying) 
 			{
-				Debug.Log("pause");
 				bgAudio.Pause ();
 			}
 		}
