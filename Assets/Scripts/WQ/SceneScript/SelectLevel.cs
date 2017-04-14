@@ -36,7 +36,7 @@ public class SelectLevel : MonoBehaviour
 	private void OnLevelBtnClick(GameObject go)
 	{
 		int levelID=GetLevel(go.name);//得到关卡数字
-		Debug.Log("currentPlayLevelID----"+levelID);
+//		Debug.Log("currentPlayLevelID----"+levelID);
 		data=LevelManager.Instance.GetSingleLevelItem(levelID);//根据关卡数字拿到关卡数据
 		LevelManager.Instance.SetCurrentLevel(data);//保存当前关卡信息
 		SceneManager.LoadSceneAsync("6_FormalScene_0");

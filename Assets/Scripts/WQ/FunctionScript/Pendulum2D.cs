@@ -34,7 +34,7 @@ public class Pendulum2D : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0) && LevelFour._instance.showFingerOnMouse)
 		{
 
 
