@@ -47,6 +47,20 @@ public class LevelSeven : MonoBehaviour
 		ShowMouse();
 	}
 
+	public void InitTest()
+	{
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+		Manager.storyStatus=StoryStatus.Normal;
+
+		Init();
+
+		ShowMouse();
+		if (BussinessManager._instance.finger) {
+			Destroy(BussinessManager._instance.finger);
+		}
+
+	}
+
 	void Init()
 	{
 		speed=1.26f;
@@ -82,6 +96,7 @@ public class LevelSeven : MonoBehaviour
 			if (!walkAniPlayed) 
 			{
 				walkAniPlayed=true;
+				mouseAnimator.CrossFade("",0);
 
 				mouseAnimator.CrossFade("WalkToLion_level7",0);
 
@@ -139,13 +154,13 @@ public class LevelSeven : MonoBehaviour
 						if (!talkAniPlayed) 
 						{
 							mouseAnimator.CrossFade("Talk",0);
+							FormalScene._instance.ShowSubtitle();
 
 							talkAniPlayed=true;
 						}
 
 
 					}
-					FormalScene._instance.ShowSubtitle();
 
 				}
 
@@ -285,6 +300,7 @@ public class LevelSeven : MonoBehaviour
 		mouse.transform.position=originMouseTrans.position;
 
 		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("idle",0);
 		mouseAnimator.speed=1;
 
@@ -311,7 +327,11 @@ public class LevelSeven : MonoBehaviour
 			Manager._instance.Reset();
 
 		}
-		mouseAnimator.CrossFade("idle",0);
+		if (mouseAnimator) 
+		{
+			mouseAnimator.CrossFade("idle",0);
+
+		}
 		if (mouse.GetComponent<MouseCtrl>()!=null) 
 		{
 			Destroy(mouse.GetComponent<MouseCtrl>());

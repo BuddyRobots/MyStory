@@ -44,14 +44,14 @@ public class RecordAgainFrameCtrl : MonoBehaviour
 	
 		Manager._instance.IOSSaveVideoToPhotosAlbum();
 		gameObject.SetActive(false);
-		FormalScene._instance.RecordAgain();
+		FormalScene._instance.RecordVideo();
 
 	}
 		
 	void OnRecordAgainBtnClick(GameObject btn)
 	{
 		gameObject.SetActive(false);
-		FormalScene._instance.RecordAgain();
+		FormalScene._instance.RecordVideo();
 	}
 
 	void OnCloseBtnClick(GameObject btn)

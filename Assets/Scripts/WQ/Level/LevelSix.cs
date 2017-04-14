@@ -9,7 +9,7 @@ public class LevelSix : MonoBehaviour
 	bool pause;
 	bool startStory;
 	bool changeScene;
-
+	public GameObject net;
 
 	void Awake()
 	{
@@ -27,10 +27,19 @@ public class LevelSix : MonoBehaviour
 
 	void Init()
 	{
-
 		pause=false;
 		startStory=false;
 		Manager._instance.isSubtitleShowOver=false;
+	}
+
+	public void InitTest()
+	{
+		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+		Init();
+
+		NetMove._instance.Reset();
+
 	}
 
 	void Update () 

@@ -114,6 +114,30 @@ public class LevelThree : MonoBehaviour
 
 	}
 
+	public void InitTest()
+	{
+		Manager.storyStatus =StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+
+		camMovespeed=3f;
+		fallSpeed=4f;
+
+
+
+		ShowMouse();
+		ShowBall();
+
+
+		Init();
+
+		mouseAnimator.CrossFade("idle",0);
+		lionAnimator.CrossFade("LionIdle",0);
+		ballAnimator.CrossFade("BallIdle",0);
+
+		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
+
+	}
+
 
 
 
@@ -175,6 +199,8 @@ public class LevelThree : MonoBehaviour
 					if (!shakeTofall) 
 					{
 						PlayAnimation();
+
+						FormalScene._instance.ShowSubtitle();
 						shakeTofall=true;
 					}
 				}
@@ -199,12 +225,13 @@ public class LevelThree : MonoBehaviour
 					{
 						Debug.Log("开始播放动画");
 						PlayAnimation();
+						FormalScene._instance.ShowSubtitle();
 
 						shakeTofall=true;
 					}
 				}
 
-				FormalScene._instance.ShowSubtitle();
+//				FormalScene._instance.ShowSubtitle();
 
 			}
 

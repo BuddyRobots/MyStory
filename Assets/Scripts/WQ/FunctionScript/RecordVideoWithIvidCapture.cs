@@ -40,6 +40,6 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	void Update()
 	{
 		micLoudness = recordVideo.micLoudness;
-		Manager.recordingDone=recordVideo.finishedRecording;
+//		Manager.recordingDone=recordVideo.finishedRecording;
 	}
 }

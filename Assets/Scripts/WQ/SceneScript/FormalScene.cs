@@ -24,6 +24,7 @@ public class FormalScene : MonoBehaviour
 
 	private Button confirmBtn;
 	public Button homeBtn;
+	public Button initTestBtn;
 
 	private GameObject music;
 	private GameObject mask;
@@ -130,6 +131,9 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
 		EventTriggerListener.Get(recordBtn.gameObject).onClick=OnRecordBtnClick;
 		EventTriggerListener.Get(homeBtn.gameObject).onClick=OnHomeBtnClick;
+		EventTriggerListener.Get(initTestBtn.gameObject).onClick=OnInitTestBtnClick;
+
+
 		EventTriggerListener.Get(cancelBtn.gameObject).onClick=OnCancelBtnClick;
 		EventTriggerListener.Get(startRecordBtn.gameObject).onClick=OnStartRecordBtnClick;
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
@@ -249,7 +253,7 @@ public class FormalScene : MonoBehaviour
 		switch (levelID)
 		{
 		case 1:
-			tempScene=Instantiate(sceneLevel_1) as GameObject;
+			tempScene=Instantiate<GameObject>(sceneLevel_1);
 			break;
 		case 2:
 			tempScene=Instantiate<GameObject>(sceneLevel_2);
@@ -284,8 +288,7 @@ public class FormalScene : MonoBehaviour
 		}
 	
 	}
-
-	bool recordingDoneShow=false;
+		
 
 	void Update () 
 	{
@@ -502,6 +505,11 @@ public class FormalScene : MonoBehaviour
 		SceneManager.LoadSceneAsync("5_SelectLevel");
 	}
 
+	private void OnInitTestBtnClick(GameObject btn)
+	{
+		BussinessManager._instance.InitTest();
+	}
+
 	private void OnCancelBtnClick(GameObject btn)
 	{
 		mask.SetActive(false);
@@ -515,62 +523,29 @@ public class FormalScene : MonoBehaviour
 
 	private void OnStartRecordBtnClick(GameObject btn)
 	{
-		Manager.storyStatus=StoryStatus.Recording;
-
-		mask.SetActive(false);
-		noticeToRecordFrame.SetActive(false);
-		recordingFrame.SetActive(true);
-		HideSubtitle();
-
-		RecordVideoWithIvidCapture._instance.RecordVideo();
-
-		sliderMoving=true;
-
-		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
-		Manager ._instance.fingerMove=true;
-		Manager._instance.RecordingToSetBgAudioVolumeZero();
-	
+		RecordVideo();
 	}
-		
 
 	public void  ShowRecordDone()
 	{
-		Debug.Log("ShowRecordDone()");
 
 		mask.SetActive(true);
-
-		Debug.Log("mask----"+mask.activeSelf);
-
 		music.SetActive(true);
-		Debug.Log("music----"+music.activeSelf);
-
 		recordingFrame.SetActive(false);
-		Debug.Log("recordingFrame----"+recordingFrame.activeSelf);
-
 		subtitle.SetActive(false);
-		Debug.Log("subtitle----"+subtitle.activeSelf);
-
 		recordDoneFrame.SetActive(true);
-		Debug.Log("recordDoneFrame----"+recordDoneFrame.activeSelf);
-
 	}
 
-	public void RecordAgain()
+	public void RecordVideo()
 	{
 		Manager.storyStatus=StoryStatus.Recording;
-
 		mask.SetActive(false);
+		noticeToRecordFrame.SetActive(false);
 		recordDoneFrame.SetActive(false);
 		recordingFrame.SetActive(true);
 		HideSubtitle();
-		Manager.recordingDone=false;
-		recordingDoneShow=false;
-
-
 		RecordVideoWithIvidCapture._instance.RecordVideo();
-
 		sliderMoving=true;
-
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
 		Manager ._instance.fingerMove=true;
 		Manager._instance.RecordingToSetBgAudioVolumeZero();
@@ -594,15 +569,25 @@ public class FormalScene : MonoBehaviour
 
 	void OnCloseRecordingDoneFrameBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了RecordingDoneFrame关闭按钮");
+
 		transform.Find("RecordDoneFrame").gameObject.SetActive(false);
+		mask.SetActive(false);
+		recordBtn.transform.gameObject.SetActive(true);
 		//场景重新回到正常状态
-		SceneManager.LoadSceneAsync("6_FormalScene_0");
+//		SceneManager.LoadSceneAsync("6_FormalScene_0");
+
+		//其实应该是场景的值重新初始化
+		BussinessManager._instance.InitTest();
 		
 	}
 
 	void OnCloseRecordingAgainFrameBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了RecordingAgainFrame关闭按钮");
+
 		transform.Find("RecordAgainFrame").gameObject.SetActive(false);
+		transform.Find("RecordDoneFrame").gameObject.SetActive(true);
 
 	}
 
@@ -611,7 +596,7 @@ public class FormalScene : MonoBehaviour
 		transform.Find("RecordAgainFrame").gameObject.SetActive(false);
 		transform.Find("RecordDoneFrame").gameObject.SetActive(false);
 
-		RecordAgain();
+		RecordVideo();
 
 	}
 

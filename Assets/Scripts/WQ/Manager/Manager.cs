@@ -22,7 +22,7 @@ public class Manager :MonoBehaviour
 	public static Manager _instance;
 
 	public static bool musicOn=true;
-	public static bool recordingDone=false;//录音是否结束的标志
+//	public static bool recordingDone=false;//录音是否结束的标志
 
 	public static ModelType modelType;//玩家选择画的角色类型，作为绘画展示界面显示什么图片的依据
 	public static StoryStatus storyStatus;//故事的进行状态，是正常进行的，还是非正常进行的（录音与播放的是非正常状态）
@@ -89,7 +89,7 @@ public class Manager :MonoBehaviour
 		Manager.musicOn=true;
 		bgMusicFadeOut=false;
 		bgMusicFadeIn=false;
-		recordingDone=false;
+//		recordingDone=false;
 
 		bgAudio=GameObject.Find("Manager").GetComponent<AudioSource>();
 
