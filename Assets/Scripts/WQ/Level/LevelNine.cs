@@ -96,7 +96,25 @@ public class LevelNine : MonoBehaviour
 
 	}
 
+	public void InitTest()
+	{
+		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
+		ShowMouse();
+		ShowGarland();
+
+
+		Init();
+
+
+		//手的位置还原，图片还原
+		hand.transform.position=originHandPos;
+		hand.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Hand/hand_0");
+
+
+
+	}
 
 	void Update () 
 	{
@@ -135,10 +153,11 @@ public class LevelNine : MonoBehaviour
 					//改变手的图片并显示花环
 					ChangeHandSpriteAndShowGarland();
 					PlayAnimation();
+					FormalScene._instance.ShowSubtitle();
 
 					aniPlayed=true;
 				}
-				FormalScene._instance.ShowSubtitle();
+//				FormalScene._instance.ShowSubtitle();
 
 			}
 
@@ -313,6 +332,10 @@ public class LevelNine : MonoBehaviour
 
 		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.CrossFade("",0);
+
+		mouseAnimator.CrossFade("idle",0);;
+
 		if (mouse.GetComponent<MouseCtrl>()==null) {
 			mouse.AddComponent<MouseCtrl>();
 		}
@@ -329,8 +352,6 @@ public class LevelNine : MonoBehaviour
 		SetGarlandLayer(garlandInveisibleLayer);
 
 		desGarlandPos=GameObject.Find("Mouse/GarlandDest").transform.position;
-		Debug.Log("garland.transform.position--"+garland.transform.position);
-		Debug.Log("desGarlandPos----"+desGarlandPos);
 
 		moveOffset=desGarlandPos-garland.transform.position;
 
@@ -356,10 +377,18 @@ public class LevelNine : MonoBehaviour
 	{
 
 		Manager._instance.Reset();
-		mouseAnimator.CrossFade("idle",0);
-		if (mouse.GetComponent<MouseCtrl>()!=null) 
+		if (mouseAnimator) 
 		{
-			Destroy(mouse.GetComponent<MouseCtrl>());
+			mouseAnimator.CrossFade("idle",0);
+
+		}
+		if (mouse) 
+		{
+			if (mouse.GetComponent<MouseCtrl>()!=null) 
+			{
+				Destroy(mouse.GetComponent<MouseCtrl>());
+			}
+
 		}
 
 	}

@@ -21,10 +21,10 @@ public class FormalScene : MonoBehaviour
 	private Button cancelBtn;
 	private Button startRecordBtn;
 
-	private Button playBtn;
-	private Button nextBtn_RecordDoneFrame;
+
 	private Button confirmBtn;
 	public Button homeBtn;
+	public Button initTestBtn;
 
 	private GameObject music;
 	private GameObject mask;
@@ -83,6 +83,8 @@ public class FormalScene : MonoBehaviour
 	Vector3 blackMask_screenInsidePos=Vector3.zero;//黑色遮罩在屏幕中间的位置
 
 
+
+
 	void Awake()
 	{
 		_instance=this;
@@ -99,8 +101,7 @@ public class FormalScene : MonoBehaviour
 		recordBtn=transform.Find("Record").GetComponent<Button>();
 		cancelBtn=transform.Find("NoticeToRecordFrame/Cancel").GetComponent<Button>();
 		startRecordBtn=transform.Find("NoticeToRecordFrame/StartRecord").GetComponent<Button>();
-		playBtn=transform.Find("RecordDoneFrame/Play").GetComponent<Button>();
-		nextBtn_RecordDoneFrame=transform.Find("RecordDoneFrame/Next").GetComponent<Button>();
+
 		confirmBtn=transform.Find("WinFrame/Btn").GetComponent<Button>();
 		music=transform.Find("Music").gameObject;
 		mask=transform.Find("Mask").gameObject;
@@ -130,18 +131,15 @@ public class FormalScene : MonoBehaviour
 		EventTriggerListener.Get(nextBtn.gameObject).onClick=OnNextBtnClick;
 		EventTriggerListener.Get(recordBtn.gameObject).onClick=OnRecordBtnClick;
 		EventTriggerListener.Get(homeBtn.gameObject).onClick=OnHomeBtnClick;
+		EventTriggerListener.Get(initTestBtn.gameObject).onClick=OnInitTestBtnClick;
+
+
 		EventTriggerListener.Get(cancelBtn.gameObject).onClick=OnCancelBtnClick;
 		EventTriggerListener.Get(startRecordBtn.gameObject).onClick=OnStartRecordBtnClick;
-		EventTriggerListener.Get(playBtn.gameObject).onClick=OnPlayBtnClick;
-		EventTriggerListener.Get(nextBtn_RecordDoneFrame.gameObject).onClick=OnNextBtnClick;
 		EventTriggerListener.Get(confirmBtn.gameObject).onClick=OnConfirmBtnClick;
-
 		EventTriggerListener.Get(closeRecordingDoneFrameBtn.gameObject).onClick=OnCloseRecordingDoneFrameBtnClick;
 		EventTriggerListener.Get(closeRecordingAgainFrameBtn.gameObject).onClick=OnCloseRecordingAgainFrameBtnClick;
 		EventTriggerListener.Get(recordAgainBtnOnRecordingAgainFrame.gameObject).onClick=OnRecordAgainBtnClick;
-
-
-//		Manager._instance.levelOneOver=false;
 
 		Init();
 
@@ -255,7 +253,7 @@ public class FormalScene : MonoBehaviour
 		switch (levelID)
 		{
 		case 1:
-			tempScene=Instantiate(sceneLevel_1) as GameObject;
+			tempScene=Instantiate<GameObject>(sceneLevel_1);
 			break;
 		case 2:
 			tempScene=Instantiate<GameObject>(sceneLevel_2);
@@ -290,17 +288,21 @@ public class FormalScene : MonoBehaviour
 		}
 	
 	}
-
-
+		
 
 	void Update () 
 	{
-		
-		if (Manager.recordingDone)
-		{
-			ShowRecordDone();
-			Manager.recordingDone=false;
-		} 
+//		
+//		if (Manager.recordingDone)
+//		{
+//			if (!recordingDoneShow) 
+//			{
+//				recordingDoneShow=true;
+//				ShowRecordDone();
+//			}
+//
+////			Manager.recordingDone=false;
+//		} 
 
 		if (sliderMoving) 
 		{
@@ -479,6 +481,8 @@ public class FormalScene : MonoBehaviour
 	}
 
 
+
+
 	private void OnHomeBtnClick(GameObject btn)
 	{
 		Manager._instance.Reset();
@@ -492,8 +496,18 @@ public class FormalScene : MonoBehaviour
 			LevelManager.Instance.LoadLocalLevelProgressData ();
 		}
 
+		if (RecordVideoWithIvidCapture._instance)
+		{
+			RecordVideoWithIvidCapture._instance.recordVideo.EndRecording();
+
+		}
 
 		SceneManager.LoadSceneAsync("5_SelectLevel");
+	}
+
+	private void OnInitTestBtnClick(GameObject btn)
+	{
+		BussinessManager._instance.InitTest();
 	}
 
 	private void OnCancelBtnClick(GameObject btn)
@@ -509,26 +523,12 @@ public class FormalScene : MonoBehaviour
 
 	private void OnStartRecordBtnClick(GameObject btn)
 	{
-		Manager.storyStatus=StoryStatus.Recording;
-
-		mask.SetActive(false);
-		noticeToRecordFrame.SetActive(false);
-		recordingFrame.SetActive(true);
-		HideSubtitle();
-
-		RecordVideoWithIvidCapture._instance.RecordVideo();
-
-		sliderMoving=true;
-
-		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
-		Manager ._instance.fingerMove=true;
-		Manager._instance.RecordingToSetBgAudioVolumeZero();
-	
+		RecordVideo();
 	}
-		
 
 	public void  ShowRecordDone()
 	{
+
 		mask.SetActive(true);
 		music.SetActive(true);
 		recordingFrame.SetActive(false);
@@ -536,43 +536,21 @@ public class FormalScene : MonoBehaviour
 		recordDoneFrame.SetActive(true);
 	}
 
-	public void RecordAgain()
+	public void RecordVideo()
 	{
 		Manager.storyStatus=StoryStatus.Recording;
-
 		mask.SetActive(false);
+		noticeToRecordFrame.SetActive(false);
 		recordDoneFrame.SetActive(false);
 		recordingFrame.SetActive(true);
 		HideSubtitle();
-		Manager.recordingDone=false;
-
 		RecordVideoWithIvidCapture._instance.RecordVideo();
-
 		sliderMoving=true;
-
 		BussinessManager._instance.StartStoryToRecordAudioAndVideo();
 		Manager ._instance.fingerMove=true;
 		Manager._instance.RecordingToSetBgAudioVolumeZero();
 	}
-		
 
-	void OnPlayBtnClick(GameObject btn)
-	{
-		Manager.storyStatus =StoryStatus.PlayRecord;
-		recordDoneFrame.SetActive(false);
-		mask.SetActive(false);
-		music.SetActive(false);
-
-		//保存音频，并播放
-//		MicroPhoneInputSaveWav.getInstance().SaveMusic();
-//		MicroPhoneInputSaveWav.getInstance().PlayRecord();
-
-		HideSubtitle();
-
-		BussinessManager._instance.PlayStoryWithAudioRecording();
-	
-	}
-		
 
 	public void SaveVideo()
 	{
@@ -591,15 +569,25 @@ public class FormalScene : MonoBehaviour
 
 	void OnCloseRecordingDoneFrameBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了RecordingDoneFrame关闭按钮");
+
 		transform.Find("RecordDoneFrame").gameObject.SetActive(false);
+		mask.SetActive(false);
+		recordBtn.transform.gameObject.SetActive(true);
 		//场景重新回到正常状态
-		SceneManager.LoadSceneAsync("6_FormalScene_0");
+//		SceneManager.LoadSceneAsync("6_FormalScene_0");
+
+		//其实应该是场景的值重新初始化
+		BussinessManager._instance.InitTest();
 		
 	}
 
 	void OnCloseRecordingAgainFrameBtnClick(GameObject btn)
 	{
+		Debug.Log("点击了RecordingAgainFrame关闭按钮");
+
 		transform.Find("RecordAgainFrame").gameObject.SetActive(false);
+		transform.Find("RecordDoneFrame").gameObject.SetActive(true);
 
 	}
 
@@ -608,7 +596,7 @@ public class FormalScene : MonoBehaviour
 		transform.Find("RecordAgainFrame").gameObject.SetActive(false);
 		transform.Find("RecordDoneFrame").gameObject.SetActive(false);
 
-		RecordAgain();
+		RecordVideo();
 
 	}
 

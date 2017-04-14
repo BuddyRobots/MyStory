@@ -114,6 +114,30 @@ public class LevelThree : MonoBehaviour
 
 	}
 
+	public void InitTest()
+	{
+		Manager.storyStatus =StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+
+		camMovespeed=3f;
+		fallSpeed=4f;
+
+
+
+		ShowMouse();
+		ShowBall();
+
+
+		Init();
+
+		mouseAnimator.CrossFade("idle",0);
+		lionAnimator.CrossFade("LionIdle",0);
+		ballAnimator.CrossFade("BallIdle",0);
+
+		lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lion") as Sprite;
+
+	}
+
 
 
 
@@ -126,7 +150,6 @@ public class LevelThree : MonoBehaviour
 			{
 				if (cam.transform.position.x>destCamTrans.position.x) 
 				{
-					Debug.Log("time----"+Time.time);
 					cam.transform.Translate(Vector3.left*camMovespeed*Time.deltaTime);
 
 				}
@@ -135,7 +158,6 @@ public class LevelThree : MonoBehaviour
 					cam.transform.position=destCamTrans.position;
 					if (!lionChange) 
 					{
-						Debug.Log("end time----"+Time.time);
 
 						lion.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Lion/lionEyeMove") as Sprite;
 
@@ -177,6 +199,8 @@ public class LevelThree : MonoBehaviour
 					if (!shakeTofall) 
 					{
 						PlayAnimation();
+
+						FormalScene._instance.ShowSubtitle();
 						shakeTofall=true;
 					}
 				}
@@ -201,12 +225,13 @@ public class LevelThree : MonoBehaviour
 					{
 						Debug.Log("开始播放动画");
 						PlayAnimation();
+						FormalScene._instance.ShowSubtitle();
 
 						shakeTofall=true;
 					}
 				}
 
-				FormalScene._instance.ShowSubtitle();
+//				FormalScene._instance.ShowSubtitle();
 
 			}
 
@@ -448,8 +473,11 @@ public class LevelThree : MonoBehaviour
 			ball.transform.parent=null;
 
 		}
+		if (Manager._instance) 
+		{
+			Manager._instance.Reset();
 
-		Manager._instance.Reset();
+		}
 
 		if (mouse.GetComponent<MouseFall>()) 
 		{

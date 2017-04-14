@@ -55,6 +55,7 @@
     <key>UIRequiredDeviceCapabilities</key>
     <array>
       <string>armv7</string>
+      <string>opengles-3</string>
     </array>
     <key>UIRequiresFullScreen</key>
     <true />

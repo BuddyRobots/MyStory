@@ -8,7 +8,7 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 
 	public iVidCapPro vr;
 
-	VideoRecorder recordVideo;
+	public VideoRecorder recordVideo;
 
 	[HideInInspector]
 	public float micLoudness;
@@ -17,8 +17,14 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	{
 		_instance=this;
 		recordVideo = new VideoRecorder(vr, true);
-		//构造完recordVideo后注册委托 formalscene 中的 ShowRecordDone()
-		//TODO
+
+	}
+
+	void Start()
+	{
+		//构造完recordVideo后传递委托 formalscene 中的 ShowRecordDone()
+
+		recordVideo.RegisterSessionCompleteDelegate(FormalScene._instance.ShowRecordDone);
 
 	}
 
@@ -34,6 +40,6 @@ public class RecordVideoWithIvidCapture : MonoBehaviour
 	void Update()
 	{
 		micLoudness = recordVideo.micLoudness;
-		Manager.recordingDone=recordVideo.finishedRecording;
+//		Manager.recordingDone=recordVideo.finishedRecording;
 	}
 }

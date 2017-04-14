@@ -50,7 +50,19 @@ public class LevelFive : MonoBehaviour
 
 	}
 
+	public void InitTest()
+	{
+		Manager.storyStatus=StoryStatus.Normal;
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 
+		EnlargeCameraSize();
+		ShowMouse();
+		ShowBall();
+
+		Init();
+		MouseRunAway._instance.ResetSpeed();
+
+	}
 	void Update () 
 	{
 		if (FormalScene._instance.storyBegin) 
@@ -58,11 +70,13 @@ public class LevelFive : MonoBehaviour
 
 			if (!storyPlay )
 			{
+				mouseAnimator.CrossFade("",0);
+
 				mouseAnimator.CrossFade("RunAway",0);
-				if (MouseRunAway._instance) 
-				{
+//				if (MouseRunAway._instance) 
+//				{
 					MouseRunAway._instance.move=true;
-				}
+//				}
 
 				if (Manager.storyStatus==StoryStatus.Normal) 
 				{
@@ -115,6 +129,8 @@ public class LevelFive : MonoBehaviour
 		}
 		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.CrossFade("",0);
+
 		mouseAnimator.CrossFade("MouseRunAway_Idle",0);
 		if (mouse.GetComponent<Rigidbody2D>()==null) 
 		{

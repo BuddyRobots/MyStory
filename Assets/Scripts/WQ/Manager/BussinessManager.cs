@@ -190,6 +190,43 @@ public class BussinessManager : MonoBehaviour
 		}
 	}
 
+	public void InitTest()
+	{
+
+		switch (LevelManager.currentLevelData.LevelID)
+		{
+		case 1:
+			LevelOne._instance.InitTest();
+			break;
+		case 2:
+			LevelTwo._instance.InitTest();
+			break;
+		case 3:
+			LevelThree._instance.InitTest();
+			break;
+		case 4:
+			break;
+		case 5:
+			LevelFive._instance.InitTest();
+			break;
+		case 6:
+			LevelSix._instance.InitTest();
+			break;
+		case 7:
+			LevelSeven._instance.InitTest();
+			break;
+		case 8:
+			break;
+		case 9:
+			LevelNine._instance.InitTest();
+
+			break;
+		default:
+			break;
+		}
+	}
+
+
 	public void DestroyFinger()
 	{
 

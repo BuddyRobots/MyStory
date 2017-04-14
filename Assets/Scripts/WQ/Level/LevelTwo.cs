@@ -69,12 +69,34 @@ public class LevelTwo : MonoBehaviour
 		Init();
 
 	}
+	public void InitTest()
+	{
+		Manager.storyStatus=StoryStatus.Normal;
+
+		FormalScene._instance.nextBtn.gameObject.SetActive(false);
+
+		dest_0=new Vector3(tar_0.position.x,originMouseTrans.position.y,originMouseTrans.position.z);
+		dest_1=tar_1.position;
+		dest_2=tar_2.position;
+
+//		ShowMouse();
+//		ShowBall();
+
+		Init();
+		ShowMouse();
+		ShowMouse();
+		if (BussinessManager._instance.finger) {
+			Destroy(BussinessManager._instance.finger);
+		}
+
+	}
 
 	/// <summary>
 	/// 初始化变量，比如老鼠的位置，球的位置，以及一些bool值
 	/// </summary>
 	public void Init()
 	{
+		
 		moveSpeed=2;
 		destFlag=0;
 		arrivedFirstDest=false;
@@ -113,7 +135,9 @@ public class LevelTwo : MonoBehaviour
 		{
 			if (!arrivedFirstDest)
 			{
-				//（播放进场的动画）  
+				//（播放进场的动画） 
+				mouseAnimator.CrossFade("",0);
+
 				mouseAnimator.CrossFade("01_WalkToBall",0);
 				destFlag++;
 				dest=dest_0;
@@ -177,7 +201,7 @@ public class LevelTwo : MonoBehaviour
 			if (ballClicked ) 
 			{
 				//刚体禁用
-				mouse.GetComponent<Rigidbody2D>().simulated=false;
+//				mouse.GetComponent<Rigidbody2D>().simulated=false;
 				if ( Manager.storyStatus==StoryStatus.Normal) 
 				{
 					if (!audioAsidePlayed) 
@@ -188,13 +212,15 @@ public class LevelTwo : MonoBehaviour
 					}
 
 				}
-				// 显示字幕
-				FormalScene._instance.ShowSubtitle();
+
+//				FormalScene._instance.ShowSubtitle();
 
 				#region 老鼠运动
 				//小老鼠移向第二个点（播放跑的动画）
 				if (!arrivedSecondDest)
 				{
+					// 显示字幕
+					FormalScene._instance.ShowSubtitle();
 					mouseAnimator.CrossFade("02_Walk",0);
 
 					dest=dest_1;
@@ -300,9 +326,15 @@ public class LevelTwo : MonoBehaviour
 		mouse=Manager._instance.mouseGo;
 		mouse.transform.position=originMouseTrans.position;
 		mouseAnimator=mouse.GetComponent<Animator>();
+		mouseAnimator.CrossFade("",0);
+
+		mouseAnimator.CrossFade("idle",0);
 		if (mouse.GetComponent<MouseEnterScene>()==null) 
 		{
 			mouse.AddComponent<MouseEnterScene>();
+		}
+		if (mouse.GetComponent<Rigidbody2D>()==null) {
+//			mouse.AddComponent<Rigidbody2D>();
 		}
 	}
 

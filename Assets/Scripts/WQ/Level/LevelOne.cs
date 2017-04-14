@@ -68,6 +68,19 @@ public class LevelOne : MonoBehaviour
 			grassClicked=true;
 		}
 	}
+	public void InitTest()
+	{
+		mouse.transform.position=Manager._instance.outsideScreenPos;
+		ball.transform.position=Manager._instance.outsideScreenPos;
+		ball.GetComponent<Rigidbody2D>().simulated=false;
+		grassL.GetComponent<BoxCollider2D>().enabled=true;
+		grassR.GetComponent<BoxCollider2D>().enabled=true;
+
+		Manager.storyStatus=StoryStatus.Normal;
+		Init();
+		Manager ._instance.fingerMove=true;
+
+	}
 
 
 	void Update () 
