@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MouseEnterScene : MonoBehaviour 
 {
-
-	float speed_run=2f;
 	float speed_walk=1f;
 	float speed_walkSlow=0.42f;
 	float speed_stop;

@@ -2,10 +2,6 @@
 using System.Collections;
 
 
-
-
-
-
 public enum ModelType
 {
 	Mouse,
@@ -38,9 +34,6 @@ public enum LevelProgress
 public enum StoryStatus
 {
 	Normal,
-	Recording,
-	PlayRecord
-
-
+	Recording
 }
 	

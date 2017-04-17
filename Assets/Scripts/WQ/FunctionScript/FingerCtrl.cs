@@ -25,17 +25,14 @@ public class FingerCtrl : MonoBehaviour
 		speed = 4f;
 	}
 
-
-
 	//出现手指，需要传入坐标
 	public void FingerShow(Vector3 fingerPos)
 	{
 		transform.position = fingerPos;
 		startPos=fingerPos;
 		dest =startPos - moveOffset;
-
+	
 		StartCoroutine (FingerMove(startPos, dest));
-
 	
 	}
 

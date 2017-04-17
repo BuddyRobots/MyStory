@@ -21,6 +21,10 @@ public class Pendulum2D : MonoBehaviour
 
 	Vector3 centerPos=new Vector3(1.53f,2.73f,0);
 
+	int index = 0; //用于记录recordPoints的点
+	bool forward = true; //true的时候从0开始(上升),false,开始下落
+	bool isCross = false; //用于做穿过检查----此时需要重新计算recordPoints
+
 	void Start()
 	{
 		recordPoints = new List<float>();
@@ -108,9 +112,7 @@ public class Pendulum2D : MonoBehaviour
 	}
 
 
-	int index = 0; //用于记录recordPoints的点
-	bool forward = true; //true的时候从0开始(上升),false,开始下落
-	bool isCross = false; //用于做穿过检查----此时需要重新计算recordPoints
+
 
 
 	void FixedUpdate()

@@ -69,7 +69,7 @@ public class LevelTwo : MonoBehaviour
 		Init();
 
 	}
-	public void InitTest()
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		Manager.storyStatus=StoryStatus.Normal;
 
@@ -115,7 +115,7 @@ public class LevelTwo : MonoBehaviour
 		{
 			showFingerOnBall=false;
 		}
-		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+		else if (Manager.storyStatus ==StoryStatus.Recording)
 		{
 			showFingerOnBall=true;
 		}
@@ -151,7 +151,7 @@ public class LevelTwo : MonoBehaviour
 				if (startToWalk) 
 				{
 					//如果是非正常状态下，就不用出现小手提示点击球，跳过这一步
-					if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
+					if (Manager.storyStatus==StoryStatus.Recording) 
 					{
 						if (mouse.transform.position.x!=tar_0.position.x) 
 						{
@@ -190,7 +190,7 @@ public class LevelTwo : MonoBehaviour
 			}
 				
 			//这里是保证录音和播放界面不会有小手出现
-			if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
+			if (Manager.storyStatus==StoryStatus.Recording) 
 			{
 				BussinessManager._instance.DestroyFinger();
 
@@ -254,7 +254,7 @@ public class LevelTwo : MonoBehaviour
 		if (mouseAniDone && Manager._instance.isSubtitleShowOver)//如果老鼠动画播放结束了，字幕也结束了，就跳转界面
 		{
 			//在正常状态或者播放状态下
-			if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
+			if (Manager.storyStatus ==StoryStatus.Normal)
 			{
 				if (!changeScene) 
 				{
@@ -378,16 +378,6 @@ public class LevelTwo : MonoBehaviour
 		mouseAnimator.CrossFade("",0);
 		mouseAnimator.CrossFade("01_WalkToBall",0);
 	}
-
-	public void PlayStoryWithAudioRecording()
-	{
-		Init();
-		mouse.transform.position=originMouseTrans.position;
-		mouseAnimator.CrossFade("",0);
-		mouseAnimator.CrossFade("01_WalkToBall",0);
-	}
-
-
 
 	public void PauseStory()
 	{

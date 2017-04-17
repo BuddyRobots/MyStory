@@ -50,7 +50,7 @@ public class LevelFive : MonoBehaviour
 
 	}
 
-	public void InitTest()
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		Manager.storyStatus=StoryStatus.Normal;
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
@@ -94,7 +94,7 @@ public class LevelFive : MonoBehaviour
 			{
 				mouseAnimator.CrossFade("idle",0);
 				//在正常状态或者播放状态下
-				if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
+				if (Manager.storyStatus ==StoryStatus.Normal)
 				{
 					FormalScene._instance.ChangeSceneAutomatically();
 					MouseRunAway._instance.move=false;
@@ -174,18 +174,6 @@ public class LevelFive : MonoBehaviour
 
 	}
 
-	public void PlayStoryWithAudioRecording()
-	{
-		Init();
-		mouse.transform.position=originMouseTrans.position;
-		mouseAnimator.CrossFade("",0);
-		mouseAnimator.CrossFade("RunAway",0);
-
-		MouseRunAway._instance.ResetSpeed();
-		MouseRunAway._instance.move=true;
-
-
-	}
 
 	public void PauseStory()
 	{

@@ -7,16 +7,13 @@ public class BussinessManager : MonoBehaviour
 {
 
 	public static BussinessManager _instance;
+
 	[HideInInspector]
 	public GameObject finger;
 	private GameObject fingerPrefab;
-	private Vector3 offSet = new Vector3 (1.3f, -0.7f, 0);//这个值表示小手距离需要点击的对象的距离（对象Position+offset=小手Position）
-	[HideInInspector]
-	public Vector3 prePos= Vector3.zero; // 记录当前指向的位置，如果没发生变化，不做任何操作
-
-
 	private GameObject sceneParent;
 	private AudioSource audioSource;
+	private Vector3 offSet = new Vector3 (1.3f, -0.7f, 0);//这个值表示小手距离需要点击的对象的距离（对象Position+offset=小手Position）
 
 	void Awake()
 	{
@@ -151,44 +148,7 @@ public class BussinessManager : MonoBehaviour
 		}
 
 	}
-
-	/// <summary>
-	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
-	/// </summary>
-	public void PlayStoryWithAudioRecording()
-	{
-
-		switch (LevelManager.currentLevelData.LevelID)
-		{
-		case 1:
-			LevelOne._instance.PlayStoryWithAudioRecording();
-			break;
-		case 2:
-			LevelTwo._instance.PlayStoryWithAudioRecording();
-			break;
-		case 3:
-			LevelThree._instance.PlayStoryWithAudioRecording();
-			break;
-		case 4:
-			break;
-		case 5:
-			LevelFive._instance.PlayStoryWithAudioRecording();
-			break;
-		case 6:
-			LevelSix._instance.PlayStoryWithAudioRecording();
-			break;
-		case 7:
-			LevelSeven._instance.PlayStoryWithAudioRecording();
-			break;
-		case 8:
-			break;
-		case 9:
-			LevelNine._instance.PlayStoryWithAudioRecording();
-			break;
-		default:
-			break;
-		}
-	}
+		
 
 	public void InitTest()
 	{
@@ -196,29 +156,29 @@ public class BussinessManager : MonoBehaviour
 		switch (LevelManager.currentLevelData.LevelID)
 		{
 		case 1:
-			LevelOne._instance.InitTest();
+			LevelOne._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 			break;
 		case 2:
-			LevelTwo._instance.InitTest();
+			LevelTwo._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 			break;
 		case 3:
-			LevelThree._instance.InitTest();
+			LevelThree._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 			break;
 		case 4:
 			break;
 		case 5:
-			LevelFive._instance.InitTest();
+			LevelFive._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 			break;
 		case 6:
-			LevelSix._instance.InitTest();
+			LevelSix._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 			break;
 		case 7:
-			LevelSeven._instance.InitTest();
+			LevelSeven._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 			break;
 		case 8:
 			break;
 		case 9:
-			LevelNine._instance.InitTest();
+			LevelNine._instance.InitByClickingCloseBtnOfRecordingDoneFrame();
 
 			break;
 		default:

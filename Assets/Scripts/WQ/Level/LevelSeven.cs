@@ -47,7 +47,7 @@ public class LevelSeven : MonoBehaviour
 		ShowMouse();
 	}
 
-	public void InitTest()
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
 		Manager.storyStatus=StoryStatus.Normal;
@@ -121,7 +121,7 @@ public class LevelSeven : MonoBehaviour
 						
 					}
 				}
-				else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
+				else if (Manager.storyStatus ==StoryStatus.Recording) 
 				{
 					//直接播放动画
 
@@ -168,7 +168,7 @@ public class LevelSeven : MonoBehaviour
 				if (aniDone && Manager._instance.isSubtitleShowOver) 
 				{
 					//在正常状态或者播放状态下
-					if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
+					if (Manager.storyStatus ==StoryStatus.Normal)
 					{
 						FormalScene._instance.ChangeSceneAutomatically();
 
@@ -237,13 +237,6 @@ public class LevelSeven : MonoBehaviour
 				}
 			}
 		}
-
-	}
-
-	public void PlayStoryWithAudioRecording()
-	{
-
-		Reset();
 
 	}
 

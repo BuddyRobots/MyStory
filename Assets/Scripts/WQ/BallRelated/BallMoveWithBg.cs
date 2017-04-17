@@ -9,16 +9,14 @@ public class BallMoveWithBg : MonoBehaviour
 	/// <summary>
 	/// 球和背景一起移动时的速度
 	/// </summary>
-	public float speedWithBgMove=8f;
+	public float moveSpeedTogetherWithBg=8f;
 	Vector3 offset;
-	private Rigidbody2D rig2D;
 	bool move;
 
 
 	void Start () 
 	{
 		offset=new Vector3(0.01f,0,0);
-		rig2D =gameObject.GetComponent<Rigidbody2D>();
 	}
 	
 
@@ -28,8 +26,7 @@ public class BallMoveWithBg : MonoBehaviour
 		move=Manager._instance.move;
 		if (move) 
 		{
-			transform.localPosition+=offset*speedWithBgMove;
-
+			transform.localPosition+=offset*moveSpeedTogetherWithBg;
 		}
 		
 	}

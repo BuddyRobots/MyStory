@@ -16,9 +16,7 @@ public class MouseDrag : MonoBehaviour
 	bool mouseClicked;
 
 	[HideInInspector]
-	public bool isMouseDown = false;  
-
-
+	public bool isMouseDown = false;  //鼠标是不是按下
 	[HideInInspector]
 	public bool mouseDraging;
 	[HideInInspector]
@@ -36,34 +34,21 @@ public class MouseDrag : MonoBehaviour
 		mouseAnimator=GetComponent<Animator>();
 		isOnNet=false;
 		mouseClicked=false;
-
 		y_MouseLowestLimit=-4.4f;
 	}
 
 	void OnMouseDown() 
 	{
-		if (LevelEight._instance.mouseClicked) {
-			mouseDraging=true;
-
-		}
-
+		mouseDraging=true;
 	}
 
 	void OnMouseDrag()
 	{
-		if (LevelEight._instance.mouseClicked) {
-			mouseDraging=true;
-
-		}
-//		mouseDraging=true;
+		mouseDraging=true;
 	}
 	void OnMouseUp()
 	{
-		if (LevelEight._instance.mouseClicked) {
-			mouseDraging=false;
-
-		}
-//		mouseDraging=false;
+		mouseDraging=false;
 	}
 
 	void Update () 
@@ -83,75 +68,65 @@ public class MouseDrag : MonoBehaviour
 					}
 				}
 			}
-
 		}  
 		if (Input.GetMouseButtonUp(0) && LevelEight._instance.mouseClicked) //如果松开了老鼠
 		{
 			isMouseDown = false;  
 			lastMousePosition = Vector3.zero;
-
 			gameObject.GetComponent<Rigidbody2D>().gravityScale=1;
 
-
 		}  
-		if (isMouseDown)  
-		{  
-			
-			if (lastMousePosition != Vector3.zero)  
-			{  
-				Vector3 offset = Camera.main.ScreenToWorldPoint(Input.mousePosition) - lastMousePosition;  
-				this.transform.position += offset;  
-			}  
-			lastMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
-
-			gameObject.GetComponent<Rigidbody2D>().gravityScale=0;
-
-			closingFloor=false;
-			changeAni=false;
-
-			if (isOnNet) //如果点住了老鼠，老鼠在网上
-			{
-				Debug.Log("----------");
-				mouseAnimator.CrossFade("8_Bite",0);
-
-			}
-			else//如果点住了老鼠，老鼠不在网上
-			{
-				mouseAnimator.CrossFade("8_StruggleOnAir",0);
-			}
-		} 
-		else
+		if (LevelEight._instance.mouseClicked)//如果点击了老鼠（销毁了小手）
 		{
-			if (mouseClicked) 
-			{
+			if (isMouseDown)  //且鼠标是按下的
+			{  
 
-				if (transform.position.y<=y_MouseLowestLimit) 
+				if (lastMousePosition != Vector3.zero)  
+				{  
+					Vector3 offset = Camera.main.ScreenToWorldPoint(Input.mousePosition) - lastMousePosition;  
+					this.transform.position += offset;  
+				}  
+				lastMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);  
+
+				gameObject.GetComponent<Rigidbody2D>().gravityScale=0;
+
+				closingFloor=false;
+				changeAni=false;
+
+				if (isOnNet) //如果点住了老鼠，老鼠在网上
 				{
-					closingFloor=true;
+					mouseAnimator.CrossFade("8_Bite",0);
+
 				}
-
-
-				if (closingFloor) 
+				else//如果点住了老鼠，老鼠不在网上
 				{
-					if (!changeAni) 
+					mouseAnimator.CrossFade("8_StruggleOnAir",0);
+				}
+			} 
+			else
+			{
+				if (mouseClicked) 
+				{
+					if (transform.position.y<=y_MouseLowestLimit) 
 					{
-						mouseAnimator.CrossFade("8_FallClosingFloor",0);
+						closingFloor=true;
+					}
+					if (closingFloor) 
+					{
+						if (!changeAni) 
+						{
+							mouseAnimator.CrossFade("8_FallClosingFloor",0);
 
-						changeAni=true;
+							changeAni=true;
+						}
+					}
+					else
+					{
+						mouseAnimator.CrossFade("8_FallOnAir",0);
+
 					}
 				}
-				else
-				{
-					mouseAnimator.CrossFade("8_FallOnAir",0);
-
-				}
-				
-			}
-
-
+			}	
 		}
-
 	} 
-
-
 }

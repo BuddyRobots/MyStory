@@ -92,9 +92,12 @@ public class LevelEight : MonoBehaviour
 					alphaChangeTimer=alphaChangeTime;
 
 					//  TO MODIFY --------------------------
+					if (net !=null) 
+					{
+						Destroy(net);
+						MouseDrag._instance.isOnNet = false;//加上这一行之后网消失后老鼠就不会有咬网的动画了，但是为什么呢？？？
 
-					Destroy(net);
-					MouseDrag._instance.isOnNet = false;//加上这一行之后网消失后老鼠就不会有咬网的动画了，但是为什么呢？？？
+					}
 
 					//----------------------------
 				}
