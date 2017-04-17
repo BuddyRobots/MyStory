@@ -374,12 +374,6 @@ public class FormalScene : MonoBehaviour
 
 	private void OnNextBtnClick(GameObject btn)
 	{
-		EnterNextLevel();
-	}
-
-	public void EnterNextLevel()
-	{
-
 		Debug.Log("点击了下一步按钮，当前关卡是："+currentLevelID);
 		//切换到下一个场景界面  
 		if (currentLevelID==9) 
@@ -401,6 +395,37 @@ public class FormalScene : MonoBehaviour
 
 			}
 			else
+			{
+				UpgradeLevel();
+				StartCoroutine(ScreenDarkenThenLoadSceneAsync());
+			}	
+		}
+	}
+
+	public void EnterNextLevelByClickNextBtnOnRecordingDoneFrame()
+	{
+
+		Debug.Log("点击了下一步按钮，当前关卡是："+currentLevelID);
+		//切换到下一个场景界面  
+		if (currentLevelID==9) 
+		{
+			mask.SetActive(true);
+			winFrame.SetActive(true);
+
+		}
+		else
+		{
+//			if (currentLevelID==1) 
+//			{
+//				Debug.Log("当前是第一关");
+//				if (!Manager._instance.levelOneOver) 
+//				{
+//					Manager._instance.levelOneOver=true;
+//					MousePlayBall._instance.OrderMouseToKickBallOutSide();	
+//				}
+//
+//			}
+//			else
 			{
 				UpgradeLevel();
 				StartCoroutine(ScreenDarkenThenLoadSceneAsync());

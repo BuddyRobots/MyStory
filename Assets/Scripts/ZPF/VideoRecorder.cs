@@ -17,7 +17,6 @@ public class VideoRecorder {
 		}
 	}
 
-	public delegate void SessionCompleteDelegate();
 	public bool isRecording = false;
 	public bool finishedRecording = false;
 		

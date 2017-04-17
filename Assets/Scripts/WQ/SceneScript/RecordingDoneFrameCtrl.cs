@@ -34,7 +34,7 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 		gameObject.SetActive(false);
 
 		Manager._instance.IOSSaveVideoToPhotosAlbum();
-		FormalScene._instance.EnterNextLevel();
+		FormalScene._instance.EnterNextLevelByClickNextBtnOnRecordingDoneFrame();
 
 	}
 

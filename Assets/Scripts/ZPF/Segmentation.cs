@@ -120,7 +120,7 @@ namespace MyStory
 		}
 	
 		// TODO need to simplify this
-		// float 0~255
+		// float 0~1
 		private static float[] MatToTensorArray(Mat image)
 		{
 			byte [] byteArray  = new byte [image.rows()*image.cols()*image.channels()];
@@ -129,7 +129,7 @@ namespace MyStory
 			image.get(0, 0, byteArray);
 
 			for (var i = 0; i < byteArray.Length; i++)
-				floatArray[i] = (float)byteArray[i];
+				floatArray[i] = (float)byteArray[i]/255.0f;
 
 			return floatArray;
 		}
