@@ -42,17 +42,28 @@ public class MouseDrag : MonoBehaviour
 
 	void OnMouseDown() 
 	{
-		mouseDraging=true;
+		if (LevelEight._instance.mouseClicked) {
+			mouseDraging=true;
+
+		}
 
 	}
 
 	void OnMouseDrag()
 	{
-		mouseDraging=true;
+		if (LevelEight._instance.mouseClicked) {
+			mouseDraging=true;
+
+		}
+//		mouseDraging=true;
 	}
 	void OnMouseUp()
 	{
-		mouseDraging=false;
+		if (LevelEight._instance.mouseClicked) {
+			mouseDraging=false;
+
+		}
+//		mouseDraging=false;
 	}
 
 	void Update () 
@@ -100,6 +111,7 @@ public class MouseDrag : MonoBehaviour
 
 			if (isOnNet) //如果点住了老鼠，老鼠在网上
 			{
+				Debug.Log("----------");
 				mouseAnimator.CrossFade("8_Bite",0);
 
 			}

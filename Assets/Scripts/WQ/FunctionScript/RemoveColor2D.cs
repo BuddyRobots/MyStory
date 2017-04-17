@@ -58,6 +58,7 @@ public class RemoveColor2D : MonoBehaviour
 				RaycastHit2D[] ray = Physics2D.RaycastAll(screenPos, Vector2.zero, 0.01f);
 				for (int i = 0; i < ray.Length; i++)
 				{
+					Debug.Log("射线点击到得物体----"+ray[i].collider.name);
 					// You will want to tag the image you want to lookup
 					if (ray[i].collider.name == "net")
 					{ 								

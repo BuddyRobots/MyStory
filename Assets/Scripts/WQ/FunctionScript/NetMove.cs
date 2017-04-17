@@ -28,6 +28,7 @@ public class NetMove : MonoBehaviour
 		moveSpeed=5f;
 		isOver=false;	
 	}
+
 	
 
 	void Update () 

@@ -167,17 +167,35 @@ public class LevelFour : MonoBehaviour
 
 		switch (randomNum)
 		{
-		case 1:
+//		case 1:
+//
+//			mouseAnimator.SetTrigger("first");
+//
+//			break;
+//		case 2:
+//			mouseAnimator.SetTrigger("second");
+//
+//			break;
+//		case 3:
+//			mouseAnimator.SetTrigger("third");
+//
+//			break;
 
-			mouseAnimator.SetTrigger("first");
+
+
+		case 1:
+			mouseAnimator.CrossFade("",0);
+			mouseAnimator.CrossFade("Struggle_01",0);
 
 			break;
 		case 2:
-			mouseAnimator.SetTrigger("second");
+			mouseAnimator.CrossFade("",0);
+			mouseAnimator.CrossFade("Struggle_02",0);
 
 			break;
 		case 3:
-			mouseAnimator.SetTrigger("third");
+			mouseAnimator.CrossFade("",0);
+			mouseAnimator.CrossFade("Struggle_03",0);
 
 			break;
 		}
@@ -189,13 +207,18 @@ public class LevelFour : MonoBehaviour
 	{
 		Manager._instance.Reset();
 
-		if (mouse.GetComponent<Pendulum2D>()) 
+		if (mouse)
 		{
-			Destroy(mouse.GetComponent<Pendulum2D>());
-		}
-		mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
+			if (mouse.GetComponent<Pendulum2D>()) 
+			{
+				Destroy(mouse.GetComponent<Pendulum2D>());
+			}
+			mouseAnimator.runtimeAnimatorController=Resources.Load("Animation/WJ/StandPoseAnimations/MouseStandPoseController") as RuntimeAnimatorController;
 
-		mouse.transform.localRotation=Quaternion.Euler(0,0,0);
+			mouse.transform.localRotation=Quaternion.Euler(0,0,0);
+		}
+
+
 
 		
 	}

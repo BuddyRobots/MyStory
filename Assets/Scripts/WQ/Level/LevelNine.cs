@@ -208,7 +208,7 @@ public class LevelNine : MonoBehaviour
 	void ChangeHandSpriteAndShowGarland()
 	{
 		hand.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Hand/hand_1");
-		SetGarlandLayer(garlandBackLayer);
+		SetGarlandLayer(garlandFrontLayer);
 	}
 		
 	void PlayAnimation()
@@ -258,7 +258,7 @@ public class LevelNine : MonoBehaviour
 
 		//花环的位置和层还原
 		garland.transform.position=originGarlandTran.position;
-		SetGarlandLayer(garlandBackLayer);
+		SetGarlandLayer(garlandFrontLayer);
 
 	}
 
