@@ -143,10 +143,7 @@ public class MousePlayBall : MonoBehaviour
 	/// </summary>
 	void UpradeLevelAndChangeScene()
 	{
-		Debug.Log("MousePlayBall---UpradeLevelAndChangeScene()");
 		FormalScene._instance.UpgradeLevel();
-
-
 		FormalScene._instance.ScreenDarkenThenReloadFormalScene();
 	}
 

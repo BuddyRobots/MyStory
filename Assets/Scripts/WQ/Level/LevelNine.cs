@@ -78,7 +78,7 @@ public class LevelNine : MonoBehaviour
 
 
 		}
-		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+		else if (Manager.storyStatus ==StoryStatus.Recording)
 		{
 			showFingerOnMouse=true;
 			isOver=false;
@@ -96,7 +96,7 @@ public class LevelNine : MonoBehaviour
 
 	}
 
-	public void InitTest()
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		Manager.storyStatus=StoryStatus.Normal;
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
@@ -166,7 +166,7 @@ public class LevelNine : MonoBehaviour
 			if(aniDone && Manager._instance.isSubtitleShowOver)
 			{
 				//在正常状态或者播放状态下
-				if (Manager.storyStatus ==StoryStatus.Normal || Manager.storyStatus ==StoryStatus.PlayRecord)
+				if (Manager.storyStatus ==StoryStatus.Normal)
 				{
 					FormalScene._instance.ChangeSceneAutomatically();
 					mouseAnimator.CrossFade("idle",0);
@@ -208,7 +208,7 @@ public class LevelNine : MonoBehaviour
 	void ChangeHandSpriteAndShowGarland()
 	{
 		hand.GetComponent<SpriteRenderer>().sprite=Resources.Load<Sprite>("Pictures/Hand/hand_1");
-		SetGarlandLayer(garlandBackLayer);
+		SetGarlandLayer(garlandFrontLayer);
 	}
 		
 	void PlayAnimation()
@@ -217,16 +217,6 @@ public class LevelNine : MonoBehaviour
 		mouseAnimator.CrossFade("Hooray",0);
 	}
 
-
-	/// <summary>
-	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
-	/// </summary>
-	public void PlayStoryWithAudioRecording()
-	{
-
-		Reset();
-
-	}
 
 	public void StartStoryToRecordAudioAndVideo()
 	{
@@ -258,7 +248,7 @@ public class LevelNine : MonoBehaviour
 
 		//花环的位置和层还原
 		garland.transform.position=originGarlandTran.position;
-		SetGarlandLayer(garlandBackLayer);
+		SetGarlandLayer(garlandFrontLayer);
 
 	}
 

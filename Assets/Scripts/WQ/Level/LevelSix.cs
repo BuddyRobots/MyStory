@@ -32,7 +32,7 @@ public class LevelSix : MonoBehaviour
 		Manager._instance.isSubtitleShowOver=false;
 	}
 
-	public void InitTest()
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		Manager.storyStatus=StoryStatus.Normal;
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
@@ -96,13 +96,6 @@ public class LevelSix : MonoBehaviour
 
 		Init();
 		NetMove._instance.Reset();
-	}
-
-	public void PlayStoryWithAudioRecording()
-	{
-		Init();
-		NetMove._instance.Reset();
-
 	}
 
 	public void PauseStory()

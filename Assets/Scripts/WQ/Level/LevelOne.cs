@@ -40,12 +40,10 @@ public class LevelOne : MonoBehaviour
 	void Start () 
 	{
 		Manager.storyStatus=StoryStatus.Normal;
-
 		grassAni=grassL.GetComponent<Animation>();
 
 		Init();
-
-//		Manager._instance.mouseGo.GetComponent<Animator>().CrossFade("idle",0);
+	
 	}
 
 	void Init()
@@ -62,13 +60,14 @@ public class LevelOne : MonoBehaviour
 			showFingerOnGrass=false;
 			grassClicked=false;
 		}
-		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+		else if (Manager.storyStatus ==StoryStatus.Recording)
 		{
 			showFingerOnGrass=true;
 			grassClicked=true;
 		}
 	}
-	public void InitTest()
+
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		mouse.transform.position=Manager._instance.outsideScreenPos;
 		ball.transform.position=Manager._instance.outsideScreenPos;
@@ -105,7 +104,7 @@ public class LevelOne : MonoBehaviour
 				}
 
 			}
-			else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
+			else if (Manager.storyStatus==StoryStatus.Recording) 
 			{
 
 				//播放动画
@@ -127,7 +126,7 @@ public class LevelOne : MonoBehaviour
 						startStoryNormally=true;
 					}
 				}
-				else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+				else if (Manager.storyStatus==StoryStatus.Recording)
 				{
 					if (!flag) 
 					{
@@ -238,15 +237,7 @@ public class LevelOne : MonoBehaviour
 		grassAni[grassAniName].speed=1;
 
 	}
-
-	public void PlayStoryWithAudioRecording()
-	{
-		mouse.SetActive(false);
-		ball.SetActive(false);
-		flag=false;
-		aniPlayed=false;
-	}
-
+		
 	public void StartStoryToRecordAudioAndVideo()
 	{
 		//如果有小手提示点击，就销毁小手，点击失效 

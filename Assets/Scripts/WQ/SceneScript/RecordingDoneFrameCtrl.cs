@@ -7,34 +7,30 @@ using System.IO;
 public class RecordingDoneFrameCtrl : MonoBehaviour {
 
 
-	public Button nextLevelBtn;
+	public Button continueBtn;
 	public Button recordAgainBtn;
 	public Button shareBtn;
-	public Button closeBtn;
+//	public Button closeBtn;
 	public Button playVideoBtn;
 
 	public GameObject recordAgainFrame;
 
-
-
-
 	void Start () 
 	{
-		EventTriggerListener.Get(nextLevelBtn.gameObject).onClick=OnNextLevelBtnClick;
+		EventTriggerListener.Get(continueBtn.gameObject).onClick=OnContinueBtnClick;
 		EventTriggerListener.Get(recordAgainBtn.gameObject).onClick=OnRecordAgainBtnClick;
 		EventTriggerListener.Get(shareBtn.gameObject).onClick=OnShareBtnClick;
-//		EventTriggerListener.Get(closeBtn.gameObject).onClick=OnCloseBtnClick;
+//		EventTriggerListener.Get(closeBtn.gameObject).onClick=OnCloseBtnClick;//写在这里不起作用，放到了FormalScene中  ？？
 		EventTriggerListener.Get(playVideoBtn.gameObject).onClick=OnPlayVideoClick;
 
 	}
 
-	void OnNextLevelBtnClick(GameObject btn)
+	void OnContinueBtnClick(GameObject btn)
 	{
 		//当前界面隐藏  
 		gameObject.SetActive(false);
-
 		Manager._instance.IOSSaveVideoToPhotosAlbum();
-		FormalScene._instance.EnterNextLevelByClickNextBtnOnRecordingDoneFrame();
+		FormalScene._instance.ContinueGame();
 
 	}
 
@@ -43,52 +39,35 @@ public class RecordingDoneFrameCtrl : MonoBehaviour {
 	{
 		//当前界面隐藏  
 		gameObject.SetActive(false);
-
 		recordAgainFrame.SetActive(true);
-
 	}
 
 
 	void OnShareBtnClick(GameObject btn)
 	{
-
 		//当前界面隐藏   TODO 
 
 	}
 
 	void OnCloseBtnClick(GameObject btn)
 	{
-		Debug.Log("点击了关闭按钮");
 		gameObject.SetActive(false);
-
 	}
-
-
-
-	private void TestFileCopy(string srcPath, string destPath)
-	{
-		///测试通过，可以成功拷贝
-//		string srcPath="/Users/WangQian/Documents/T0/body.png";
-//		string destPath="/Users/WangQian/Documents/T1/copy_body.png";
-		System.IO.File.Copy(srcPath,destPath);
-
-	}
-
-
 
 	void OnPlayVideoClick(GameObject btn)
 	{
-		Debug.Log("*********click play btn");
 		//播放视频
 		string srcPath = Path.Combine(Application.persistentDataPath, "MyRecordedVideo.mov");
-	
-		Debug.Log("srcPath------"+srcPath);
-	
 
 		if (File.Exists(srcPath))
-			Debug.Log("-----movie exists in Application.persistentDataPath");
+		{
+			Debug.Log("-----MyRecordedVideo.mov exists in Application.persistentDataPath");
+
+		}
 		else
-			Debug.Log("------movie does not exist in Application.persistentDataPath");
+		{
+			Debug.Log("------MyRecordedVideo.mov does not exist in Application.persistentDataPath");
+		}
 
 		Handheld.PlayFullScreenMovie("file://" + srcPath, Color.black, FullScreenMovieControlMode.CancelOnInput);
 

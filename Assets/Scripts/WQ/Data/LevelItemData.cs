@@ -1,14 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-
-
-//public enum LevelProgress
-//{
-//
-//	Todo=0,
-//	Doing,
-//	Done
-//}
 using System.Collections.Generic;
 
 

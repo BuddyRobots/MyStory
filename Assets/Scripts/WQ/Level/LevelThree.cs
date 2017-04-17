@@ -89,7 +89,7 @@ public class LevelThree : MonoBehaviour
 		{
 			showFingerOnLion=false;
 		}
-		else if (Manager.storyStatus ==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord)
+		else if (Manager.storyStatus ==StoryStatus.Recording)
 		{
 			showFingerOnLion=true;
 		}
@@ -114,7 +114,7 @@ public class LevelThree : MonoBehaviour
 
 	}
 
-	public void InitTest()
+	public void InitByClickingCloseBtnOfRecordingDoneFrame()
 	{
 		Manager.storyStatus =StoryStatus.Normal;
 		FormalScene._instance.nextBtn.gameObject.SetActive(false);
@@ -191,7 +191,7 @@ public class LevelThree : MonoBehaviour
 						}
 					}
 				}
-				else if (Manager.storyStatus==StoryStatus.Recording || Manager.storyStatus ==StoryStatus.PlayRecord) 
+				else if (Manager.storyStatus==StoryStatus.Recording) 
 				{
 					lionClick=true;
 					
@@ -313,15 +313,6 @@ public class LevelThree : MonoBehaviour
 	}
 
 
-	/// <summary>
-	/// 点击播放按钮，开启场景故事（有播放录音，有字幕，或者还有动画）
-	/// </summary>
-	public void PlayStoryWithAudioRecording()
-	{
-
-		Reset();
-
-	}
 
 	public void StartStoryToRecordAudioAndVideo()
 	{
