@@ -22,7 +22,8 @@ namespace MyStory
 
 			Mat modelSizeImage = CropMatToModelSize(sourceImage);
 
-			float[] inputImageArray = MatToTensorArray(modelSizeImage);
+			// Float or Byte?
+			float[] inputImageArray = MatToTensorArrayByte(modelSizeImage);
 			float[] segmentationResultArray;
 
 			Call_dll_Segment(inputImageArray, out segmentationResultArray);
@@ -121,7 +122,7 @@ namespace MyStory
 	
 		// TODO need to simplify this
 		// float 0~1
-		private static float[] MatToTensorArray(Mat image)
+		private static float[] MatToTensorArrayFloat(Mat image)
 		{
 			byte [] byteArray  = new byte [image.rows()*image.cols()*image.channels()];
 			float[] floatArray = new float[image.rows()*image.cols()*image.channels()];
@@ -130,6 +131,20 @@ namespace MyStory
 
 			for (var i = 0; i < byteArray.Length; i++)
 				floatArray[i] = (float)byteArray[i]/255.0f;
+
+			return floatArray;
+		}
+
+		// float 0~255
+		private static float[] MatToTensorArrayByte(Mat image)
+		{
+			byte [] byteArray  = new byte [image.rows()*image.cols()*image.channels()];
+			float[] floatArray = new float[image.rows()*image.cols()*image.channels()];
+
+			image.get(0, 0, byteArray);
+
+			for (var i = 0; i < byteArray.Length; i++)
+				floatArray[i] = (float)byteArray[i];
 
 			return floatArray;
 		}
