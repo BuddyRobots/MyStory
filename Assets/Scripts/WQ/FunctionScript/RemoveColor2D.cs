@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 
 public class RemoveColor2D : MonoBehaviour 
-{
-	
+{	
 	public GameObject netGO;
 	[Range (0, 100)]
 	public int brushRadius = 40;
@@ -25,6 +25,13 @@ public class RemoveColor2D : MonoBehaviour
 	public bool netIsErased = false;
 
 
+	private Rect netSpriteRect;
+	private Vector2 centerPoint = new Vector2(0.5f, 0.5f);
+	private bool isSettingSpriteTexture = false;
+	private int numSkipFrame = 3;
+	private int skippedFrames = 0;
+
+
 	void Awake()
 	{
 		netSpriteRenderer = netGO.GetComponent<SpriteRenderer>();
@@ -34,6 +41,8 @@ public class RemoveColor2D : MonoBehaviour
 		newTexture.SetPixels32(netTexture.GetPixels32());
 		textureHalfWidth = netTexture.width/2;
 		textureHalfHeight = netTexture.height/2;
+
+		netSpriteRect = netSpriteRenderer.sprite.rect;
 
 
 		worldRadius = brushRadius * netSprite.bounds.extents.x / textureHalfWidth;
@@ -58,7 +67,7 @@ public class RemoveColor2D : MonoBehaviour
 				RaycastHit2D[] ray = Physics2D.RaycastAll(screenPos, Vector2.zero, 0.01f);
 				for (int i = 0; i < ray.Length; i++)
 				{
-//					Debug.Log("射线点击到得物体----"+ray[i].collider.name);
+					// Debug.Log("射线点击到得物体----"+ray[i].collider.name);
 					// You will want to tag the image you want to lookup
 					if (ray[i].collider.name == "net")
 					{ 								
@@ -71,25 +80,25 @@ public class RemoveColor2D : MonoBehaviour
 						int y = (int)(screenPos.y * textureHalfHeight / netSprite.bounds.extents.y) + textureHalfHeight;
 
 						EraseCircle(newTexture, x, y, brushRadius);
+
+						newTexture.Apply();
+						//netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f));
+						StartCoroutine(setSpriteTexture());
+
 						EraseKeyPoint(screenPos.x, screenPos.y, worldRadius);
+
 						break;
 					}
 					else
 					{
 						MouseDrag._instance.isOnNet = false;
 					}
-				} 
-				newTexture.Apply();
-				netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRenderer.sprite.rect, new Vector2(0.5f, 0.5f));
+				}
 
 				netIsErased = CheckIfNetWasErased();
 				LevelEight._instance.netIsErased=netIsErased;
-
-//				Debug.Log("netIsErased = " + netIsErased);
-			}
-			
+			}	
 		}
-
 	}
 
 	private void EraseCircle(Texture2D texture, int xCenter, int yCenter, int radius)
@@ -134,5 +143,27 @@ public class RemoveColor2D : MonoBehaviour
 			return true;
 		else
 			return false;
+	}
+
+	private IEnumerator setSpriteTexture()
+	{
+		/*while (skippedFrames != 0)
+		{
+			yield return null;
+
+			skippedFrames++;
+			skippedFrames = skippedFrames % numSkipFrame;
+		}*/
+
+
+		while (isSettingSpriteTexture || (skippedFrames++ < numSkipFrame))
+			yield return null;
+
+
+		isSettingSpriteTexture = true;
+
+		netSpriteRenderer.sprite = Sprite.Create(newTexture, netSpriteRect, centerPoint, 100, 0, SpriteMeshType.Tight);
+
+		isSettingSpriteTexture = false;
 	}
 }
