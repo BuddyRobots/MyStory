@@ -2061,9 +2061,6 @@ MonoBehaviour:
   homeBtn: {fileID: 933518871}
   saveSuccessNotice: {fileID: 0}
   recordAgainFrame: {fileID: 1676334647}
-  saveVideoOver: 0
-  screenGrowingDarkAndLight: 0
-  storyBegin: 0
   sceneLevel_1: {fileID: 1175315381556600, guid: 12b4db37bb92b45c9af60a0184bd05f6,
     type: 2}
   sceneLevel_2: {fileID: 1321157112791852, guid: f59c81329008e4e58a21b5c83379a2ad,
@@ -2085,6 +2082,9 @@ MonoBehaviour:
   closeRecordingDoneFrameBtn: {fileID: 0}
   closeRecordingAgainFrameBtn: {fileID: 0}
   recordAgainBtnOnRecordingAgainFrame: {fileID: 0}
+  saveVideoOver: 0
+  screenGrowingDarkAndLight: 0
+  storyBegin: 0
 --- !u!114 &152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2097,7 +2097,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   finger: {fileID: 0}
-  prePos: {x: 0, y: 0, z: 0}
 --- !u!114 &153
 MonoBehaviour:
   m_ObjectHideFlags: 0

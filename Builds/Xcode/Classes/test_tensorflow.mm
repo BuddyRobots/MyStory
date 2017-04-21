@@ -14,7 +14,7 @@ static NSString* model_file_type = @"pb";
 static NSString* model_file_subfolder = @"Models";
 
 static const std::string inputLayerName  = "NETWORK_INPUT";
-static const std::string outputLayerName = "segmentation/atrous_conv.9/BiasAdd";
+static const std::string outputLayerName = "segmentation/atrous_conv.9/transpose_3";
 
 //--------------------- Function Definition ---------------------------------
 class IfstreamInputStream : public ::google::protobuf::io::CopyingInputStream
@@ -188,7 +188,7 @@ extern "C"
                 {
                     float predictionValue = predictions(i);
                     outputArray[i] = predictionValue;
-                }  
+                }
             }
         }
         return 0;
