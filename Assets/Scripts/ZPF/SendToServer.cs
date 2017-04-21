@@ -5,57 +5,41 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class SendToServer : MonoBehaviour {
+public class SendToServer {
 
-	//public string serverURL= "http://192.168.0.100:8000/form";
-	public GameObject cube;
+	private string serverUrl;
 
-	private Texture2D tex;
+	private Texture2D sourceTexture;
+	public Texture2D resultTexture;
 
 
-	void Awake()
+	public SendToServer(string url, Texture2D tex)
 	{
-		tex = Resources.Load("image2") as Texture2D;
-		//cube.GetComponent<Renderer>().material.mainTexture = tex;
-	}
+		serverUrl = url;
+		sourceTexture = tex;
+	}		
 
-	// Use this for initialization
-	void Start ()
-	{
-		StartCoroutine(UploadPNG());
-	}
-
-	public IEnumerator UploadPNG(string serverURL)
+	public IEnumerator UploadPNG()
 	{
 		// We should only read the screen after all rendering is complete
 		yield return new WaitForEndOfFrame();
 
-		//byte[] texData = tex.EncodeToPNG();
-		byte[] texData = new byte[5];
+		byte[] sourceData = sourceTexture.EncodeToPNG();
 
 		WWWForm form = new WWWForm();
 		form.AddField("frameCount", Time.frameCount.ToString());
-		form.AddBinaryData("file", texData, "screenShot.png", "image/png");
+		form.AddBinaryData("file", sourceData, "mouse.png", "image/png");
 
-		WWW w = new WWW(serverURL, form);
+		WWW w = new WWW(serverUrl, form);
 		yield return w;
 		if (!string.IsNullOrEmpty(w.error))
 		{
-			print(w.error);
+			Debug.LogError(w.error);
 		}
 		else
 		{
-			if (w.responseHeaders.Count > 0)
-			{
-				foreach (KeyValuePair<string, string> entry in w.responseHeaders)
-				{
-					Debug.Log(entry.Key + "   =    " + entry.Value);
-				}
-			}
-
-			cube.GetComponent<Renderer>().material.mainTexture = w.texture;
-
-			print("Finished Uploading Screenshot");
+			resultTexture = w.texture;
+			Debug.Log("Finished Uploading Screenshot and Recieved Server Response");
 		}
 	}		
 }

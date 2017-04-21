@@ -18,7 +18,7 @@ namespace MyStory
 		public static Mat Segment(Mat sourceImage, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
 		{
 			partList = new List<Texture2D>();
-			bbList = new List<OpenCVForUnity.Rect>();		
+			bbList = new List<OpenCVForUnity.Rect>();
 
 			Mat modelSizeImage = CropMatToModelSize(sourceImage);
 
@@ -29,7 +29,7 @@ namespace MyStory
 			Call_dll_Segment(inputImageArray, out segmentationResultArray);
 
 			Mat modelMaskImage = GenerateMask(segmentationResultArray);
-			Mat originMaskImage = new Mat(sourceImage.size(), CvType.CV_8UC3);
+			Mat originMaskImage = new Mat(sourceImage.size(), CvType.CV_8UC1);
 			Imgproc.resize(modelMaskImage, originMaskImage, originMaskImage.size(), 0, 0, Imgproc.INTER_NEAREST);
 
 			FillHoles(originMaskImage);
@@ -37,6 +37,29 @@ namespace MyStory
 			GetLists(sourceImage, originMaskImage, out partList, out bbList);
 
 			return modelSizeImage;
+		}
+
+		// TODO Test returning Mat, change to return void when public
+		public static Mat Segment(Texture2D sourceTex, Texture2D resultMaskTex, out List<Texture2D> partList, out List<OpenCVForUnity.Rect> bbList)
+		{
+			Mat sourceImage = new Mat(sourceTex.height, sourceTex.width, CvType.CV_8UC3);
+			Utils.texture2DToMat(sourceTex, sourceImage);
+			Mat resultMaskImage = new Mat(resultMaskTex.height, resultMaskTex.width, CvType.CV_8UC1);
+			Utils.texture2DToMat(resultMaskTex, resultMaskImage);
+
+			partList = new List<Texture2D>();
+			bbList = new List<OpenCVForUnity.Rect>();
+
+			Mat modelSizeImage = CropMatToModelSize(sourceImage);
+
+			Mat originMaskImage = new Mat(sourceImage.size(), CvType.CV_8UC1);
+			Imgproc.resize(resultMaskImage, originMaskImage, originMaskImage.size(), 0, 0, Imgproc.INTER_NEAREST);
+
+			FillHoles(originMaskImage);
+
+			GetLists(sourceImage, originMaskImage, out partList, out bbList);
+
+			return originMaskImage;
 		}
 
 		private static Mat CropMatToModelSize(Mat sourceImage)
@@ -215,7 +238,10 @@ namespace MyStory
 				{
 					int part = maskImageData[i*originWidth + j] - 1;
 					try{
+
 						if (part == -1) continue;
+
+						part = (int)(part*9/255);
 						partMaskList[part].put(i, j, (byte)254);
 					}
 					catch(Exception ex)

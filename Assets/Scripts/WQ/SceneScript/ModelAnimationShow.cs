@@ -25,9 +25,7 @@ public class ModelAnimationShow : MonoBehaviour
 		EventTriggerListener.Get(backBtn.gameObject).onClick=OnBackBtnClick;
 		EventTriggerListener.Get(reDrawBtn.gameObject).onClick=OnReDrawBtnClick;
 
-		#if !UNITY_EDITOR
 		mouse = Manager._instance.mouse;
-		#endif
 	}
 
 	private void OnConfirmBtnClick(GameObject btn)

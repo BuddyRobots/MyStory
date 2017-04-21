@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using MyStory;
 using MyUtils;
 using OpenCVForUnity;
+using System.Collections;
 
 
 [RequireComponent(typeof(GetImage))]
@@ -40,20 +41,7 @@ public class TakingPhoto : MonoBehaviour
 
 	private void OnConfirmBtnClick(GameObject btn)
 	{				
-		Manager._instance.sourceMat=getImage.RGBMat;
-
-		// Segmentation	
-		//TODO For test.
-		#if !UNITY_EDITOR
-		Mat readMat = ReadPicture.ReadAsMat("Pictures/Mouses/1487573118");
-		Mouse mouse = new Mouse(readMat);
-
-
-		//Mouse mouse = new Mouse(Manager._instance.sourceMat);
-		Manager._instance.mouse = mouse;
-		#endif
-
-		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
+		StartCoroutine(OnConfirmBtnClickCoroutine());
 	}
 
 	private void OnBackBtnClick(GameObject btn)
@@ -64,4 +52,48 @@ public class TakingPhoto : MonoBehaviour
 	void OnDisable() {
 		getImage.Dispose();
 	}
+
+	private IEnumerator OnConfirmBtnClickCoroutine()
+	{
+		Manager._instance.sourceMat=getImage.RGBMat;
+
+		// Segmentation	
+		//TODO For test.
+		//#if !UNITY_EDITOR
+		// Depracated.
+		//Mat readMat = ReadPicture.ReadAsMat("Pictures/Mouses/1487573118");
+		//Mouse mouse = new Mouse(readMat);
+
+
+
+		////////////////////
+		string serverUrl = "http://192.168.0.100:8000/";
+		Texture2D sourceTexture = Resources.Load("Pictures/Mouses/1487573118") as Texture2D;
+
+		SendToServer sendToServer = new SendToServer(serverUrl, sourceTexture);
+
+		yield return StartCoroutine(sendToServer.UploadPNG());
+
+		Texture2D resultTexture = sendToServer.resultTexture;
+
+		Mouse mouse = new Mouse(sourceTexture, resultTexture);
+
+
+
+
+		Texture2D displayTex = new Texture2D(mouse.testDisplayImage.cols(), mouse.testDisplayImage.rows());
+		Utils.matToTexture2D(mouse.testDisplayImage, displayTex);
+
+		GameObject.Find("Image").GetComponent<Renderer>().material.mainTexture = displayTex;
+		///////////////////
+
+
+
+
+		//Mouse mouse = new Mouse(Manager._instance.sourceMat);
+		Manager._instance.mouse = mouse;
+		//#endif
+
+		SceneManager.LoadSceneAsync("4_ModelAnimationShow");
+	}		
 }

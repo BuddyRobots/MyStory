@@ -16,7 +16,7 @@ public class test_ShowMouse : MonoBehaviour {
 		mouse = Manager._instance.mouse;
 
 		// Model Size Mat
-		Mat modelSizeMat = mouse.modelSizeMat;
+		Mat modelSizeMat = mouse.testDisplayImage;
 		Texture2D modelSizeTex = new Texture2D(modelSizeMat.cols(), modelSizeMat.rows());
 		Utils.matToTexture2D(modelSizeMat, modelSizeTex);
 		modelMouse.GetComponent<Renderer>().material.mainTexture = modelSizeTex;	

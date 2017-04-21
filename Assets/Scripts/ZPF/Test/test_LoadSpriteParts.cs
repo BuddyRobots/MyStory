@@ -28,22 +28,7 @@ public class test_LoadSpriteParts : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		#if UNITY_EDITOR
-		List<Texture2D> partTexList = new List<Texture2D>();
-		List<OpenCVForUnity.Rect> partBBList;
-
-		for (var i = 0; i < 9; i++)
-		{
-			string path = "Sprites/Tests/" + (i + 1).ToString();
-			partTexList.Add(ReadPicture.ReadAsTexture2D(path));
-		}
-
-		SetCordinate(partTexList, out partBBList);
-
-		Mouse mouse = new Mouse(partTexList, partBBList);
-		#elif !UNITY_EDITOR
 		Mouse mouse = Manager._instance.mouse;
-		#endif
 
 		mouse.CreateSprite(mouseSpriteRootGO);
 

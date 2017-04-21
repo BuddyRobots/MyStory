@@ -19,7 +19,7 @@ namespace MyStory
 		public BodyPart tail;
 
 		// Test : For test.
-		public Mat modelSizeMat;
+		public Mat testDisplayImage;
 
 		private List<BodyPart> bodyPartList;
 		private List<GameObject> oriSpriteGOList;
@@ -28,11 +28,31 @@ namespace MyStory
 
 
 		// TODO Need to complete this. It's for test now.
+		// Deprecated.
 		public Mouse(Mat inputMat/*, GameObject oriSpriteRootGO*/)
 		{
 			List<Texture2D> partList = new List<Texture2D>();
 			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
-			modelSizeMat = Segmentation.Segment(inputMat, out partList, out bbList);
+			testDisplayImage = Segmentation.Segment(inputMat, out partList, out bbList);
+
+			head     = new BodyPart(partList[0], bbList[0], "head", 9);
+			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 7);
+			rightEar = new BodyPart(partList[2], bbList[2], "rightEar", 8);
+			body     = new BodyPart(partList[3], bbList[3], "body", 4);
+			leftArm  = new BodyPart(partList[4], bbList[4], "leftArm", 3);
+			rightArm = new BodyPart(partList[5], bbList[5], "rightArm", 20);
+			leftLeg  = new BodyPart(partList[6], bbList[6], "leftLeg", 2);
+			rightLeg = new BodyPart(partList[7], bbList[7], "rightLeg", 5);
+			tail     = new BodyPart(partList[8], bbList[8], "tail", 2);
+
+			AddPartsToList();
+		}
+
+		public Mouse(Texture2D sourceImage, Texture2D resultTexture)
+		{
+			List<Texture2D> partList = new List<Texture2D>();
+			List<OpenCVForUnity.Rect> bbList = new List<OpenCVForUnity.Rect>();
+			testDisplayImage = Segmentation.Segment(sourceImage, resultTexture, out partList, out bbList);
 
 			head     = new BodyPart(partList[0], bbList[0], "head", 9);
 			leftEar  = new BodyPart(partList[1], bbList[1], "leftEar", 7);
@@ -48,6 +68,7 @@ namespace MyStory
 		}
 
 		// Test : Constructor For Test.
+		// Deprecated.
 		public Mouse(List<Texture2D> partList, List<OpenCVForUnity.Rect> bbList)
 		{
 			head     = new BodyPart(partList[0], bbList[0], "head", 9);
